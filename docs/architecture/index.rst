@@ -6,3 +6,4 @@ Architecture
 
    domain
    infrastructure
+   protocol
