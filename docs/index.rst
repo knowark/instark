@@ -10,4 +10,6 @@ Instant messaging and notifications server.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+
+   usage/index
+   architecture/index
