@@ -2,7 +2,7 @@ from .infrastructure.web import create_app, ServerApplication
 
 
 def main():
-    app = create_app() 
+    app = create_app()
     ServerApplication(app).run()
 
 
