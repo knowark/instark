@@ -37,6 +37,9 @@ sent to an specific device or to all devices listening to a channel.
     <table border="0" cellborder="1" cellspacing="0">
     <tr><td><i>Message</i></td></tr>
     <tr><td port="id">id</td></tr>
+    <tr><td port="type">type: device | channel</td></tr>
+    <tr><td port="reference">reference</td></tr>
+    <tr><td port="content">content</td></tr>
     </table>>];
 
     DeviceChannel:device_id -> Device:id;
