@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, TypeVar, Optional, Generic
-from .types import T
+from .types import T, QueryDomain
 
 
 class Repository(ABC, Generic[T]):
@@ -14,8 +14,9 @@ class Repository(ABC, Generic[T]):
         "Add method to be implemented."
 
     @abstractmethod
-    def search(self) -> List[T]:
-        "Search users matching a query domain"
+    def search(self, domain: QueryDomain,
+               limit: int = 0, offset: int = 0) -> List[T]:
+        "Search items matching a query domain"
 
     @abstractmethod
     def remove(self, user: T) -> bool:
