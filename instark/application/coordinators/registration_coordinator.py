@@ -7,7 +7,7 @@ from .types import RegistrationDict
 class RegistrationCoordinator:
 
     def __init__(self, id_service: IdService,
-                 device_repository: DeviceRepository):
+                 device_repository: DeviceRepository) -> None:
         self.id_service = id_service
         self.device_repository = device_repository
 

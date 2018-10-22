@@ -5,11 +5,11 @@ from instark.__main__ import main
 def test_main(monkeypatch):
     application = None
 
-    def mock_create_app():
+    def mock_create_app(context):
         return {'application': 'instark'}
 
     class MockServerApplication:
-        def __init__(self, app):
+        def __init__(self, app, config):
             self.app = app
 
         def run(self):
