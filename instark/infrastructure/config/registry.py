@@ -3,6 +3,7 @@ from ...application.repositories import (
     ExpressionParser, MemoryDeviceRepository)
 from ...application.services import StandardIdService
 from ...application.coordinators import RegistrationCoordinator
+from ...application.reporters import MemoryInstarkReporter
 from .config import Config
 
 
@@ -25,4 +26,7 @@ class MemoryRegistry(Registry):
         registration_coordinator = RegistrationCoordinator(
             id_service, device_repository)
 
+        instark_reporter = MemoryInstarkReporter(device_repository)
+
         self['registration_coordinator'] = registration_coordinator
+        self['instark_reporter'] = instark_reporter
