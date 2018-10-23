@@ -1,5 +1,5 @@
 from pytest import fixture
-from instark.application.models import Device
+from instark.application.models import Device, Channel
 from instark.application.repositories import (
     ExpressionParser, MemoryDeviceRepository)
 from instark.application.reporters import (
@@ -18,8 +18,20 @@ def device_repository():
 
 
 @fixture
-def instark_reporter(device_repository):
-    return MemoryInstarkReporter(device_repository)
+def channel_repository():
+    parser = ExpressionParser()
+    channel_repository = MemoryDeviceRepository(parser)
+    channel_repository.load({
+        '001': Channel(id='001', name='Channel 1', code='CH001'),
+        '002': Channel(id='002', name='Channel 2', code='CH002'),
+        '003': Channel(id='003', name='Channel 3', code='CH003')
+    })
+    return channel_repository
+
+
+@fixture
+def instark_reporter(device_repository, channel_repository):
+    return MemoryInstarkReporter(device_repository, channel_repository)
 
 
 def test_instark_reporter_instantiation(instark_reporter):
@@ -29,3 +41,8 @@ def test_instark_reporter_instantiation(instark_reporter):
 def test_instark_reporter_search_devices(instark_reporter):
     result = instark_reporter.search_devices([])
     assert len(result) == 2
+
+
+def test_instark_reporter_search_channels(instark_reporter):
+    result = instark_reporter.search_channels([])
+    assert len(result) == 3
