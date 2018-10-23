@@ -8,6 +8,10 @@ ChannelDict = Dict[str, Any]
 
 ChannelDictList = List[ChannelDict]
 
+SubscriptionDict = Dict[str, Any]
+
+SubscriptionDictList = List[SubscriptionDict]
+
 TermTuple = Tuple[str, str, Union[str, int, float, bool, list, tuple]]
 
 SearchDomain = List[Union[str, TermTuple]]

@@ -1,7 +1,7 @@
 from pytest import fixture
-from instark.application.models import Device, Channel
+from instark.application.models import Device, Channel, DeviceChannel
 from instark.application.repositories import (
-    ExpressionParser, MemoryDeviceRepository)
+    ExpressionParser, MemoryDeviceRepository, MemoryDeviceChannelRepository)
 from instark.application.reporters import (
     InstarkReporter, MemoryInstarkReporter)
 
@@ -30,8 +30,23 @@ def channel_repository():
 
 
 @fixture
-def instark_reporter(device_repository, channel_repository):
-    return MemoryInstarkReporter(device_repository, channel_repository)
+def device_channel_repository():
+    parser = ExpressionParser()
+    device_channel_repository = MemoryDeviceChannelRepository(parser)
+    device_channel_repository.load({
+        '001': DeviceChannel(id='001', device_id='001',
+                             channel_id='001'),
+        '002': DeviceChannel(id='001', device_id='002',
+                             channel_id='001')
+    })
+    return device_channel_repository
+
+
+@fixture
+def instark_reporter(device_repository, channel_repository,
+                     device_channel_repository):
+    return MemoryInstarkReporter(device_repository, channel_repository,
+                                 device_channel_repository)
 
 
 def test_instark_reporter_instantiation(instark_reporter):
@@ -46,3 +61,8 @@ def test_instark_reporter_search_devices(instark_reporter):
 def test_instark_reporter_search_channels(instark_reporter):
     result = instark_reporter.search_channels([])
     assert len(result) == 3
+
+
+def test_instark_reporter_search_device_channels(instark_reporter):
+    result = instark_reporter.search_device_channels([])
+    assert len(result) == 2

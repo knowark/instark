@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from ...application.repositories import (
-    ExpressionParser, MemoryDeviceRepository, MemoryChannelRepository)
+    ExpressionParser, MemoryDeviceRepository, MemoryChannelRepository,
+    MemoryDeviceChannelRepository)
 from ...application.services import StandardIdService
 from ...application.coordinators import (
     RegistrationCoordinator, SubscriptionCoordinator)
@@ -22,6 +23,7 @@ class MemoryRegistry(Registry):
         parser = ExpressionParser()
         device_repository = MemoryDeviceRepository(parser)
         channel_repository = MemoryChannelRepository(parser)
+        device_channel_repository = MemoryDeviceChannelRepository(parser)
 
         id_service = StandardIdService()
 
@@ -29,10 +31,11 @@ class MemoryRegistry(Registry):
             id_service, device_repository)
 
         subscription_coordinator = SubscriptionCoordinator(
-            id_service, channel_repository)
+            id_service, channel_repository, device_channel_repository)
 
         instark_reporter = MemoryInstarkReporter(
-            device_repository, channel_repository)
+            device_repository, channel_repository,
+            device_channel_repository)
 
         self['registration_coordinator'] = registration_coordinator
         self['subscription_coordinator'] = subscription_coordinator

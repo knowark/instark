@@ -1,6 +1,7 @@
 from pytest import fixture
 from instark.application.repositories import (
-    ExpressionParser, DeviceRepository, MemoryDeviceRepository)
+    ExpressionParser, MemoryDeviceRepository, MemoryChannelRepository,
+    MemoryDeviceChannelRepository)
 from instark.application.services import StandardIdService
 
 
@@ -12,3 +13,13 @@ def id_service():
 @fixture
 def device_repository():
     return MemoryDeviceRepository(ExpressionParser())
+
+
+@fixture
+def channel_repository():
+    return MemoryChannelRepository(ExpressionParser())
+
+
+@fixture
+def device_channel_repository():
+    return MemoryDeviceChannelRepository(ExpressionParser())
