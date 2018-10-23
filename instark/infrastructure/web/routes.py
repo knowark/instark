@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restful import Api
 from ..config import Registry
-from .resources import DeviceResource
+from .resources import DeviceResource, ChannelResource
 
 
 def set_routes(app: Flask, registry: Registry) -> None:
@@ -15,4 +15,8 @@ def set_routes(app: Flask, registry: Registry) -> None:
 
     # Devices Resource
     api.add_resource(DeviceResource, '/devices',
+                     resource_class_kwargs=registry)
+
+    # Channels Resource
+    api.add_resource(ChannelResource, '/channels',
                      resource_class_kwargs=registry)
