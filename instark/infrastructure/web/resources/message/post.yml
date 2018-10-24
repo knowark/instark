@@ -1,0 +1,13 @@
+summary: Publish message.
+
+tags:
+  - Messages
+
+parameters:
+  - in: body
+    schema: 
+      $ref: "#/definitions/Message"
+
+responses:
+  201:
+    description: "Message posted"

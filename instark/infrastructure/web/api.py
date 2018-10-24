@@ -2,7 +2,8 @@ from flask import Flask
 from ..config import Registry
 from flask_restful import Api, Resource
 from flasgger import Swagger, swag_from
-from .resources import DeviceResource, ChannelResource, SubscriptionResource
+from .resources import (
+    DeviceResource, ChannelResource, SubscriptionResource, MessageResource)
 
 
 def create_api(app: Flask, registry: Registry) -> Api:
@@ -36,7 +37,8 @@ def create_api(app: Flask, registry: Registry) -> Api:
     api.add_resource(SubscriptionResource, '/subscriptions',
                      resource_class_kwargs=registry)
 
-    # # Add namespaces
-    # api.add_namespace(channel_namespace)
+    # Messages Resource
+    api.add_resource(MessageResource, '/messages',
+                     resource_class_kwargs=registry)
 
     return api
