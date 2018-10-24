@@ -1,0 +1,13 @@
+summary: Create device.
+
+tags:
+  - Subscriptions
+
+parameters:
+  - in: body
+    schema: 
+      $ref: "#/definitions/Subscription"
+
+responses:
+  201:
+    description: "Subscription created"

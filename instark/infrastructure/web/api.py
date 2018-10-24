@@ -1,9 +1,8 @@
 from flask import Flask
 from ..config import Registry
-# from .resources import DeviceResource, ChannelResource, SubscriptionResource
 from flask_restful import Api, Resource
 from flasgger import Swagger, swag_from
-from .resources import ChannelResource
+from .resources import DeviceResource, ChannelResource, SubscriptionResource
 
 
 def create_api(app: Flask, registry: Registry) -> Api:
@@ -25,20 +24,17 @@ def create_api(app: Flask, registry: Registry) -> Api:
         "swagger_ui": True
     })
 
-    # # Devices Resource
-    # api.add_resource(DeviceResource, '/devices',
-    #                  resource_class_kwargs=registry)
+    # Devices Resource
+    api.add_resource(DeviceResource, '/devices',
+                     resource_class_kwargs=registry)
 
     # Channels Resource
     api.add_resource(ChannelResource, '/channels',
                      resource_class_kwargs=registry)
 
-    # register_resource(channel_namespace, ChannelResource,
-    #                   '/channels', registry)
-
-    # # Subscriptions Resource
-    # api.add_resource(SubscriptionResource, '/subscriptions',
-    #                  resource_class_kwargs=registry)
+    # Subscriptions Resource
+    api.add_resource(SubscriptionResource, '/subscriptions',
+                     resource_class_kwargs=registry)
 
     # # Add namespaces
     # api.add_namespace(channel_namespace)
