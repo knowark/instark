@@ -14,6 +14,7 @@ class ChannelResource(Resource):
     def get(self) -> str:
         return self.instark_reporter.search_channels([])
 
+    @swag_from('post.yml')
     def post(self) -> Tuple[str, int]:
         data = request.get_json()
         self.subscription_coordinator.create_channel(data)
