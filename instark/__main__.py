@@ -1,10 +1,16 @@
+import os
 from .infrastructure.web import create_app, ServerApplication
-from .infrastructure.config import DevelopmentConfig, MemoryRegistry, Context
+from .infrastructure.config import (
+    DevelopmentConfig, ProductionRegistry, MemoryRegistry, Context)
 
 
-def main():
+def main():  # pragma: no cover
     ConfigClass = DevelopmentConfig  # type: Type[Config]
-    RegistryClass = MemoryRegistry  # type: Type[Registry]
+    RegistryClass = ProductionRegistry  # type: Type[Registry]
+
+    if os.environ.get('INSTARK_DEVELOPMENT'):
+        ConfigClass = DevelopmentConfig
+        RegistryClass = MemoryRegistry
 
     config = ConfigClass()
     context = Context(config, RegistryClass(config))
