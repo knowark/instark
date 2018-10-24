@@ -1,0 +1,18 @@
+definitions:
+  Channel:
+    title: Channel
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        example: "637250d6-dc57-4d96-9f8a-2697ca5c55c3"
+      name:
+        type: string
+        example: "General Notifications"
+      code:
+        type: string
+        example: CH001
+    required:
+      - name
+      - code

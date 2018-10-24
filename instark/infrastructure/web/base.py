@@ -11,12 +11,10 @@ def create_app(context: Context):
 
     app = Flask(__name__)
     CORS(app)
-    # app.config.SWAGGER_UI_DOC_EXPANSION = 'full'
+    app.config['SWAGGER'] = {
+        'title': 'Instark'
+    }
 
     api = create_api(app, registry)
-
-    api.init_app(app)
-
-    # set_routes(app, registry)
 
     return app
