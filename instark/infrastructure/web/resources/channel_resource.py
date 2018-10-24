@@ -1,32 +1,29 @@
 from typing import Any, Dict, Tuple
 from flask import request
-from flask_restful import Resource
-from flask_restful_swagger import swagger
+from flask_restplus import Namespace, Resource, fields
 
 
+api = Namespace('channels', description='Channels related operations.')
+
+channel = api.model('Channel', {
+    'id': fields.String,
+    'name': fields.String(required=True),
+    'code': fields.String(required=True)
+})
+
+
+@api.doc()
 class ChannelResource(Resource):
 
     def __init__(self, **kwargs: Any) -> None:
         self.subscription_coordinator = kwargs['subscription_coordinator']
         self.instark_reporter = kwargs['instark_reporter']
 
-    @swagger.operation(
-        notes='Retrieve all channels.',
-        responseMessages=[
-            {"code": 200,
-             "message": "Channels are delivered."}
-        ]
-    )
+    @api.doc(responses={200: 'Success!'})
     def get(self) -> str:
         return self.instark_reporter.search_channels([])
 
-    @swagger.operation(
-        notes='Create a new channel.',
-        responseMessages=[
-            {"code": 201,
-             "message": "Created. The channel is now availabe."}
-        ]
-    )
+    @api.doc(responses={204: 'Created.'}, body=channel)
     def post(self) -> Tuple[str, int]:
         data = request.get_json()
         self.subscription_coordinator.create_channel(data)

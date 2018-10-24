@@ -1,7 +1,8 @@
 from flask import Flask
 from flask_cors import CORS
 from ..config import Context
-from .routes import set_routes
+from .api import create_api
+# from .routes import set_routes
 
 
 def create_app(context: Context):
@@ -10,7 +11,12 @@ def create_app(context: Context):
 
     app = Flask(__name__)
     CORS(app)
+    # app.config.SWAGGER_UI_DOC_EXPANSION = 'full'
 
-    set_routes(app, registry)
+    api = create_api(app, registry)
+
+    api.init_app(app)
+
+    # set_routes(app, registry)
 
     return app
