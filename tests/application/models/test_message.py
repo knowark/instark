@@ -19,4 +19,5 @@ def test_message_instantiation(message):
 def test_message_attributes(message):
     assert message.recipient_id == '3'
     assert message.kind == 'Direct'
+    assert message.backend_id == ''
     assert message.content == 'Hello World'

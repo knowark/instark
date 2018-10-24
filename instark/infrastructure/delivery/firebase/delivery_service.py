@@ -8,10 +8,13 @@ class FirebaseDeliveryService(DeliveryService):
         credentials_ = credentials.Certificate(certificate_path)
         firebase_admin.initialize_app(credentials_)
 
-    def send(self, locator: str, content: str) -> bool:
+    def send(self, locator: str, content: str) -> str:
         "Send method to be implemented."
 
         message = messaging.Message(
             data={'content': content},
             token=locator)
-        return bool(message)
+
+        response = messaging.send(message)
+
+        return response

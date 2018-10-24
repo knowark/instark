@@ -22,8 +22,10 @@ class NotificationCoordinator:
 
         message = Message(**message_dict)
         device = self.device_repository.get(message.recipient_id)
-        sent = self.delivery_service.send(device.locator, message.content)
-        if not sent:
+        response = self.delivery_service.send(device.locator, message.content)
+
+        if not response:
             raise ValueError("The message couldn't be sent")
 
+        message.backend_id = response
         self.message_repository.add(message)

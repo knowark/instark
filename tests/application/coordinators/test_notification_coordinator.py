@@ -16,12 +16,13 @@ def test_notification_coordinator_instantiation(notification_coordinator):
 
 def test_notification_coordinator_send_direct_message(
         notification_coordinator):
+    notification_coordinator.delivery_service.response = 'a1b2c3'
     notification_coordinator.device_repository.load(
         {'1': Device(id='1', name='Device 1', locator='ABC123')})
     message_dict = {
         'recipient_id': '1', 'kind': 'Direct', 'content': 'Hello'}
 
-    result = notification_coordinator.send_direct_message(message_dict)
+    notification_coordinator.send_direct_message(message_dict)
 
     assert len(notification_coordinator.message_repository.items) == 1
 
@@ -32,7 +33,7 @@ def test_notification_coordinator_send_direct_message_failed(
         {'1': Device(id='1', name='Device 1', locator='ABC123')})
     message_dict = {
         'recipient_id': '1', 'kind': 'Direct', 'content': 'Hello'}
-    notification_coordinator.delivery_service.sent = False
+    notification_coordinator.delivery_service.response = ''
 
     with raises(ValueError):
         notification_coordinator.send_direct_message(message_dict)
