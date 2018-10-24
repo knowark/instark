@@ -12,6 +12,10 @@ SubscriptionDict = Dict[str, Any]
 
 SubscriptionDictList = List[SubscriptionDict]
 
+MessageDict = Dict[str, Any]
+
+MessageDictList = List[MessageDict]
+
 TermTuple = Tuple[str, str, Union[str, int, float, bool, list, tuple]]
 
 SearchDomain = List[Union[str, TermTuple]]

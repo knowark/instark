@@ -43,7 +43,7 @@ class MemoryRegistry(Registry):
 
         instark_reporter = MemoryInstarkReporter(
             device_repository, channel_repository,
-            device_channel_repository)
+            message_repository, device_channel_repository)
 
         self['registration_coordinator'] = registration_coordinator
         self['subscription_coordinator'] = subscription_coordinator
