@@ -14,8 +14,8 @@ class DeviceResource(Resource):
     def get(self) -> str:
         return self.instark_reporter.search_devices([])
 
-    @swag_from('post.yml')
-    def post(self) -> Tuple[str, int]:
+    @swag_from('put.yml')
+    def put(self) -> Tuple[str, int]:
         data = request.get_json()
         self.registration_coordinator.register_device(data)
         ds = str(data)
