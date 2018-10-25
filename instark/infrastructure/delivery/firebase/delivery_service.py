@@ -11,8 +11,10 @@ class FirebaseDeliveryService(DeliveryService):
     def send(self, locator: str, content: str) -> str:
         "Send method to be implemented."
 
+        notification = messaging.Notification(body=content)
+
         message = messaging.Message(
-            data={'content': content},
+            notification=notification,
             token=locator)
 
         response = messaging.send(message)

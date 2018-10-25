@@ -30,10 +30,15 @@ definitions:
       kind:
         type: string
         enum: [Direct, Channel]
+      backend_id:
+        type: string
+        readOnly: true
+        example: "projects/instark/messages/0:154042575"
       content:
         type: string
         format: uuid
         example: "Hello World"
     required:
-      - device_id
-      - channel_id
+      - recipient_id
+      - kind
+      - content
