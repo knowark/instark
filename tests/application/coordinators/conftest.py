@@ -1,7 +1,7 @@
 from pytest import fixture
 from instark.application.repositories import (
     ExpressionParser, MemoryDeviceRepository, MemoryChannelRepository,
-    MemoryDeviceChannelRepository, MemoryMessageRepository)
+    MemorySubscriptionRepository, MemoryMessageRepository)
 from instark.application.services import (
     StandardIdService, MemoryDeliveryService)
 
@@ -23,7 +23,7 @@ def channel_repository():
 
 @fixture
 def device_channel_repository():
-    return MemoryDeviceChannelRepository(ExpressionParser())
+    return MemorySubscriptionRepository(ExpressionParser())
 
 
 @fixture

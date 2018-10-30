@@ -1,5 +1,5 @@
 
-class DeviceChannel:
+class Subscription:
     def __init__(self, **attributes):
         self.id = attributes['id']
         self.device_id = attributes['device_id']
