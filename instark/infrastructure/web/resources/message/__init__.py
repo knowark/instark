@@ -17,6 +17,6 @@ class MessageResource(Resource):
     @swag_from('post.yml')
     def post(self) -> Tuple[str, int]:
         data = request.get_json()
-        self.notification_coordinator.send_direct_message(data)
+        self.notification_coordinator.send_message(data)
         ds = str(data)
         return ds, 200

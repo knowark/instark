@@ -18,13 +18,20 @@ class NotificationCoordinator:
         self.message_repository = message_repository
         self.delivery_service = delivery_service
 
-    def send_direct_message(self, message_dict: NotificationDict) -> None:
+    def send_message(self, message_dict: NotificationDict) -> None:
         if 'id' not in message_dict:
             message_dict['id'] = self.id_service.generate_id()
 
         message = Message(**message_dict)
-        device = self.device_repository.get(message.recipient_id)
-        response = self.delivery_service.send(device.locator, message.content)
+
+        if message.kind == 'Direct':
+            device = self.device_repository.get(message.recipient_id)
+            response = self.delivery_service.send(
+                device.locator, message.content)
+        else:
+            channel = self.channel_repository.get(message.recipient_id)
+            response = self.delivery_service.broadcast(
+                channel.code, message.content)
 
         if not response:
             raise ValueError("The message couldn't be sent")
@@ -32,17 +39,17 @@ class NotificationCoordinator:
         message.backend_id = response
         self.message_repository.add(message)
 
-    def broadcast_message(self, message_dict: NotificationDict) -> None:
-        if 'id' not in message_dict:
-            message_dict['id'] = self.id_service.generate_id()
+    # def broadcast_message(self, message_dict: NotificationDict) -> None:
+    #     if 'id' not in message_dict:
+    #         message_dict['id'] = self.id_service.generate_id()
 
-        message = Message(**message_dict)
-        channel = self.channel_repository.get(message.recipient_id)
-        response = self.delivery_service.broadcast(
-            channel.code, message.content)
+    #     message = Message(**message_dict)
+    #     channel = self.channel_repository.get(message.recipient_id)
+    #     response = self.delivery_service.broadcast(
+    #         channel.code, message.content)
 
-        if not response:
-            raise ValueError("The message couldn't be sent")
+    #     if not response:
+    #         raise ValueError("The message couldn't be sent")
 
-        message.backend_id = response
-        self.message_repository.add(message)
+    #     message.backend_id = response
+    #     self.message_repository.add(message)
