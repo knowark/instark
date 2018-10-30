@@ -57,15 +57,3 @@ def test_notification_coordinator_send_channel_message(
             notification_coordinator.message_repository.items.items()):
         assert message.recipient_id == '1'
         assert message.kind == 'Channel'
-
-
-# def test_notification_coordinator_broadcast_message_failed(
-#         notification_coordinator):
-#     notification_coordinator.channel_repository.load(
-#         {'1': Channel(id='1', name='Channel XYZ', code='news')})
-#     message_dict = {
-#         'recipient_id': '1', 'kind': 'Channel', 'content': 'Hello'}
-#     notification_coordinator.delivery_service.response = ''
-
-#     with raises(ValueError):
-#         notification_coordinator.broadcast_message(message_dict)

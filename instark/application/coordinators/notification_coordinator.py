@@ -38,18 +38,3 @@ class NotificationCoordinator:
 
         message.backend_id = response
         self.message_repository.add(message)
-
-    # def broadcast_message(self, message_dict: NotificationDict) -> None:
-    #     if 'id' not in message_dict:
-    #         message_dict['id'] = self.id_service.generate_id()
-
-    #     message = Message(**message_dict)
-    #     channel = self.channel_repository.get(message.recipient_id)
-    #     response = self.delivery_service.broadcast(
-    #         channel.code, message.content)
-
-    #     if not response:
-    #         raise ValueError("The message couldn't be sent")
-
-    #     message.backend_id = response
-    #     self.message_repository.add(message)
