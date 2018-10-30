@@ -35,7 +35,8 @@ class MemoryRegistry(Registry):
             id_service, device_repository)
 
         subscription_coordinator = SubscriptionCoordinator(
-            id_service, channel_repository, device_channel_repository)
+            id_service, channel_repository, device_channel_repository,
+            delivery_service)
 
         notification_coordinator = NotificationCoordinator(
             id_service, device_repository, message_repository,
