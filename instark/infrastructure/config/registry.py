@@ -39,8 +39,8 @@ class MemoryRegistry(Registry):
             device_channel_repository, delivery_service)
 
         notification_coordinator = NotificationCoordinator(
-            id_service, device_repository, message_repository,
-            delivery_service)
+            id_service, channel_repository, device_repository,
+            message_repository, delivery_service)
 
         instark_reporter = MemoryInstarkReporter(
             device_repository, channel_repository,
