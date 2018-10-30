@@ -5,6 +5,8 @@ from instark.application.services import (
 def test_delivery_service() -> None:
     methods = DeliveryService.__abstractmethods__  # type: ignore
     assert 'send' in methods
+    assert 'broadcast' in methods
+    assert 'subscribe' in methods
 
 
 def test_memory_delivery_service_implementation() -> None:
@@ -18,3 +20,21 @@ def test_memory_delivery_service_send() -> None:
     result = delivery_service.send(locator, content)
 
     assert result == 'a1b2c3'
+
+
+def test_memory_delivery_service_broadcast() -> None:
+    delivery_service = MemoryDeliveryService('BROADCAST_MESSAGE')
+    code = 'news'
+    content = 'Hello World'
+    result = delivery_service.broadcast(code, content)
+
+    assert result == 'BROADCAST_MESSAGE'
+
+
+def test_memory_delivery_service_subscribe() -> None:
+    delivery_service = MemoryDeliveryService('')
+    code = 'news'
+    locator = 'e8j0YSGiE0k:APA91bEz5KQKaS3LfZVZ'
+    result = delivery_service.subscribe(code, locator)
+
+    assert result is True
