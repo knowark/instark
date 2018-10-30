@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from ...application.repositories import (
     ExpressionParser, MemoryDeviceRepository, MemoryChannelRepository,
-    MemoryDeviceChannelRepository, MemoryMessageRepository)
+    MemorySubscriptionRepository, MemoryMessageRepository)
 from ...application.services import StandardIdService, MemoryDeliveryService
 from ...application.coordinators import (
     RegistrationCoordinator, SubscriptionCoordinator, NotificationCoordinator)
@@ -25,7 +25,7 @@ class MemoryRegistry(Registry):
         parser = ExpressionParser()
         device_repository = MemoryDeviceRepository(parser)
         channel_repository = MemoryChannelRepository(parser)
-        device_channel_repository = MemoryDeviceChannelRepository(parser)
+        device_channel_repository = MemorySubscriptionRepository(parser)
         message_repository = MemoryMessageRepository(parser)
 
         id_service = StandardIdService()

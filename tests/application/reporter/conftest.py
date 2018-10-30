@@ -1,8 +1,8 @@
 from pytest import fixture
-from instark.application.models import Device, Channel, Message, DeviceChannel
+from instark.application.models import Device, Channel, Message, Subscription
 from instark.application.repositories import (
     ExpressionParser, MemoryDeviceRepository,
-    MemoryMessageRepository, MemoryDeviceChannelRepository)
+    MemoryMessageRepository, MemorySubscriptionRepository)
 from instark.application.reporters import (
     InstarkReporter, MemoryInstarkReporter)
 
@@ -44,12 +44,12 @@ def message_repository():
 @fixture
 def device_channel_repository():
     parser = ExpressionParser()
-    device_channel_repository = MemoryDeviceChannelRepository(parser)
+    device_channel_repository = MemorySubscriptionRepository(parser)
     device_channel_repository.load({
-        '001': DeviceChannel(id='001', device_id='001',
-                             channel_id='001'),
-        '002': DeviceChannel(id='001', device_id='002',
-                             channel_id='001')
+        '001': Subscription(id='001', device_id='001',
+                            channel_id='001'),
+        '002': Subscription(id='001', device_id='002',
+                            channel_id='001')
     })
     return device_channel_repository
 

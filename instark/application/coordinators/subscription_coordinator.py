@@ -1,6 +1,6 @@
-from ..models import Channel, DeviceChannel
+from ..models import Channel, Subscription
 from ..repositories import (
-    ChannelRepository, DeviceRepository, DeviceChannelRepository)
+    ChannelRepository, DeviceRepository, SubscriptionRepository)
 from ..services import IdService, DeliveryService
 from .types import ChannelDict, SubscriptionDict
 
@@ -10,7 +10,7 @@ class SubscriptionCoordinator:
     def __init__(self, id_service: IdService,
                  channel_repository: ChannelRepository,
                  device_repository: DeviceRepository,
-                 device_channel_repository: DeviceChannelRepository,
+                 device_channel_repository: SubscriptionRepository,
                  delivery_service: DeliveryService) -> None:
         self.id_service = id_service
         self.channel_repository = channel_repository
@@ -28,7 +28,7 @@ class SubscriptionCoordinator:
         if 'id' not in subscription_dict:
             subscription_dict['id'] = self.id_service.generate_id()
 
-        device_channel = DeviceChannel(**subscription_dict)
+        device_channel = Subscription(**subscription_dict)
         device = self.device_repository.get(device_channel.device_id)
         channel = self.channel_repository.get(device_channel.channel_id)
 

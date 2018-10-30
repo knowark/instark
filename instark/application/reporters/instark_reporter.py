@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from ..repositories import (
     DeviceRepository, ChannelRepository, MessageRepository,
-    DeviceChannelRepository)
+    SubscriptionRepository)
 from .types import (
     DeviceDictList, ChannelDictList, SubscriptionDictList,
     MessageDictList, SearchDomain)
@@ -19,7 +19,7 @@ class MemoryInstarkReporter(InstarkReporter):
     def __init__(self, device_repository: DeviceRepository,
                  channel_repository: ChannelRepository,
                  message_repository: MessageRepository,
-                 device_channel_repository: DeviceChannelRepository) -> None:
+                 device_channel_repository: SubscriptionRepository) -> None:
         self.device_repository = device_repository
         self.channel_repository = channel_repository
         self.message_repository = message_repository

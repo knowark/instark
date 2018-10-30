@@ -25,9 +25,9 @@ sent to an specific device or to all devices listening to a channel.
     <tr><td port="id">id</td></tr>
     </table>>];
 
-    DeviceChannel [label=<
+    Subscription [label=<
     <table border="0" cellborder="1" cellspacing="0">
-    <tr><td><i>DeviceChannel</i></td></tr>
+    <tr><td><i>Subscription</i></td></tr>
     <tr><td port="id">id</td></tr>
     <tr><td port="device_id">device_id</td></tr>
     <tr><td port="channel_id">channel_id</td></tr>
@@ -42,8 +42,8 @@ sent to an specific device or to all devices listening to a channel.
     <tr><td port="content">content</td></tr>
     </table>>];
 
-    DeviceChannel:device_id -> Device:id;
-    DeviceChannel:channel_id -> Channel:id;
+    Subscription:device_id -> Device:id;
+    Subscription:channel_id -> Channel:id;
 
     }
 

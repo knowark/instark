@@ -1,10 +1,10 @@
 from pytest import fixture
-from instark.application.models import DeviceChannel
+from instark.application.models import Subscription
 
 
 @fixture
 def device_channel():
-    return DeviceChannel(
+    return Subscription(
         id='001',
         device_id='001',
         channel_id='001'
