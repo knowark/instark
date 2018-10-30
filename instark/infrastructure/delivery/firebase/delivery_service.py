@@ -9,14 +9,19 @@ class FirebaseDeliveryService(DeliveryService):
         firebase_admin.initialize_app(credentials_)
 
     def send(self, locator: str, content: str) -> str:
-        "Send method to be implemented."
-
         notification = messaging.Notification(body=content)
-
         message = messaging.Message(
             notification=notification,
             token=locator)
+        return messaging.send(message)
 
-        response = messaging.send(message)
+    def broadcast(self, code: str, content: str) -> str:
+        notification = messaging.Notification(body=content)
+        message = messaging.Message(
+            notification=notification,
+            topic=code)
+        return messaging.send(message)
 
-        return response
+    def subscribe(self, code: str, locator: str) -> bool:
+        messaging.subscribe_to_topic(tokens=[locator], topic=code)
+        return True
