@@ -73,3 +73,9 @@ class ProductionRegistry(Registry):
         notification_coordinator.delivery_service = delivery_service
 
         self['notification_coordinator'] = notification_coordinator
+
+        subscription_coordinator = memory_registry[
+            'subscription_coordinator']
+        subscription_coordinator.delivery_service = delivery_service
+
+        self['subscription_coordinator'] = subscription_coordinator
