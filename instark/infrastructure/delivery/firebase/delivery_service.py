@@ -1,5 +1,6 @@
 import firebase_admin
 from firebase_admin import credentials, messaging
+from firebase_admin.messaging import AndroidConfig, AndroidNotification
 from ....application.services import DeliveryService
 
 
@@ -10,15 +11,21 @@ class FirebaseDeliveryService(DeliveryService):
 
     def send(self, locator: str, content: str) -> str:
         notification = messaging.Notification(body=content)
+        android_notification = AndroidNotification(sound='default')
+        android_config = AndroidConfig(notification=android_notification)
         message = messaging.Message(
             notification=notification,
+            android=android_config,
             token=locator)
         return messaging.send(message)
 
     def broadcast(self, code: str, content: str) -> str:
         notification = messaging.Notification(body=content)
+        android_notification = AndroidNotification(sound='default')
+        android_config = AndroidConfig(notification=android_notification)
         message = messaging.Message(
             notification=notification,
+            android=android_config,
             topic=code)
         return messaging.send(message)
 
