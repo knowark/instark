@@ -1,4 +1,4 @@
-from instark.application.reporters import InstarkReporter
+from instark.application.informers import InstarkReporter
 
 
 def test_instark_reporter_instantiation(instark_reporter):

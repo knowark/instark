@@ -3,7 +3,7 @@ from instark.application.models import Device, Channel, Message, Subscription
 from instark.application.repositories import (
     ExpressionParser, MemoryDeviceRepository,
     MemoryMessageRepository, MemorySubscriptionRepository)
-from instark.application.reporters import (
+from instark.application.informers import (
     InstarkReporter, MemoryInstarkReporter)
 
 
