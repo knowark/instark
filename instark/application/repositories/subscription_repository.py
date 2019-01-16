@@ -1,6 +1,6 @@
 from ..models import Subscription
-from .repository import Repository
-from .memory_repository import MemoryRepository
+from .repository.repository import Repository
+from .repository.memory_repository import MemoryRepository
 
 
 class SubscriptionRepository(Repository[Subscription]):

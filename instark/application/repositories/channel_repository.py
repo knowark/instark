@@ -1,6 +1,6 @@
 from ..models import Channel
-from .repository import Repository
-from .memory_repository import MemoryRepository
+from .repository.repository import Repository
+from .repository.memory_repository import MemoryRepository
 
 
 class ChannelRepository(Repository[Channel]):
