@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, TypeVar, Optional, Generic
+from typing import List, TypeVar, Optional, Generic, Dict
 from ..types import T, QueryDomain
 
 
@@ -21,3 +21,7 @@ class Repository(ABC, Generic[T]):
     @abstractmethod
     def remove(self, user: T) -> bool:
         "Remove method to be implemented."
+
+    @abstractmethod
+    def load(self, items: Dict[str, T]) -> None:
+        "load method to be implemented."

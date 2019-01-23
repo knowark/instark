@@ -71,8 +71,8 @@ class ExpressionParser:
 
     def _parse_term(self, term_tuple: TermTuple) -> Callable:
         field, operator, value = term_tuple
-        if operator not in self.comparison_dict:
-            operator = '='
+        validate = operator in self.comparison_dict
+        operator = operator if validate else '='
         function = self.comparison_dict[operator]
         result = function(field, value)
         return result

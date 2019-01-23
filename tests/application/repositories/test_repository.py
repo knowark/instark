@@ -7,3 +7,4 @@ def test_repository_methods() -> None:
     assert 'add' in methods
     assert 'search' in methods
     assert 'remove' in methods
+    assert 'load' in methods
