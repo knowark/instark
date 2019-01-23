@@ -6,7 +6,7 @@ from ...application.repositories import (
 from ...application.services import StandardIdService, MemoryDeliveryService
 from ...application.coordinators import (
     RegistrationCoordinator, SubscriptionCoordinator, NotificationCoordinator)
-from ...application.reporters import MemoryInstarkReporter
+from ...application.informers import MemoryInstarkReporter
 from ...infrastructure.delivery import FirebaseDeliveryService
 from .config import Config
 
