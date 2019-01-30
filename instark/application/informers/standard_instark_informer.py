@@ -5,16 +5,10 @@ from ..repositories import (
 from .types import (
     DeviceDictList, ChannelDictList, SubscriptionDictList,
     MessageDictList, SearchDomain)
+from .instark_informer import InstarkInformer
 
 
-class InstarkReporter(ABC):
-
-    @abstractmethod
-    def search_devices(self, domain: SearchDomain) -> DeviceDictList:
-        """Search Instark's devices"""
-
-
-class MemoryInstarkReporter(InstarkReporter):
+class MemoryInstarkInformer(InstarkInformer):
 
     def __init__(self, device_repository: DeviceRepository,
                  channel_repository: ChannelRepository,

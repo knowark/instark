@@ -1,7 +1,8 @@
 from typing import Dict
 from pytest import fixture
+from instark.application.repositories.repository import MemoryRepository
 from instark.application.repositories import (
-    ExpressionParser, Repository, MemoryRepository)
+    ExpressionParser, Repository)
 
 
 class DummyEntity:
@@ -24,6 +25,7 @@ def memory_repository() -> MemoryRepository:
     }
     repository = MemoryRepository[DummyEntity](parser)
     repository.load(entity_dict)
+    print('?????', repository.get("1"))
     return repository
 
 
