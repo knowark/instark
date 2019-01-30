@@ -6,7 +6,7 @@ from ...application.repositories import (
 from ...application.services import StandardIdService, MemoryDeliveryService
 from ...application.coordinators import (
     RegistrationCoordinator, SubscriptionCoordinator, NotificationCoordinator)
-from ...application.informers import MemoryInstarkReporter
+from ...application.informers import MemoryInstarkInformer
 from ...infrastructure.delivery import FirebaseDeliveryService
 from .config import Config
 
@@ -42,14 +42,14 @@ class MemoryRegistry(Registry):
             id_service, channel_repository, device_repository,
             message_repository, delivery_service)
 
-        instark_reporter = MemoryInstarkReporter(
+        instark_informer = MemoryInstarkInformer(
             device_repository, channel_repository,
             message_repository, device_channel_repository)
 
         self['registration_coordinator'] = registration_coordinator
         self['subscription_coordinator'] = subscription_coordinator
         self['notification_coordinator'] = notification_coordinator
-        self['instark_reporter'] = instark_reporter
+        self['instark_informer'] = instark_informer
 
 
 class ProductionRegistry(Registry):

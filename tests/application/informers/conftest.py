@@ -4,7 +4,7 @@ from instark.application.repositories import (
     ExpressionParser, MemoryDeviceRepository,
     MemoryMessageRepository, MemorySubscriptionRepository)
 from instark.application.informers import (
-    InstarkReporter, MemoryInstarkReporter)
+    InstarkInformer, MemoryInstarkInformer)
 
 
 @fixture
@@ -55,8 +55,8 @@ def device_channel_repository():
 
 
 @fixture
-def instark_reporter(device_repository, channel_repository,
+def instark_informer(device_repository, channel_repository,
                      message_repository, device_channel_repository):
-    return MemoryInstarkReporter(
+    return MemoryInstarkInformer(
         device_repository, channel_repository,
         message_repository, device_channel_repository)
