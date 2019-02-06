@@ -12,7 +12,7 @@ def test_registation_coordinator_instantiation(registration_coordinator):
 
 
 def test_registation_coordinator_register_device(registration_coordinator):
-    registration_dict = {'name': 'DEV001', 'locator': 'a1b2c3d4'}
+    registration_dict = {'name': 'DEV001', 'locator_id': '1'}
     registration_coordinator.register_device(registration_dict)
 
     assert len(registration_coordinator.device_repository.items) == 1

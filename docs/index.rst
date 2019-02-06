@@ -13,3 +13,4 @@ Instant messaging and notifications server.
 
    usage/index
    architecture/index
+   requirements/index

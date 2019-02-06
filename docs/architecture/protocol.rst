@@ -6,7 +6,7 @@ Protocol
 
    seqdiag {
       # On register
-      Device ->  Instark [label = "POST /devices 
+      Device ->  Instark [label = "POST /devices
         {registration_token=123,
         channel_id=xyz}"];
       
