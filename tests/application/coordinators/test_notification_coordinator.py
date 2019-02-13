@@ -19,7 +19,7 @@ def test_notification_coordinator_send_direct_message(
         notification_coordinator):
     notification_coordinator.delivery_service.response = 'a1b2c3'
     notification_coordinator.device_repository.load(
-        {'1': Device(id='1', name='Device 1', locator='ABC123')})
+        {'1': Device(id='1', name='Device 1', locator_id='1')})
     message_dict = {
         'recipient_id': '1', 'kind': 'Direct', 'content': 'Hello'}
 
@@ -31,7 +31,7 @@ def test_notification_coordinator_send_direct_message(
 def test_notification_coordinator_send_direct_message_failed(
         notification_coordinator):
     notification_coordinator.device_repository.load(
-        {'1': Device(id='1', name='Device 1', locator='ABC123')})
+        {'1': Device(id='1', name='Device 1', locator_id='1')})
     message_dict = {
         'recipient_id': '1', 'kind': 'Direct', 'content': 'Hello'}
     notification_coordinator.delivery_service.response = ''
@@ -44,7 +44,8 @@ def test_notification_coordinator_send_channel_message(
         notification_coordinator):
     notification_coordinator.delivery_service.response = 'BROADCAST'
     notification_coordinator.channel_repository.load(
-        {'1': Channel(id='1', name='Channel XYZ', code='news')})
+        {'1': Channel(id='1', name='Channel XYZ', code='news',
+                      locator_id='1')})
 
     message_dict = {
         'recipient_id': '1', 'kind': 'Channel', 'content': 'Hello'}

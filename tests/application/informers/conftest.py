@@ -12,8 +12,8 @@ def device_repository():
     parser = ExpressionParser()
     device_repository = MemoryDeviceRepository(parser)
     device_repository.load({
-        '001': Device(id='001', name='DEV001', locator='a1b2c3'),
-        '002': Device(id='002', name='DEV002', locator='x1y2z3')
+        '001': Device(id='001', name='DEV001', locator_id='1'),
+        '002': Device(id='002', name='DEV002', locator_id='2')
     })
     return device_repository
 
@@ -23,9 +23,12 @@ def channel_repository():
     parser = ExpressionParser()
     channel_repository = MemoryDeviceRepository(parser)
     channel_repository.load({
-        '001': Channel(id='001', name='Channel 1', code='CH001'),
-        '002': Channel(id='002', name='Channel 2', code='CH002'),
-        '003': Channel(id='003', name='Channel 3', code='CH003')
+        '001': Channel(id='001', name='Channel 1', code='CH001',
+                       locator_id='1'),
+        '002': Channel(id='002', name='Channel 2', code='CH002',
+                       locator_id='2'),
+        '003': Channel(id='003', name='Channel 3', code='CH003',
+                       locator_id='3')
     })
     return channel_repository
 
