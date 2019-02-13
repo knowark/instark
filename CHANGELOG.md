@@ -17,3 +17,7 @@
 - Create locator_id field in Channel model.
 ### Refactoring
 - Change field name 'locator' to 'locator_id' in Device model.
+
+## 1.6.0(2019-02-13)
+### Refactoring
+- Method optimization 'send_message' in module 'coordinators'.
