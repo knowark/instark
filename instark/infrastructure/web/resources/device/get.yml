@@ -26,10 +26,10 @@ definitions:
       name:
         type: string
         example: "Android Phone XYZ001"
-      locator:
+      locator_id:
         type: string
         example: "e8j0YSGiE0k:APA91bEz5KQKaS3LfZVZjojSs6SLHmbghrAn"
     required:
       - id
       - name
-      - locator
+      - locator_id

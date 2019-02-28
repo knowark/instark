@@ -3,6 +3,7 @@ aniso8601==3.0.2
 argh==0.26.2
 atomicwrites==1.2.1
 attrs==18.2.0
+autopep8==1.4.3
 Babel==2.6.0
 CacheControl==0.12.5
 cachetools==2.1.0
@@ -29,6 +30,7 @@ grpcio==1.16.0
 gunicorn==19.9.0
 idna==2.7
 imagesize==1.1.0
+injectark==0.2.0
 itsdangerous==1.1.0
 Jinja2==2.10
 jsonschema==2.6.0
@@ -47,6 +49,7 @@ protobuf==3.6.1
 py==1.7.0
 pyasn1==0.4.4
 pyasn1-modules==0.2.2
+pycodestyle==2.4.0
 Pygments==2.2.0
 pyparsing==2.2.2
 pytest==3.9.1
