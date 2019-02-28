@@ -21,3 +21,9 @@
 ## 1.6.0(2019-02-13)
 ### Refactoring
 - Method optimization 'send_message' in module 'coordinators'.
+
+## 1.6.1(2019-02-28)
+### Features
+- Modify .yml in cahnnel and device.
+### Performance
+- Cover 100%

@@ -29,9 +29,10 @@ class SubscriptionCoordinator:
             subscription_dict['id'] = self.id_service.generate_id()
 
         device_channel = Subscription(**subscription_dict)
+        print('Id de', device_channel.device_id)
+        print('Id ch', device_channel.channel_id)
         device = self.device_repository.get(device_channel.device_id)
         channel = self.channel_repository.get(device_channel.channel_id)
-
         self.delivery_service.subscribe(channel.code, device.locator_id)
 
         self.device_channel_repository.add(device_channel)
