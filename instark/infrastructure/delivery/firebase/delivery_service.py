@@ -14,14 +14,14 @@ class FirebaseDeliveryService(DeliveryService):
 
     def send(self, locator: str, content: str) -> str:
         notification = messaging.Notification(body=content)
-        android_notification = AndroidNotification(sound='default')
-        android_config = AndroidConfig(notification=android_notification)
-        web_notification = WebpushNotification(sound='default')
-        web_configuration = WebpushConfig(notification=web_configuration)
+        # android_notification = AndroidNotification(sound='default')
+        # android_config = AndroidConfig(notification=android_notification)
+        web_notification = WebpushNotification()
+        web_configuration = WebpushConfig(notification=web_notification)
         message = messaging.Message(
             notification=notification,
-            android=android_config,
-            web=web_configuration,
+            # android=android_config,
+            webpush=web_configuration,
             token=locator)
         return messaging.send(message)
 
@@ -29,12 +29,12 @@ class FirebaseDeliveryService(DeliveryService):
         notification = messaging.Notification(body=content)
         android_notification = AndroidNotification(sound='default')
         android_config = AndroidConfig(notification=android_notification)
-        web_notification = WebpushNotification(sound='default')
-        web_configuration = WebpushConfig(notification=web_configuration)
+        web_notification = WebpushNotification()
+        web_configuration = WebpushConfig(notification=web_notification)
         message = messaging.Message(
             notification=notification,
             android=android_config,
-            web=web_configuration,
+            webpush=web_configuration,
             topic=code)
         return messaging.send(message)
 
