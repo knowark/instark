@@ -20,10 +20,6 @@ def device_repository():
 def channel_repository():
     return MemoryChannelRepository(ExpressionParser())
 
-@fixture
-def locator_repository():
-    return MemoryLocatorRepository(ExpressionParser())
-
 
 @fixture
 def device_channel_repository():

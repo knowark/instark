@@ -25,6 +25,7 @@ def memory_repository() -> MemoryRepository:
     }
     repository = MemoryRepository[DummyEntity](parser)
     repository.load(entity_dict)
+    print('?????', repository.get("1"))
     return repository
 
 

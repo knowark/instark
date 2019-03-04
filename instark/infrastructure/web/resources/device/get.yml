@@ -32,4 +32,4 @@ definitions:
     required:
       - id
       - name
-      - locator_id
+      - locator
