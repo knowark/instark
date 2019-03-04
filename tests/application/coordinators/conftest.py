@@ -1,8 +1,7 @@
 from pytest import fixture
 from instark.application.repositories import (
     ExpressionParser, MemoryDeviceRepository, MemoryChannelRepository,
-    MemorySubscriptionRepository, MemoryMessageRepository,
-    MemoryLocatorRepository)
+    MemorySubscriptionRepository, MemoryMessageRepository)
 from instark.application.services import (
     StandardIdService, MemoryDeliveryService)
 

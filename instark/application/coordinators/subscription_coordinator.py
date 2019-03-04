@@ -32,6 +32,6 @@ class SubscriptionCoordinator:
         device = self.device_repository.get(device_channel.device_id)
         channel = self.channel_repository.get(device_channel.channel_id)
 
-        self.delivery_service.subscribe(channel.code, device.locator_id)
+        self.delivery_service.subscribe(channel.code, device.locator)
 
         self.device_channel_repository.add(device_channel)
