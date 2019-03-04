@@ -25,3 +25,7 @@
 ## 1.6.1(2019-02-28)
 ### Refactoring
 - Modify .yml of channel and device
+
+## 1.6.2(2019-02-28)
+### Fixes
+- Revert vertion stable

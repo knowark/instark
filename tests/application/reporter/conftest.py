@@ -4,7 +4,7 @@ from instark.application.repositories import (
     ExpressionParser, MemoryDeviceRepository,
     MemoryMessageRepository, MemorySubscriptionRepository)
 from instark.application.informers import (
-    InstarkInformer, MemoryInstarkInformer)
+    InstarkReporter, MemoryInstarkReporter)
 
 
 @fixture
@@ -12,8 +12,8 @@ def device_repository():
     parser = ExpressionParser()
     device_repository = MemoryDeviceRepository(parser)
     device_repository.load({
-        '001': Device(id='001', name='DEV001', locator='1'),
-        '002': Device(id='002', name='DEV002', locator='2')
+        '001': Device(id='001', name='DEV001', locator='a1b2c3'),
+        '002': Device(id='002', name='DEV002', locator='x1y2z3')
     })
     return device_repository
 
@@ -55,8 +55,8 @@ def device_channel_repository():
 
 
 @fixture
-def instark_informer(device_repository, channel_repository,
+def instark_reporter(device_repository, channel_repository,
                      message_repository, device_channel_repository):
-    return MemoryInstarkInformer(
+    return MemoryInstarkReporter(
         device_repository, channel_repository,
         message_repository, device_channel_repository)
