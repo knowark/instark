@@ -14,8 +14,8 @@ class FirebaseDeliveryService(DeliveryService):
 
     def send(self, locator: str, content: str) -> str:
         notification = messaging.Notification(body=content)
-        #android_notification = AndroidNotification(sound='default')
-        #android_config = AndroidConfig(notification=android_notification)
+        # android_notification = AndroidNotification(sound='default')
+        # android_config = AndroidConfig(notification=android_notification)
         web_notification = WebpushNotification()
         web_configuration = WebpushConfig(notification=web_notification)
         message = messaging.Message(
