@@ -8,11 +8,11 @@ class MessageResource(Resource):
 
     def __init__(self, **kwargs: Any) -> None:
         self.notification_coordinator = kwargs['notification_coordinator']
-        self.instark_informer = kwargs['instark_informer']
+        self.instark_reporter = kwargs['instark_reporter']
 
     @swag_from('get.yml')
     def get(self) -> str:
-        return self.instark_informer.search_messages([])
+        return self.instark_reporter.search_messages([])
 
     @swag_from('post.yml')
     def post(self) -> Tuple[str, int]:
