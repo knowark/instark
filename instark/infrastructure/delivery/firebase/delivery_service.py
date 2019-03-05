@@ -29,12 +29,12 @@ class FirebaseDeliveryService(DeliveryService):
         notification = messaging.Notification(body=content)
         android_notification = AndroidNotification(sound='default')
         android_config = AndroidConfig(notification=android_notification)
-        web_notification = WebpushNotification()
-        web_configuration = WebpushConfig(notification=web_notification)
+        # web_notification = WebpushNotification()
+        # web_configuration = WebpushConfig(notification=web_notification)
         message = messaging.Message(
             notification=notification,
             android=android_config,
-            webpush=web_configuration,
+            # webpush=web_configuration,
             topic=code)
         return messaging.send(message)
 
