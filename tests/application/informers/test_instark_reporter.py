@@ -1,4 +1,4 @@
-from instark.application.informers import InstarkInformer
+from instark.application.informers.instark_informer import InstarkInformer
 
 
 def test_instark_informer_instantiation(instark_informer):

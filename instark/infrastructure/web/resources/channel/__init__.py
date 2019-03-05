@@ -8,11 +8,11 @@ class ChannelResource(Resource):
 
     def __init__(self, **kwargs: Any) -> None:
         self.subscription_coordinator = kwargs['subscription_coordinator']
-        self.instark_reporter = kwargs['instark_reporter']
+        self.instark_informer = kwargs['instark_informer']
 
     @swag_from('get.yml')
     def get(self) -> str:
-        return self.instark_reporter.search_channels([])
+        return self.instark_informer.search_channels([])
 
     @swag_from('post.yml')
     def post(self) -> Tuple[str, int]:

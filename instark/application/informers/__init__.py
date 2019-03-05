@@ -1,1 +1,2 @@
-from .instark_reporter import InstarkReporter, MemoryInstarkReporter
+from .instark_informer import InstarkInformer
+from .standard_instark_informer import MemoryInstarkInformer

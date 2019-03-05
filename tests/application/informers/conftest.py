@@ -3,8 +3,8 @@ from instark.application.models import Device, Channel, Message, Subscription
 from instark.application.repositories import (
     ExpressionParser, MemoryDeviceRepository,
     MemoryMessageRepository, MemorySubscriptionRepository)
-from instark.application.informers import (
-    InstarkInformer, MemoryInstarkInformer)
+from instark.application.informers.instark_informer import InstarkInformer
+from instark.application.informers.standard_instark_informer import MemoryInstarkInformer
 
 
 @fixture
