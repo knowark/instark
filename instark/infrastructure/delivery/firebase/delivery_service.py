@@ -14,18 +14,18 @@ class FirebaseDeliveryService(DeliveryService):
         firebase_admin.initialize_app(credentials_)
 
     def send(self, locator: str, subject: str,
-             content: str, payload: list) -> str:
+             content: str) -> str:
         notification = messaging.Notification(body=content)
         #android_notification = AndroidNotification(sound='default')
         #android_config = AndroidConfig(notification=android_notification)
         #web_notification = WebpushNotification()
-        #fcm_options = WebpushFcmOptions(link="https://www.nubark.com")
+        #fcm_options = WebpushFcmOptions(link="")
         #web_configuration = WebpushConfig(
         #    notification=web_notification,
         #    fcm_options=fcm_options)
         message = messaging.Message(
             data={
-                'title': 'Message Direct!',
+                'title': subject,
                 'body': content,
             },
             #notification=notification,
@@ -34,8 +34,7 @@ class FirebaseDeliveryService(DeliveryService):
             token=locator)
         return messaging.send(message)
 
-    def broadcast(self, str, code: str, subject: str, content: str,
-                  payload: list) -> str:
+    def broadcast(self, str, code: str, subject: str, content: str) -> str:
         notification = messaging.Notification(body=content)
         #android_notification = AndroidNotification(sound='default')
         #android_config = AndroidConfig(notification=android_notification)
@@ -46,7 +45,7 @@ class FirebaseDeliveryService(DeliveryService):
             # android=android_config,
             #webpush=web_configuration,
             data={
-                'title': 'Message Direct!',
+                'title': subject,
                 'body': content,
             },
             topic=code)
