@@ -1,10 +1,11 @@
+from ....application.services import DeliveryService
 import firebase_admin
 from firebase_admin import credentials, messaging
 # import for create Android notification
 from firebase_admin.messaging import AndroidConfig, AndroidNotification
 # import for create Web notification
 from firebase_admin.messaging import WebpushConfig, WebpushNotification
-from ....application.services import DeliveryService
+from firebase_admin.messaging import WebpushFcmOptions
 
 
 class FirebaseDeliveryService(DeliveryService):
@@ -12,29 +13,23 @@ class FirebaseDeliveryService(DeliveryService):
         credentials_ = credentials.Certificate(certificate_path)
         firebase_admin.initialize_app(credentials_)
 
-    def send(self, locator: str, content: str) -> str:
+    def send(self, locator: str, title: str, content: str) -> str:
         notification = messaging.Notification(body=content)
-        # android_notification = AndroidNotification(sound='default')
-        # android_config = AndroidConfig(notification=android_notification)
-        web_notification = WebpushNotification()
-        web_configuration = WebpushConfig(notification=web_notification)
         message = messaging.Message(
-            notification=notification,
-            # android=android_config,
-            webpush=web_configuration,
+            data={
+                'title': title,
+                'body': content,
+            },
             token=locator)
         return messaging.send(message)
 
-    def broadcast(self, code: str, content: str) -> str:
+    def broadcast(self, str, code: str, title: str, content: str) -> str:
         notification = messaging.Notification(body=content)
-        android_notification = AndroidNotification(sound='default')
-        android_config = AndroidConfig(notification=android_notification)
-        # web_notification = WebpushNotification()
-        # web_configuration = WebpushConfig(notification=web_notification)
         message = messaging.Message(
-            notification=notification,
-            android=android_config,
-            # webpush=web_configuration,
+            data={
+                'title': title,
+                'body': content,
+            },
             topic=code)
         return messaging.send(message)
 

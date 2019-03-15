@@ -1,29 +1,68 @@
-# from flask import Flask
-# from flask_restful import Api
-# from flask_restful_swagger import swagger
-# from ..config import Registry
-# from .resources import DeviceResource, ChannelResource, SubscriptionResource
+from flask import Flask
+from flask_restful import Api
+from ..config import Registry
+from instark.infrastructure.web.resources import (MessageResource,
+                                                  ChannelResource,
+                                                  DeviceResource,
+                                                  SubscriptionResource)
+from instark.application.repositories.message_repository import (
+    MemoryMessageRepository)
+from instark.application.repositories.channel_repository import (
+    MemoryChannelRepository)
+from instark.application.repositories.device_repository import (
+    MemoryDeviceRepository)
+from instark.application.repositories.subscription_repository import (
+    MemorySubscriptionRepository)
+from instark.application.coordinators.notification_coordinator import (
+    NotificationCoordinator)
+from instark.application.coordinators.subscription_coordinator import (
+    SubscriptionCoordinator)
+from instark.application.coordinators.registration_coordinator import (
+    RegistrationCoordinator)
 
 
-# def set_routes(app: Flask, registry: Registry) -> None:
+def set_routes(app: Flask, registry: Registry) -> None:
 
-#     @app.route('/')
-#     def index() -> str:
-#         return ('Welcome to Instark!<br/>'
-#                 '<a href="/spec.html">spec</a>')
+    @app.route('/')
+    def index() -> str:
+        return 'Welcome to Instark!'
 
-#     # Restful API
-#     api = swagger.docs(Api(app), apiVersion='1.0',
-#                        api_spec_url='/spec', swaggerVersion='3.0.2')
+    # Restful API
+    api = Api(app)
 
-#     # Devices Resource
-#     api.add_resource(DeviceResource, '/devices',
-#                      resource_class_kwargs=registry)
+    # Services
+    notification_coordinator = registry['NotificationCoordinator']
+    subscription_coordinator = registry['SubscriptionCoordinator']
+    registration_coordinator = registry['RegistrationCoordinator']
 
-#     # Channels Resource
-#     api.add_resource(ChannelResource, '/channels',
-#                      resource_class_kwargs=registry)
+    # Message resource
+    api.add_resource(
+        MessageResource,
+        '/register', '/signup',
+        resource_class_kwargs={
+            'notification_coordinator': notification_coordinator
+        })
 
-#     # Subscriptions Resource
-#     api.add_resource(SubscriptionResource, '/subscriptions',
-#                      resource_class_kwargs=registry)
+    # Channel resource
+    api.add_resource(
+        ChannelResource,
+        '/register', '/signup',
+        resource_class_kwargs={
+            'subscription_coordinator': subscription_coordinator
+        })
+
+    # Device resource
+    api.add_resource(
+        DeviceResource,
+        '/register', '/signup',
+        resource_class_kwargs={
+            'registration_coordinator': registration_coordinator
+        })
+
+    # Subscription resource
+    api.add_resource(
+        DeviceResource,
+        '/register', '/signup',
+        resource_class_kwargs={
+            'subscription_coordinator': subscription_coordinator
+        })

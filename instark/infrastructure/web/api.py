@@ -1,44 +1,38 @@
-from flask import Flask
-from ..config import Registry
-from flask_restful import Api, Resource
-from flasgger import Swagger, swag_from
-from .resources import (
-    DeviceResource, ChannelResource, SubscriptionResource, MessageResource)
+from flask import Flask, jsonify
+
+from ..resolver import Registry
+from .resources import(RootResource, MessageResource, ChannelResource,
+                       DeviceResource, SubscriptionResource)
+from .spec import create_spec
 
 
-def create_api(app: Flask, registry: Registry) -> Api:
+def create_api(app: Flask, registry: Registry) -> None:
 
-    # REST API
-    api = Api(app)
+    # Restful API
+    spec = create_spec()
+    registry['spec'] = spec
 
-    # Swagger
-    Swagger(app, template_file="api.yml", config={
-        "specs_route": "/",
-        "headers": [],
-        "specs": [{
-            "endpoint": 'apispec_1',
-            "route": '/apispec_1.json',
-            "rule_filter": lambda rule: True,
-            "model_filter": lambda tag: True,
-        }],
-        "static_url_path": "/flasgger_static",
-        "swagger_ui": True
-    })
+    # Root Resource (Api Specification)
+    root_view = RootResource.as_view('root', registry=registry)
+    app.add_url_rule("/", view_func=root_view)
 
-    # Devices Resource
-    api.add_resource(DeviceResource, '/devices',
-                     resource_class_kwargs=registry)
+    # Message Resource
+    spec.path(path="/messages/", resource=MessageResource)
+    message_view = MessageResource.as_view('messages', registry=registry)
+    app.add_url_rule("/messages/", view_func=message_view)
 
-    # Channels Resource
-    api.add_resource(ChannelResource, '/channels',
-                     resource_class_kwargs=registry)
+    # Channel Resource
+    spec.path(path="/channels/", resource=ChannelResource)
+    channel_view = ChannelResource.as_view('channels', registry=registry)
+    app.add_url_rule("/channels/", view_func=channel_view)
 
-    # Subscriptions Resource
-    api.add_resource(SubscriptionResource, '/subscriptions',
-                     resource_class_kwargs=registry)
+    # Device Resource
+    spec.path(path="/devices/", resource=DeviceResource)
+    device_view = DeviceResource.as_view('devices', registry=registry)
+    app.add_url_rule("/devices/", view_func=device_view)
 
-    # Messages Resource
-    api.add_resource(MessageResource, '/messages',
-                     resource_class_kwargs=registry)
-
-    return api
+    # Device Resource
+    spec.path(path="/subscriptions/", resource=SubscriptionResource)
+    subscription_view = SubscriptionResource.as_view('subscriptions',
+                                                     registry=registry)
+    app.add_url_rule("/subscriptions/", view_func=subscription_view)

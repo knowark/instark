@@ -3,11 +3,11 @@ from abc import ABC, abstractmethod
 
 class DeliveryService(ABC):
     @abstractmethod
-    def send(self, locator: str, content: str) -> str:
+    def send(self, locator: str, title: str, content: str) -> str:
         "Send method to be implemented."
 
     @abstractmethod
-    def broadcast(self, code: str, content: str) -> str:
+    def broadcast(self, code: str, title: str, content: str) -> str:
         "Broadcast to channel method to be implemented."
 
     @abstractmethod

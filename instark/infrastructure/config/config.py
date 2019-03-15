@@ -22,6 +22,21 @@ class Config(dict, ABC):
             'worker_class': 'gevent',
             'debug': False
         }
+        self['flask'] = {}
+        self['database'] = {}
+        self['tokens'] = {
+            'access': {
+                'algorithm': 'HS256',
+                'secret': 'DEVSECRET123',
+                'lifetime': 86400
+            },
+            'refresh': {
+                'algorithm': 'HS256',
+                'secret': 'DEVSECRET123',
+                'lifetime': 604800,
+                'threshold': 86400
+            }
+        }
 
 
 class TrialConfig(Config):
