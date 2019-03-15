@@ -3,15 +3,13 @@ from flask import request, jsonify
 from flask.views import MethodView
 from marshmallow import ValidationError
 from ..schemas import MessageSchema
-from instark.application.coordinators.notification_coordinator import (
-    NotificationCoordinator)
-from ...config import Registry
 
 
 class MessageResource(MethodView):
 
     def __init__(self, registry) -> None:
-        self.notification_coordinator = registry['NotificationCoordinator']
+        self.notification_coordinator = registry['notification_coordinator']
+        print('############################', registry)
         self.spec = registry['spec']
 
     def post(self) -> Tuple[str, int]:
@@ -35,14 +33,15 @@ class MessageResource(MethodView):
             data = MessageSchema().loads(request.data or '{}')
         except ValidationError as error:
             return jsonify(code=400, error=error.messages), 400
-        print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> DA>TA >>>>>', data)
+        print('????????????????? DATA', data)
         message = self.notification_coordinator.send_message(data)
-
-        response = """Message Post: recipient_id<{0}> - content<{1}> - 
-                      kind<{2}>""".format(
-            message.get('recipient_id'),
-            message.get('content'),
-            message.get('kind', 'Direct')
+        print('----------------------- Message', message)
+        response = """Message Post: \n recipient_id<{0}> - title<{1}> -
+                      content<{2}> - kind<{3}>""".format(
+            message.recipient_id,
+            message.title,
+            message.content,
+            message.kind,
         )
 
         return response, 201

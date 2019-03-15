@@ -8,12 +8,13 @@ class MemoryDeliveryService(DeliveryService):
         self.response = response
         self.code = None
         self.locator = None
+        self.title = None
 
-    def send(self, locator: str, content: str) -> str:
+    def send(self, locator: str, title: str, content: str) -> str:
         self.locator = locator
         return self.response
 
-    def broadcast(self, code: str, content: str) -> str:
+    def broadcast(self, code: str, title: str, content: str) -> str:
         self.code = code
         return self.response
 

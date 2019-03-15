@@ -13,39 +13,21 @@ class FirebaseDeliveryService(DeliveryService):
         credentials_ = credentials.Certificate(certificate_path)
         firebase_admin.initialize_app(credentials_)
 
-    def send(self, locator: str, subject: str,
-             content: str) -> str:
+    def send(self, locator: str, title: str, content: str) -> str:
         notification = messaging.Notification(body=content)
-        #android_notification = AndroidNotification(sound='default')
-        #android_config = AndroidConfig(notification=android_notification)
-        #web_notification = WebpushNotification()
-        #fcm_options = WebpushFcmOptions(link="")
-        #web_configuration = WebpushConfig(
-        #    notification=web_notification,
-        #    fcm_options=fcm_options)
         message = messaging.Message(
             data={
-                'title': subject,
+                'title': title,
                 'body': content,
             },
-            #notification=notification,
-            # android=android_config,
-            #webpush=web_configuration,
             token=locator)
         return messaging.send(message)
 
-    def broadcast(self, str, code: str, subject: str, content: str) -> str:
+    def broadcast(self, str, code: str, title: str, content: str) -> str:
         notification = messaging.Notification(body=content)
-        #android_notification = AndroidNotification(sound='default')
-        #android_config = AndroidConfig(notification=android_notification)
-        #web_notification = WebpushNotification()
-        #web_configuration = WebpushConfig(notification=web_notification)
         message = messaging.Message(
-        #    notification=notification,
-            # android=android_config,
-            #webpush=web_configuration,
             data={
-                'title': subject,
+                'title': title,
                 'body': content,
             },
             topic=code)

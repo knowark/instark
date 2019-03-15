@@ -3,8 +3,6 @@ from flask import request, jsonify
 from flask.views import MethodView
 from marshmallow import ValidationError
 from ..schemas import ChannelSchema
-from instark.application.coordinators.subscription_coordinator import (
-    SubscriptionCoordinator)
 
 
 class ChannelResource(MethodView):
@@ -37,13 +35,10 @@ class ChannelResource(MethodView):
             data = ChannelSchema().loads(request.data or '{}')
         except ValidationError as error:
             return jsonify(code=400, error=error.messages), 400
-        print('>>>>>>>>>>>>>> Data >>>>>', data)
         channel = self.subscription_coordinator.create_channel(data)
-        # channel = SubscriptionCoordinator.create_channel(request.data, '')
-        print('>>>>>>>>>>>>>> Channel >>>>>', channel)
-        response = 'Channel Post: name<{0}> - code<{1}>'.format(
-            channel.get('name'),
-            channel.get('code'),
+        response = 'Channel Post: \n name<{0}> - code<{1}>'.format(
+            channel.name,
+            channel.code,
         )
 
         return response, 201

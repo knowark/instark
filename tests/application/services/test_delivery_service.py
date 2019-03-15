@@ -17,8 +17,8 @@ def test_memory_delivery_service_send() -> None:
     delivery_service = MemoryDeliveryService('a1b2c3')
     locator = 'e8j0YSGiE0k:APA91bEz5KQKaS3LfZVZ'
     content = 'Hello World'
-    subject = 'Message Direct of admin'
-    result = delivery_service.send(locator, subject, content)
+    title = 'Message Direct of admin'
+    result = delivery_service.send(locator, title, content)
 
     assert result == 'a1b2c3'
 
@@ -27,8 +27,8 @@ def test_memory_delivery_service_broadcast() -> None:
     delivery_service = MemoryDeliveryService('BROADCAST_MESSAGE')
     code = 'news'
     content = 'Hello World'
-    subject = 'Message Direct of admin'
-    result = delivery_service.broadcast(code, subject, content)
+    title = 'Message Direct of admin'
+    result = delivery_service.broadcast(code, title, content)
 
     assert result == 'BROADCAST_MESSAGE'
 

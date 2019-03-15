@@ -11,7 +11,7 @@ from ..schemas import SubscriptionSchema
 class SubscriptionResource(MethodView):
 
     def __init__(self, registry) -> None:
-        self.subscription_coordinator = registry['SubscriptionCoordinator']
+        self.subscription_coordinator = registry['subscription_coordinator']
         self.spec = registry['spec']
 
     def post(self) -> Tuple[str, int]:
@@ -36,10 +36,9 @@ class SubscriptionResource(MethodView):
         except ValidationError as error:
             return jsonify(code=400, error=error.messages), 400
         subscription = self.subscription_coordinator.subscribe(data)
-        print('>>>>>>>>>>>>>> Device >>>>>', subscription)
-        response = 'Subscribe Post: name<{0}> - code<{1}>'.format(
-            subscription.get('name'),
-            subscription.get('code'),
+        response = 'Subscribe Post: \n channel_id<{0}> - device_id<{1}>'.format(
+            subscription.channel_id,
+            subscription.device_id,
         )
 
         return response, 201
