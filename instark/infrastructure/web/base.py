@@ -3,7 +3,6 @@ from flask_cors import CORS
 from ..config import Context
 from .api import create_api
 from .errors import register_error_handler
-# from .routes import set_routes
 
 
 def create_app(context: Context):
@@ -13,9 +12,6 @@ def create_app(context: Context):
     app = Flask(__name__)
     register_error_handler(app)
     CORS(app)
-    # app.config['SWAGGER'] = {
-    #     'title': 'Instark'
-    # }
     app.config.update(config['flask'])
     api = create_api(app, registry)
 

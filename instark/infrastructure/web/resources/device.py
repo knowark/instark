@@ -39,3 +39,25 @@ class DeviceResource(MethodView):
         )
 
         return response, 201
+    
+    def get(self) -> str:
+        """
+        ---
+        summary: Return all devices.
+        tags:
+          - Devices
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+        responses:
+          201:
+            description: "Succesful response"
+        """
+        try:
+            data = DeviceSchema().loads(request.data or '{}')
+        except ValidationError as error:
+            return jsonify(code=400, error=error.messages), 400
+        return 201

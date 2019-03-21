@@ -12,8 +12,27 @@ class ChannelResource(MethodView):
         self.spec = registry['spec']
 
     def get(self) -> str:
-        return "Here code for get"
-
+        """
+        ---
+        summary: Return all channels.
+        tags:
+          - Channels
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Channel'
+        responses:
+          201:
+            description: "Succesful response"
+        """
+        try:
+            data = ChannelSchema().loads(request.data or '{}')
+        except ValidationError as error:
+            return jsonify(code=400, error=error.messages), 400
+        return 201
+        
     def post(self) -> Tuple[str, int]:
         """
         ---
