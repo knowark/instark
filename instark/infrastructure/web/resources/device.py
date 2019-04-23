@@ -11,7 +11,7 @@ class DeviceResource(MethodView):
         self.registration_coordinator = registry['registration_coordinator']
         self.spec = registry['spec']
 
-    def post(self) -> Tuple[str, int]:
+    def put(self) -> Tuple[str, int]:
         """
         ---
         summary: Create device.

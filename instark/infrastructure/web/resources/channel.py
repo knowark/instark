@@ -11,7 +11,7 @@ class ChannelResource(MethodView):
         self.subscription_coordinator = registry['subscription_coordinator']
         self.spec = registry['spec']
 
-    def get(self) -> str:
+    def get(self) -> Tuple[str, int]:
         """
         ---
         summary: Return all channels.
@@ -49,7 +49,6 @@ class ChannelResource(MethodView):
           201:
             description: "Channel created"
         """
-
         try:
             data = ChannelSchema().loads(request.data or '{}')
         except ValidationError as error:

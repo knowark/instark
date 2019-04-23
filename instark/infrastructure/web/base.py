@@ -10,9 +10,9 @@ def create_app(context: Context):
     registry = context.registry
 
     app = Flask(__name__)
-    register_error_handler(app)
     CORS(app)
     app.config.update(config['flask'])
-    api = create_api(app, registry)
+    register_error_handler(app)
+    create_api(app, registry)
 
     return app
