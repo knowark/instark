@@ -1,12 +1,12 @@
 from abc import ABC, abstractmethod
 from typing import List, Dict, TypeVar, Optional, Generic, Union
 from .repository import Repository
-from .. expression_parser import ExpressionParser
-from .. types import T, QueryDomain
+from ...utilities.query_parser import QueryParser
+from ...utilities.types import T, QueryDomain
 
 
 class MemoryRepository(Repository, Generic[T]):
-    def __init__(self,  parser: ExpressionParser) -> None:
+    def __init__(self,  parser: QueryParser) -> None:
         self.items = {}  # type: Dict[str, T]
         self.parser = parser
 

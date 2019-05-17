@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
 from ...application.repositories import (
-    ExpressionParser, MemoryDeviceRepository, MemoryChannelRepository,
+    MemoryDeviceRepository, MemoryChannelRepository,
     MemorySubscriptionRepository, MemoryMessageRepository)
+from ...application.utilities.query_parser import QueryParser
 from ...application.services import StandardIdService, MemoryDeliveryService
 from ...application.coordinators import (
     RegistrationCoordinator, SubscriptionCoordinator, NotificationCoordinator)
@@ -22,7 +23,7 @@ class MemoryRegistry(Registry):
     def __init__(self, config: Config) -> None:
         super().__init__(config)
 
-        parser = ExpressionParser()
+        parser = QueryParser()
         device_repository = MemoryDeviceRepository(parser)
         channel_repository = MemoryChannelRepository(parser)
         device_channel_repository = MemorySubscriptionRepository(parser)

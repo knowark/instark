@@ -23,9 +23,15 @@ class Config(dict, ABC):
             'debug': False
         }
         self['flask'] = {}
+        self['tenancy'] = {}
         self['database'] = {}
         self['tokens'] = {
             'access': {
+                'algorithm': 'HS256',
+                'secret': 'DEVSECRET123',
+                'lifetime': 86400
+            },
+            'tenant':{
                 'algorithm': 'HS256',
                 'secret': 'DEVSECRET123',
                 'lifetime': 86400

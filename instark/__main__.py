@@ -17,6 +17,8 @@ def main():  # pragma: no cover
     gunicorn_config = config['gunicorn']
 
     app = create_app(context)
+    print('app>>>>>>>>', app)
+    print('gunicorn_config>>>>>>', gunicorn_config)
     ServerApplication(app, gunicorn_config).run()
 
 

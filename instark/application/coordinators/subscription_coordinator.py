@@ -39,10 +39,5 @@ class SubscriptionCoordinator:
         return device_channel
 
     def get_channels(self, channel_id: str):
-        try:
-            channels = self.channel_repository.search([('id', '=', channel_id)])
-        except ValueError:
-            raise 'Channel no found'
-        return channels
-
-        
+        channels = self.channel_repository.search([('id', '=', channel_id)])
+        return channels if channels else []
