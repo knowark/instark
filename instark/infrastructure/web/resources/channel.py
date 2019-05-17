@@ -11,7 +11,7 @@ class ChannelResource(MethodView):
         self.subscription_coordinator = registry['subscription_coordinator']
         self.spec = registry['spec']
 
-    def get(self) -> Tuple[str, int]:
+    def get(self)-> Tuple[str, int]:
         """
         ---
         summary: Return all channels.
@@ -29,9 +29,11 @@ class ChannelResource(MethodView):
         """
         try:
             data = ChannelSchema().loads(request.data or '{}')
+            print('Data #########', data)
         except ValidationError as error:
             return jsonify(code=400, error=error.messages), 400
         return 201
+
         
     def post(self) -> Tuple[str, int]:
         """
@@ -54,6 +56,9 @@ class ChannelResource(MethodView):
         except ValidationError as error:
             return jsonify(code=400, error=error.messages), 400
         channel = self.subscription_coordinator.create_channel(data)
+        channel2 = self.subscription_coordinator.get_channels(data.get('id'))
+        print('Channel 2$$$$$$$$$$$$$$$$$$', channel2[0].id)
+
         response = 'Channel Post: \n name<{0}> - code<{1}>'.format(
             channel.name,
             channel.code,
