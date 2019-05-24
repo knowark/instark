@@ -5,6 +5,7 @@ from instark.application.repositories import (
 from instark.application.utilities.query_parser import QueryParser
 from instark.application.services import (
     StandardIdService, MemoryDeliveryService)
+from instark.application.utilities.tenancy import TenantProvider, Tenant
 
 
 @fixture
@@ -14,12 +15,12 @@ def id_service():
 
 @fixture
 def device_repository():
-    return MemoryDeviceRepository(QueryParser())
+    return MemoryDeviceRepository(QueryParser(), TenantProvider)
 
 
 @fixture
 def channel_repository():
-    return MemoryChannelRepository(QueryParser())
+    return MemoryChannelRepository(QueryParser(), TenantProvider)
 
 
 @fixture
@@ -29,7 +30,7 @@ def device_channel_repository():
 
 @fixture
 def message_repository():
-    return MemoryMessageRepository(QueryParser())
+    return MemoryMessageRepository(QueryParser(), TenantProvider)
 
 
 @fixture

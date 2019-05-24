@@ -7,9 +7,7 @@ from instark.application.coordinators import NotificationCoordinator
 def notification_coordinator(id_service, channel_repository, device_repository,
                              message_repository, delivery_service):
     return NotificationCoordinator(id_service, channel_repository,
-                                   device_repository, message_repository,
-                                   delivery_service)
-
+                                   device_repository, message_repository)
 
 def test_notification_coordinator_instantiation(notification_coordinator):
     assert notification_coordinator is not None

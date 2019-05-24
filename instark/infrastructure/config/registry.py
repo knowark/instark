@@ -8,6 +8,7 @@ from ...application.services import StandardIdService, MemoryDeliveryService
 from ...application.coordinators import (
     RegistrationCoordinator, SubscriptionCoordinator, NotificationCoordinator)
 from ...application.informers import MemoryInstarkInformer
+from ...application.utilities.tenancy import StandardTenantProvider, Tenant
 from ...infrastructure.delivery import FirebaseDeliveryService
 from .config import Config
 
@@ -22,12 +23,14 @@ class MemoryRegistry(Registry):
 
     def __init__(self, config: Config) -> None:
         super().__init__(config)
-
         parser = QueryParser()
-        device_repository = MemoryDeviceRepository(parser)
-        channel_repository = MemoryChannelRepository(parser)
-        device_channel_repository = MemorySubscriptionRepository(parser)
-        message_repository = MemoryMessageRepository(parser)
+        tenant_provider = StandardTenantProvider(Tenant(name='servagro'))
+        device_repository = MemoryDeviceRepository(parser, tenant_provider)
+        channel_repository = MemoryChannelRepository(parser, tenant_provider)
+        device_channel_repository = MemorySubscriptionRepository(parser,
+            tenant_provider)
+        message_repository = MemoryMessageRepository(parser, tenant_provider)
+        
 
         id_service = StandardIdService()
         delivery_service = MemoryDeliveryService()

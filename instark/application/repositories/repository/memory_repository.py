@@ -1,14 +1,17 @@
 from abc import ABC, abstractmethod
 from typing import List, Dict, TypeVar, Optional, Generic, Union
 from .repository import Repository
+from ...utilities.tenancy import TenantProvider
 from ...utilities.query_parser import QueryParser
 from ...utilities.types import T, QueryDomain
 
 
 class MemoryRepository(Repository, Generic[T]):
-    def __init__(self,  parser: QueryParser) -> None:
+    def __init__(self,  parser: QueryParser,
+                tenant_provider: TenantProvider) -> None:
         self.items = {}  # type: Dict[str, T]
         self.parser = parser
+        self.tenant_provider = tenant_provider
 
     def get(self, id: str) -> Optional[T]:
         return self.items.get(id)
@@ -41,3 +44,7 @@ class MemoryRepository(Repository, Generic[T]):
 
     def load(self, items: Dict[str, T]) -> None:
         self.items = items
+    
+    @property
+    def _location(self) -> str:
+        return self.tenant_service.tenant.location

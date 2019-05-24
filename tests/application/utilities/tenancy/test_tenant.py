@@ -1,5 +1,5 @@
 from pytest import fixture, raises
-from instark.application.services import Tenant
+from instark.application.utilities.tenancy import Tenant
 
 
 @fixture

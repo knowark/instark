@@ -2,6 +2,7 @@ from typing import Dict
 from pytest import fixture
 from instark.application.repositories.repository import MemoryRepository
 from instark.application.repositories import Repository
+from instark.application.utilities.tenancy import StandardTenantProvider, Tenant
 from instark.application.utilities.query_parser import QueryParser
 
 
@@ -18,6 +19,7 @@ def test_memory_repository_implementation() -> None:
 @fixture
 def memory_repository() -> MemoryRepository:
     parser = QueryParser()
+    tenant_provider = StandardTenantProvider(Tenant(name="Default"))
     entity_dict = {
         "1": DummyEntity('1', 'value_1'),
         "2": DummyEntity('2', 'value_2'),
