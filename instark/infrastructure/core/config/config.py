@@ -1,4 +1,5 @@
 import multiprocessing
+from collections import defaultdict
 from typing import Dict, Any
 from abc import ABC, abstractmethod
 from json import loads, JSONDecodeError
@@ -9,7 +10,7 @@ TEST = 'TEST'
 DEV = 'DEV'
 
 
-class Config(dict, ABC):
+class Config(defaultdict, ABC):
     @abstractmethod
     def __init__(self):
         self['mode'] = 'BASE'
@@ -33,7 +34,7 @@ class Config(dict, ABC):
                 'secret': 'DEVSECRET123',
                 'lifetime': 86400
             },
-            'tenant':{
+            'tenant': {
                 'algorithm': 'HS256',
                 'secret': 'DEVSECRET123',
                 'lifetime': 86400

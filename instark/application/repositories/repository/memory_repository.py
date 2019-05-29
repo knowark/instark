@@ -1,24 +1,31 @@
 from abc import ABC, abstractmethod
+from collections import defaultdict
 from typing import List, Dict, TypeVar, Optional, Generic, Union
 from .repository import Repository
 from ...utilities.tenancy import TenantProvider
 from ...utilities.query_parser import QueryParser
-from ...utilities.types import T, QueryDomain
+from ...utilities.types import T, QueryDomain, EntityNotFoundError
 
 
 class MemoryRepository(Repository, Generic[T]):
     def __init__(self,  parser: QueryParser,
                 tenant_provider: TenantProvider) -> None:
-        self.items = {}  # type: Dict[str, T]
+        self.data: Dict[str, Dict[str, T]] = defaultdict(dict)
         self.parser = parser
         self.tenant_provider = tenant_provider
 
-    def get(self, id: str) -> Optional[T]:
+    def get(self, id: str) -> T:
+        item = self.data[self._location].get(id)
+        if not item:
+            raise EntityNotFoundError(
+                f"The entity with id {id} was not found.")
         return self.items.get(id)
 
     def add(self, item: T) -> bool:
         id = getattr(item, 'id')
-        self.items[id] = item
+        if id not in self.data[self._location]:
+            return False
+        self.data[self._location][id] = item
         return True
 
     def search(self, domain: QueryDomain, limit=0, offset=0) -> List[T]:
@@ -26,7 +33,7 @@ class MemoryRepository(Repository, Generic[T]):
         limit = int(limit) if limit > 0 else 100
         offset = int(offset) if offset > 0 else 0
         filter_function = self.parser.parse(domain)
-        for item in list(self.items.values()):
+        for item in list(self.data[self._location].values()):
             if filter_function(item):
                 items.append(item)
 
@@ -37,13 +44,13 @@ class MemoryRepository(Repository, Generic[T]):
 
     def remove(self, item: T) -> bool:
         id = getattr(item, 'id')
-        if id not in self.items:
+        if id not in self.data[self._location]:
             return False
         del self.items[id]
         return True
 
-    def load(self, items: Dict[str, T]) -> None:
-        self.items = items
+    def load(self, data: Dict[str, Dict[str, T]]) -> None:
+        self.data = data
     
     @property
     def _location(self) -> str:
