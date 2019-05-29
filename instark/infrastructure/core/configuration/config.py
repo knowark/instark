@@ -46,6 +46,7 @@ class Config(defaultdict, ABC):
                 'threshold': 86400
             }
         }
+        self['strategy'] = {}
 
 
 class TrialConfig(Config):

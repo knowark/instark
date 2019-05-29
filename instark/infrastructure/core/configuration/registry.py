@@ -10,6 +10,7 @@ from ....application.coordinators import (
 from ....application.informers import MemoryInstarkInformer
 from ....application.utilities.tenancy import StandardTenantProvider, Tenant
 from ....infrastructure.delivery import FirebaseDeliveryService
+from ..tenancy import TenantSupplier, MemoryTenantSupplier
 from .config import Config
 
 

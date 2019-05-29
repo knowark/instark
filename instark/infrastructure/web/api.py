@@ -1,12 +1,12 @@
 from flask import Flask, jsonify
-
+from injectark import Injectark
 from ..resolver import Registry
 from .resources import(RootResource, MessageResource, ChannelResource,
                        DeviceResource, SubscriptionResource)
 from .spec import create_spec
 
 
-def create_api(app: Flask, registry: Registry) -> None:
+def create_api(app: Flask, registry: Registry, resolver: Injectark) -> None:
 
     # Restful API
     spec = create_spec()
@@ -15,6 +15,9 @@ def create_api(app: Flask, registry: Registry) -> None:
     # Root Resource (Api Specification)
     root_view = RootResource.as_view('root', registry=registry)
     app.add_url_rule("/", view_func=root_view)
+
+    # Middleware
+    authenticate = resolver.resolve('Authenticate')
 
     # Message Resource
     spec.path(path="/messages/", resource=MessageResource)
