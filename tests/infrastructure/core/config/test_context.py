@@ -1,4 +1,4 @@
-from instark.infrastructure.config import (
+from instark.infrastructure.core.config import (
     TrialConfig, MemoryRegistry, Context)
 
 

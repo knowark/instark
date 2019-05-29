@@ -23,7 +23,9 @@ class Config(dict, ABC):
             'debug': False
         }
         self['flask'] = {}
-        self['tenancy'] = {}
+        self['tenancy'] = {
+            'json': Path.home() / 'tenants.json'
+        }
         self['database'] = {}
         self['tokens'] = {
             'access': {

@@ -57,8 +57,6 @@ class ChannelResource(MethodView):
             return jsonify(code=400, error=error.messages), 400
         channel = self.subscription_coordinator.create_channel(data)
         channel2 = self.subscription_coordinator.get_channels(data.get('id'))
-        print('Channel 2$$$$$$$$$$$$$$$$$$', channel2[0].id)
-
         response = 'Channel Post: \n name<{0}> - code<{1}>'.format(
             channel.name,
             channel.code,

@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
-from ..config import Context
+from ..core.config import Context
 from .api import create_api
 from .errors import register_error_handler
 

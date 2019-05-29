@@ -1,6 +1,6 @@
 import os
 from .infrastructure.web import create_app, ServerApplication
-from .infrastructure.config import (
+from .infrastructure.core.config import (
     DevelopmentConfig, ProductionRegistry, MemoryRegistry, Context)
 
 
@@ -15,7 +15,7 @@ def main():  # pragma: no cover
     config = ConfigClass()
     context = Context(config, RegistryClass(config))
     gunicorn_config = config['gunicorn']
-
+    print('Context >>>>>>>', context)
     app = create_app(context)
     print('app>>>>>>>>', app)
     print('gunicorn_config>>>>>>', gunicorn_config)

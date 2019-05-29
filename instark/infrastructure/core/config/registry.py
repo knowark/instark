@@ -1,15 +1,15 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
-from ...application.repositories import (
+from ....application.repositories import (
     MemoryDeviceRepository, MemoryChannelRepository,
     MemorySubscriptionRepository, MemoryMessageRepository)
-from ...application.utilities.query_parser import QueryParser
-from ...application.services import StandardIdService, MemoryDeliveryService
-from ...application.coordinators import (
+from ....application.utilities.query_parser import QueryParser
+from ....application.services import StandardIdService, MemoryDeliveryService
+from ....application.coordinators import (
     RegistrationCoordinator, SubscriptionCoordinator, NotificationCoordinator)
-from ...application.informers import MemoryInstarkInformer
-from ...application.utilities.tenancy import StandardTenantProvider, Tenant
-from ...infrastructure.delivery import FirebaseDeliveryService
+from ....application.informers import MemoryInstarkInformer
+from ....application.utilities.tenancy import StandardTenantProvider, Tenant
+from ....infrastructure.delivery import FirebaseDeliveryService
 from .config import Config
 
 
