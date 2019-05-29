@@ -4,7 +4,8 @@ from typing import List, Dict, TypeVar, Optional, Generic, Union
 from .repository import Repository
 from ...utilities.tenancy import TenantProvider
 from ...utilities.query_parser import QueryParser
-from ...utilities.types import T, QueryDomain, EntityNotFoundError
+from ...utilities.types import T, QueryDomain
+from ...utilities.exceptions import EntityNotFoundError
 
 
 class MemoryRepository(Repository, Generic[T]):

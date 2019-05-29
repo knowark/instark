@@ -6,14 +6,14 @@ from .resources import(RootResource, MessageResource, ChannelResource,
 from .spec import create_spec
 
 
-def create_api(app: Flask, registry: Registry, resolver: Injectark) -> None:
+def create_api(app: Flask, resolver: Injectark) -> None:
 
     # Restful API
     spec = create_spec()
-    registry['spec'] = spec
+    # registry['spec'] = spec
 
     # Root Resource (Api Specification)
-    root_view = RootResource.as_view('root', registry=registry)
+    root_view = RootResource.as_view('root', spec=spec)
     app.add_url_rule("/", view_func=root_view)
 
     # Middleware
@@ -21,21 +21,21 @@ def create_api(app: Flask, registry: Registry, resolver: Injectark) -> None:
 
     # Message Resource
     spec.path(path="/messages/", resource=MessageResource)
-    message_view = MessageResource.as_view('messages', registry=registry)
+    message_view = MessageResource.as_view('messages', resolver=resolver)
     app.add_url_rule("/messages/", view_func=message_view)
 
     # Channel Resource
     spec.path(path="/channels/", resource=ChannelResource)
-    channel_view = ChannelResource.as_view('channels', registry=registry)
+    channel_view = ChannelResource.as_view('channels', resolver=resolver)
     app.add_url_rule("/channels/", view_func=channel_view)
 
     # Device Resource
     spec.path(path="/devices/", resource=DeviceResource)
-    device_view = DeviceResource.as_view('devices', registry=registry)
+    device_view = DeviceResource.as_view('devices', resolver=resolver)
     app.add_url_rule("/devices/", view_func=device_view)
 
     # Device Resource
     spec.path(path="/subscriptions/", resource=SubscriptionResource)
     subscription_view = SubscriptionResource.as_view('subscriptions',
-                                                     registry=registry)
+                                                     resolver=resolver)
     app.add_url_rule("/subscriptions/", view_func=subscription_view)

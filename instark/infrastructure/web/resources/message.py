@@ -7,9 +7,8 @@ from ..schemas import MessageSchema
 
 class MessageResource(MethodView):
 
-    def __init__(self, registry) -> None:
-        self.notification_coordinator = registry['notification_coordinator']
-        self.spec = registry['spec']
+    def __init__(self, resolver) -> None:
+        self.notification_coordinator = resolver['notification_coordinator']
 
     def post(self) -> Tuple[str, int]:
         """

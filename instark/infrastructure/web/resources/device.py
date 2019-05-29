@@ -7,9 +7,8 @@ from ..schemas import DeviceSchema
 
 class DeviceResource(MethodView):
 
-    def __init__(self, registry) -> None:
-        self.registration_coordinator = registry['registration_coordinator']
-        self.spec = registry['spec']
+    def __init__(self, resolver) -> None:
+        self.registration_coordinator = resolver['registration_coordinator']
 
     def put(self) -> Tuple[str, int]:
         """

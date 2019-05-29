@@ -65,3 +65,4 @@ class DevelopmentConfig(Config):
         self['gunicorn'].update({
             'debug': True
         })
+        self['factory'] = 'MemoryFactory'

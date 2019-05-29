@@ -7,9 +7,8 @@ from ..schemas import SubscriptionSchema
 
 class SubscriptionResource(MethodView):
 
-    def __init__(self, registry) -> None:
-        self.subscription_coordinator = registry['subscription_coordinator']
-        self.spec = registry['spec']
+    def __init__(self, resolver) -> None:
+        self.subscription_coordinator = resolver['subscription_coordinator']
 
     def post(self) -> Tuple[str, int]:
         """
