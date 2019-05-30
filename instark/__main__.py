@@ -19,7 +19,7 @@ def main():  # pragma: no cover
     # app = create_app(context, resolver)
     
     # ServerApplication(app, gunicorn_config).run()
-    # Cli(config, resolver)
+    Cli(config, resolver)
 
 
 if __name__ == '__main__':  # pragma: no cover

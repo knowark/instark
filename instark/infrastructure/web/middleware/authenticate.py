@@ -3,7 +3,7 @@ from functools import wraps
 from flask import request
 from ....application.coordinators import SessionCoordinator
 from ...core import JwtSupplier, AuthenticationError, TenantSupplier
-# from ..schemas import *
+from ..schemas import UserSchema
 
 
 class Authenticate:
@@ -21,14 +21,18 @@ class Authenticate:
             token = authorization.replace('Bearer ', '')
             if not token:
                 token = request.args.get('access_token')
+
             try:
                 token_payload = self.jwt_supplier.decode(
                     token, verify=False)
                 tenant_dict = self.tenant_supplier.get_tenant(
                     token_payload['tid'])
+
                 token_payload = self.jwt_supplier.decode(token, secret=None)
                 self.session_coordinator.set_tenant(tenant_dict)
-                # user_dict = UserSchema().load(token_payload)
+                
+                user_dict = UserSchema().load(token_payload)
+                self.session_coordinator.set_user(user_dict)
             except Exception as e:
                 raise AuthenticationError(
                     "Couldn't authenticate the request.")

@@ -7,7 +7,6 @@ class Cli:
     def __init__(self, config: Config, resolver: Injectark) -> None:
         self.config = config
         self.resolver = resolver
-
         args = self.parse()
         args.func(args)
     
@@ -30,6 +29,12 @@ class Cli:
         serve_parser = subparsers.add_parser(
             'serve', help='Start HTTP server.')
         serve_parser.set_defaults(func=self.serve)
+        print('///////////////', sys.argv, sys.argv[1:])
+        if len(sys.argv[1:]) == 0:
+            parser.print_help()
+            parser.exit()
+
+        return parser.parse_args()
     
     def setup(self, args: Namespace) -> None:
         print('...SETUP:::', args)

@@ -66,3 +66,11 @@ class DevelopmentConfig(Config):
             'debug': True
         })
         self['factory'] = 'MemoryFactory'
+        self['strategy'] = {
+            "QueryParser": {
+                "method": "query_parser"
+            },
+            "TenantSupplier": {
+                "method": "memory_tenant_supplier"
+            }
+        }
