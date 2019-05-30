@@ -11,12 +11,9 @@ from ....application.services import (
 from ....application.coordinators import (
     RegistrationCoordinator, SubscriptionCoordinator, NotificationCoordinator,
     SessionCoordinator)
-# here
 from ....application.informers import MemoryInstarkInformer
 from ..configuration import Config
 from ..tenancy import TenantSupplier, MemoryTenantSupplier
-
-from ....application.utilities.query_parser import QueryParser
 from .factory import Factory
 # from ....infrastructure.delivery import FirebaseDeliveryService
 
@@ -54,6 +51,8 @@ class MemoryFactory(Factory):
     ) -> MemoryMessageRepository:
         return MemoryMessageRepository(query_parser, tenant_provider)
 
+    def standard_tenant_provider(self) -> StandardTenantProvider:
+        return StandardTenantProvider()
     # Services
 
     def standart_id_service(self) -> StandardIdService:

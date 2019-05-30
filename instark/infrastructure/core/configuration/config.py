@@ -46,6 +46,7 @@ class Config(defaultdict, ABC):
                 'threshold': 86400
             }
         }
+        self['secrets'] = {}
         self['strategy'] = {}
 
 
@@ -63,12 +64,66 @@ class DevelopmentConfig(Config):
         super().__init__()
         self['mode'] = DEV
         self['gunicorn'].update({
-            'debug': True
+            'debug': True,
+            'accesslog': '-',
+            'loglevel': 'debug'
         })
+        self['authentication'] = {
+            "type": "jwt",
+            "secret_file": str(Path.home().joinpath('sign.txt'))
+        }
+        self['secrets'] = {
+            "jwt": str(Path.home().joinpath('sign.txt'))
+        }
         self['factory'] = 'MemoryFactory'
         self['strategy'] = {
             "QueryParser": {
                 "method": "query_parser"
+            },
+            "CatalogService": {
+                "method": "memory_catalog_service"
+            },
+            "ProvisionService": {
+                "method": "memory_provision_service"
+            },
+            "TenantSupplier": {
+                "method": "tenant_supplier"
+            },
+            "DeviceRepository": {
+                "method": "memory_device_repository"
+            },
+            "ChannelRepository": {
+                "method": "memory_channel_repository"
+            },
+            "SubscriptionRepository": {
+                "method": "memory_subscription_repository"
+            },
+            "MessageRepository": {
+                "method": "memory_message_repository"
+            },
+            "MessageRepository": {
+                "method": "memory_message_repository"
+            },
+            "TenantProvider": {
+                "method": "standard_tenant_provider"
+            },
+            "AuthService": {
+                "method": "memory_auth_service"
+            },
+            "SessionCoordinator": {
+                "method": "session_coordinator"
+            },
+            "RegistrationCoordinator": {
+                "method": "registration_coordinator"
+            },
+            "SubcriptionCoordinator": {
+                "method": "subscription_coordinator"
+            },
+            "NotificationCoordinator": {
+                "method": "notification_coordinator"
+            },
+            "InstarkInformer": {
+                "method": "memory_instark_informer"
             },
             "TenantSupplier": {
                 "method": "memory_tenant_supplier"
