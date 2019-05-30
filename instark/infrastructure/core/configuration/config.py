@@ -8,6 +8,7 @@ from pathlib import Path
 
 TEST = 'TEST'
 DEV = 'DEV'
+PROD = 'PROD'
 
 
 class Config(defaultdict, ABC):
@@ -59,7 +60,7 @@ class TrialConfig(Config):
         })
 
 
-class DevelopmentConfig(Config):
+class DevelopmentConfig(TrialConfig):
     def __init__(self):
         super().__init__()
         self['mode'] = DEV
@@ -76,7 +77,7 @@ class DevelopmentConfig(Config):
             "jwt": str(Path.home().joinpath('sign.txt'))
         }
         self['factory'] = 'MemoryFactory'
-        self['strategy'] = {
+        self['strategy'].update({
             "QueryParser": {
                 "method": "query_parser"
             },
@@ -128,4 +129,31 @@ class DevelopmentConfig(Config):
             "TenantSupplier": {
                 "method": "memory_tenant_supplier"
             }
+        })
+
+
+class ProductionConfig(DevelopmentConfig):
+    def __init__(self):
+        super().__init__()
+        self['mode'] = PROD
+        self['gunicorn'].update({
+            'debug': True,
+            'accesslog': '-',
+            'loglevel': 'debug'
+        })
+        self['authentication'] = {
+            "type": "jwt",
+            "secret_file": str(Path.home().joinpath('sign.txt'))
         }
+        self['secrets'] = {
+            "jwt": str(Path.home().joinpath('sign.txt'))
+        }
+        self['factory'] = 'HttpFactory'
+        self['strategy'].update({
+            "Jwt": {
+                "method": "jwt_supplier"
+            },
+            "Authenticate": {
+                "method": "middleware_authenticate"
+            }
+        })

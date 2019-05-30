@@ -5,7 +5,7 @@ from instark.application.repositories import (
     MemorySubscriptionRepository)
 from instark.application.utilities.query_parser import QueryParser
 from instark.application.informers.instark_informer import InstarkInformer
-from instark.application.informers.standard_instark_informer import MemoryInstarkInformer
+from instark.application.informers.standard_instark_informer import StandardInstarkInformer
 
 
 @fixture
@@ -58,6 +58,6 @@ def device_channel_repository():
 @fixture
 def instark_informer(device_repository, channel_repository,
                      message_repository, device_channel_repository):
-    return MemoryInstarkInformer(
+    return StandardInstarkInformer(
         device_repository, channel_repository,
         message_repository, device_channel_repository)

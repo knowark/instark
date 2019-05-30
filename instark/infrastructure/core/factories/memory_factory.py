@@ -11,7 +11,7 @@ from ....application.services import (
 from ....application.coordinators import (
     RegistrationCoordinator, SubscriptionCoordinator, NotificationCoordinator,
     SessionCoordinator)
-from ....application.informers import MemoryInstarkInformer
+from ....application.informers import StandardInstarkInformer
 from ..configuration import Config
 from ..tenancy import TenantSupplier, MemoryTenantSupplier
 from .factory import Factory
@@ -57,7 +57,7 @@ class MemoryFactory(Factory):
 
     def standart_id_service(self) -> StandardIdService:
         return StandardIdService()
-    
+
     def memory_auth_service(self) -> StandardAuthService:
         return StandardAuthService()
 
@@ -78,7 +78,8 @@ class MemoryFactory(Factory):
     ) -> SubscriptionCoordinator:
         return SubscriptionCoordinator(id_service, channel_repository,
                                        device_repository,
-                                       device_channel_repository)
+                                       device_channel_repository,
+                                       delivery_service)
 
     def notification_coordinator(
         self, id_service: IdService,
@@ -92,9 +93,9 @@ class MemoryFactory(Factory):
                                        delivery_service)
 
     def session_coordinator(
-        self, tenant_provider: TenantProvider
+        self, tenant_provider: TenantProvider, auth_service: AuthService
     ) -> SessionCoordinator:
-        return SessionCoordinator(tenant_provider)
+        return SessionCoordinator(tenant_provider, auth_service)
 
     # Reporters
 
@@ -103,7 +104,7 @@ class MemoryFactory(Factory):
         channel_repository: ChannelRepository,
         message_repository: MessageRepository,
         device_channel_repository: SubscriptionRepository
-    ) -> MemoryInstarkInformer:
-        return MemoryInstarkInformer(device_repository, channel_repository,
-                                     message_repository,
-                                     device_channel_repository)
+    ) -> StandardInstarkInformer:
+        return StandardInstarkInformer(device_repository, channel_repository,
+                                       message_repository,
+                                       device_channel_repository)

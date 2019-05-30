@@ -7,7 +7,7 @@ from ....application.utilities.query_parser import QueryParser
 from ....application.services import StandardIdService, MemoryDeliveryService
 from ....application.coordinators import (
     RegistrationCoordinator, SubscriptionCoordinator, NotificationCoordinator)
-from ....application.informers import MemoryInstarkInformer
+from ....application.informers import StandardInstarkInformer
 from ....application.utilities.tenancy import StandardTenantProvider, Tenant
 from ....infrastructure.delivery import FirebaseDeliveryService
 from ..tenancy import TenantSupplier, MemoryTenantSupplier
@@ -29,9 +29,8 @@ class MemoryRegistry(Registry):
         device_repository = MemoryDeviceRepository(parser, tenant_provider)
         channel_repository = MemoryChannelRepository(parser, tenant_provider)
         device_channel_repository = MemorySubscriptionRepository(parser,
-            tenant_provider)
+                                                                 tenant_provider)
         message_repository = MemoryMessageRepository(parser, tenant_provider)
-        
 
         id_service = StandardIdService()
         delivery_service = MemoryDeliveryService()
@@ -47,7 +46,7 @@ class MemoryRegistry(Registry):
             id_service, channel_repository, device_repository,
             message_repository, delivery_service)
 
-        instark_informer = MemoryInstarkInformer(
+        instark_informer = StandardInstarkInformer(
             device_repository, channel_repository,
             message_repository, device_channel_repository)
 

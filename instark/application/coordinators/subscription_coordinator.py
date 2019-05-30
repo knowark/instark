@@ -23,6 +23,7 @@ class SubscriptionCoordinator:
             channel_dict['id'] = self.id_service.generate_id()
         channel = Channel(**channel_dict)
         self.channel_repository.add(channel)
+        print("DATA IN REPO:::", self.channel_repository.data)
         return channel
 
     def subscribe(self, subscription_dict: SubscriptionDict) -> None:

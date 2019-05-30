@@ -9,8 +9,8 @@ from .subscription import SubscriptionResource
 
 class RootResource(MethodView):
 
-    def __init__(self, registry) -> None:
-        self.spec = registry.get('spec')
+    def __init__(self, spec) -> None:
+        self.spec = spec
 
     def get(self) -> str:
         if 'api' in request.args:

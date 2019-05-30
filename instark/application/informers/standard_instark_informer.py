@@ -8,7 +8,7 @@ from .types import (
 from .instark_informer import InstarkInformer
 
 
-class MemoryInstarkInformer(InstarkInformer):
+class StandardInstarkInformer(InstarkInformer):
 
     def __init__(self, device_repository: DeviceRepository,
                  channel_repository: ChannelRepository,
@@ -24,6 +24,7 @@ class MemoryInstarkInformer(InstarkInformer):
                 self.device_repository.search(domain)]
 
     def search_channels(self, domain: SearchDomain) -> ChannelDictList:
+        print("DATA****", self.channel_repository.data)
         return [vars(channel) for channel in
                 self.channel_repository.search(domain)]
 

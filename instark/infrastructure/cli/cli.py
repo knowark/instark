@@ -9,10 +9,12 @@ class Cli:
         self.config = config
         self.resolver = resolver
         self.registry = resolver
+        print('config++++++++++', config)
+        print('resolver--------', resolver)
 
         args = self.parse()
         args.func(args)
-    
+
     def parse(self) -> Namespace:
         parser = ArgumentParser('Instark')
         subparsers = parser.add_subparsers()
@@ -32,7 +34,7 @@ class Cli:
         serve_parser = subparsers.add_parser(
             'serve', help='Start HTTP server.')
         serve_parser.set_defaults(func=self.serve)
-
+        
         if len(sys.argv[1:]) == 0:
             parser.print_help()
             parser.exit()

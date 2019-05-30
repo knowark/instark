@@ -5,14 +5,18 @@ from .config import *
 from .context import *
 from .registry import *
 
+
 def build_config(config_path: str, mode: str) -> Config:
     if mode == 'DEV':
         return DevelopmentConfig()
-    trial_config = TrialConfig()
+
+    production_config = ProductionConfig()
     loaded_config = load_config(config_path)
     if loaded_config is not None:
-        trial_config.update(loaded_config)
-    return trial_config
+        production_config.update(loaded_config)
+
+    return production_config
+
 
 def load_config(config_path: str) -> Optional[Config]:
     path = Path(config_path)
