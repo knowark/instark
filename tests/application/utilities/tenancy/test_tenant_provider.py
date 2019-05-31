@@ -19,14 +19,14 @@ def test_standard_tenant_provider_instantiation(tenant_provider):
 
 
 def test_standard_tenant_provider_setup(tenant_provider):
-    tenant = Tenant(name='Alpina')
+    tenant = Tenant(name='Nubark')
     assert tenant_provider.state.tenant is None
     tenant_provider.setup(tenant)
     assert tenant_provider.state.tenant == tenant
 
 
 def test_standard_tenant_provider_get_tenant(tenant_provider):
-    tenant = Tenant(name='Alpina')
+    tenant = Tenant(name='Nubark')
     assert tenant_provider.state.tenant is None
     tenant_provider.setup(tenant)
     assert tenant_provider.tenant == tenant
