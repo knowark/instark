@@ -18,14 +18,22 @@ class MemoryRepository(Repository, Generic[T]):
 
     def get(self, id: str) -> T:
         item = self.data[self._location].get(id)
+        print('Item################', item)
         if not item:
             raise EntityNotFoundError(
                 f"The entity with id {id} was not found.")
-        return self.items.get(id)
+        print('GET items>>>>>>>>>', item)
+        return item
 
     def add(self, item: T) -> T:
-        setattr(item, 'id', getattr(item, 'id') or str(uuid4()))
-        self.data[self._location][getattr(item, 'id')] = item
+        # print('item>>>>>>>>>>>', item)
+        # setattr(item, 'id', getattr(item, 'id') or str(uuid4()))
+        # print('Locator>>>>>>>>>>>>>', self.data[self._location])
+        # self.data[self._location][getattr(item, 'id')] = item
+        
+        # return item
+        item.id = item.id or str(uuid4())
+        self.data[self._location][item.id] = item
         return item
 
     def search(self, domain: QueryDomain, limit=0, offset=0) -> List[T]:

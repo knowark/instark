@@ -8,6 +8,7 @@ from instark.application.services import (
 from instark.application.utilities.tenancy import TenantProvider, Tenant
 
 
+
 @fixture
 def id_service():
     return StandardIdService()
@@ -25,7 +26,7 @@ def channel_repository():
 
 @fixture
 def device_channel_repository():
-    return MemorySubscriptionRepository(QueryParser())
+    return MemorySubscriptionRepository(QueryParser(), TenantProvider)
 
 
 @fixture

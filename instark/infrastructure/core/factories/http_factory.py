@@ -1,3 +1,4 @@
+from pathlib import Path
 from ....application.utilities import (
     QueryParser, TenantProvider, StandardTenantProvider)
 from ....application.repositories import (
@@ -14,6 +15,7 @@ from ....application.coordinators import (
 from ....application.informers import StandardInstarkInformer
 from ...web.middleware import Authenticate
 from ...core.crypto import JwtSupplier
+from ...delivery import FirebaseDeliveryService
 from ..configuration import Config
 from ..tenancy import TenantSupplier, MemoryTenantSupplier
 from .memory_factory import MemoryFactory
@@ -33,3 +35,14 @@ class HttpFactory(MemoryFactory):
     def jwt_supplier(self) -> JwtSupplier:
         secret = self.access_config['secret']
         return JwtSupplier(secret)
+
+    def firebase_delivery_service(self) -> FirebaseDeliveryService:
+       
+       
+        default_firebase_credentials_path = str(Path.home().joinpath(
+            'firebase_credentials.json'))
+        firebase_credentials_path = self.config.get(
+            'firebase_credentials_path', default_firebase_credentials_path)
+
+
+        return FirebaseDeliveryService(firebase_credentials_path)

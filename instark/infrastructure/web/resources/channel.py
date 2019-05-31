@@ -9,7 +9,7 @@ from ..schemas import ChannelSchema
 class ChannelResource(MethodView):
 
     def __init__(self, resolver) -> None:
-        self.subscription_coordinator = resolver['SubcriptionCoordinator']
+        self.subscription_coordinator = resolver['SubscriptionCoordinator']
         self.instark_informer = resolver['InstarkInformer']
 
     def get(self) -> Tuple[str, int]:
@@ -17,7 +17,7 @@ class ChannelResource(MethodView):
         ---
         summary: Return all channels.
         tags:
-          - Users
+          - Channels
         responses:
           200:
             description: "Successful response"
@@ -30,8 +30,6 @@ class ChannelResource(MethodView):
         """
 
         domain, limit, offset = get_request_filter(request)
-
-        print("+++++", self.instark_informer.search_channels(domain))
 
         channels = ChannelSchema().dump(
             self.instark_informer.search_channels(domain), many=True)
@@ -56,8 +54,6 @@ class ChannelResource(MethodView):
         """
 
         data = ChannelSchema().loads(request.data)
-
-        print('DATA>>>>>>', data)
 
         channel = self.subscription_coordinator.create_channel(data)
         

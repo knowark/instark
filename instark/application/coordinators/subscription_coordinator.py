@@ -23,7 +23,6 @@ class SubscriptionCoordinator:
             channel_dict['id'] = self.id_service.generate_id()
         channel = Channel(**channel_dict)
         self.channel_repository.add(channel)
-        print("DATA IN REPO:::", self.channel_repository.data)
         return channel
 
     def subscribe(self, subscription_dict: SubscriptionDict) -> None:
@@ -33,12 +32,7 @@ class SubscriptionCoordinator:
         device_channel = Subscription(**subscription_dict)
         device = self.device_repository.get(device_channel.device_id)
         channel = self.channel_repository.get(device_channel.channel_id)
-
         self.delivery_service.subscribe(channel.code, device.locator)
 
         self.device_channel_repository.add(device_channel)
         return device_channel
-
-    def get_channels(self, channel_id: str):
-        channels = self.channel_repository.search([('id', '=', channel_id)])
-        return channels if channels else []

@@ -25,27 +25,9 @@ class Config(defaultdict, ABC):
             'debug': False
         }
         self['flask'] = {}
+        self['database'] = {}
         self['tenancy'] = {
             'json': Path.home() / 'tenants.json'
-        }
-        self['database'] = {}
-        self['tokens'] = {
-            'access': {
-                'algorithm': 'HS256',
-                'secret': 'DEVSECRET123',
-                'lifetime': 86400
-            },
-            'tenant': {
-                'algorithm': 'HS256',
-                'secret': 'DEVSECRET123',
-                'lifetime': 86400
-            },
-            'refresh': {
-                'algorithm': 'HS256',
-                'secret': 'DEVSECRET123',
-                'lifetime': 604800,
-                'threshold': 86400
-            }
         }
         self['secrets'] = {}
         self['strategy'] = {}
@@ -108,6 +90,10 @@ class DevelopmentConfig(TrialConfig):
             "TenantProvider": {
                 "method": "standard_tenant_provider"
             },
+            # Delivery service
+            "DeliveryService": {
+                "method": "memory_delivery_service"
+            },
             "AuthService": {
                 "method": "memory_auth_service"
             },
@@ -117,7 +103,7 @@ class DevelopmentConfig(TrialConfig):
             "RegistrationCoordinator": {
                 "method": "registration_coordinator"
             },
-            "SubcriptionCoordinator": {
+            "SubscriptionCoordinator": {
                 "method": "subscription_coordinator"
             },
             "NotificationCoordinator": {
@@ -155,5 +141,8 @@ class ProductionConfig(DevelopmentConfig):
             },
             "Authenticate": {
                 "method": "middleware_authenticate"
-            }
+            },
+            # "DeliveryService": {
+            #     "method": "firebase_delivery_service"
+            # }
         })

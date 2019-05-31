@@ -21,8 +21,8 @@ def create_api(app: Flask, resolver: Injectark) -> None:
 
     # Message Resource
     spec.path(path="/messages", resource=MessageResource)
-    message_view = MessageResource.as_view(
-        'messages', resolver=resolver)
+    message_view = authenticate(MessageResource.as_view(
+        'messages', resolver=resolver))
     app.add_url_rule("/messages", view_func=message_view)
 
     # Channel Resource
@@ -33,12 +33,12 @@ def create_api(app: Flask, resolver: Injectark) -> None:
 
     # Device Resource
     spec.path(path="/devices", resource=DeviceResource)
-    device_view = DeviceResource.as_view(
-        'devices', resolver=resolver)
+    device_view = authenticate(DeviceResource.as_view(
+        'devices', resolver=resolver))
     app.add_url_rule("/devices", view_func=device_view)
 
     # Subscription Resource
     spec.path(path="/subscriptions", resource=SubscriptionResource)
-    subscription_view = SubscriptionResource.as_view(
-        'subscriptions', resolver=resolver)
+    subscription_view = authenticate(SubscriptionResource.as_view(
+        'subscriptions', resolver=resolver))
     app.add_url_rule("/subscriptions", view_func=subscription_view)

@@ -1,3 +1,7 @@
+from pathlib import Path
+from .factory import Factory
+from ..configuration import Config
+from ..tenancy import TenantSupplier, MemoryTenantSupplier
 from ....application.utilities import (
     QueryParser, TenantProvider, StandardTenantProvider)
 from ....application.repositories import (
@@ -12,10 +16,6 @@ from ....application.coordinators import (
     RegistrationCoordinator, SubscriptionCoordinator, NotificationCoordinator,
     SessionCoordinator)
 from ....application.informers import StandardInstarkInformer
-from ..configuration import Config
-from ..tenancy import TenantSupplier, MemoryTenantSupplier
-from .factory import Factory
-# from ....infrastructure.delivery import FirebaseDeliveryService
 
 
 class MemoryFactory(Factory):
@@ -28,8 +28,8 @@ class MemoryFactory(Factory):
         return QueryParser()
 
     def memory_device_repository(
-            self, query_parser: QueryParser,
-            tenant_provider: TenantProvider
+        self, query_parser: QueryParser,
+        tenant_provider: TenantProvider
     ) -> MemoryDeviceRepository:
         return MemoryDeviceRepository(query_parser, tenant_provider)
 
@@ -53,7 +53,11 @@ class MemoryFactory(Factory):
 
     def standard_tenant_provider(self) -> StandardTenantProvider:
         return StandardTenantProvider()
+
     # Services
+
+    def memory_delivery_service(self) -> MemoryDeliveryService:
+        return MemoryDeliveryService('Fake Response')
 
     def standart_id_service(self) -> StandardIdService:
         return StandardIdService()

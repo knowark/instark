@@ -3,17 +3,19 @@ from flask import request, jsonify
 from flask.views import MethodView
 from marshmallow import ValidationError
 from ..schemas import MessageSchema
+from ..helpers import get_request_filter
 
 
 class MessageResource(MethodView):
 
     def __init__(self, resolver) -> None:
-        self.notification_coordinator = resolver['notification_coordinator']
+        self.notification_coordinator = resolver['NotificationCoordinator']
+        self.instark_informer = resolver['InstarkInformer']
 
     def post(self) -> Tuple[str, int]:
         """
         ---
-        summary: Publish message.
+        summary: Send message.
         tags:
           - Messages
         requestBody:
@@ -24,13 +26,11 @@ class MessageResource(MethodView):
                 $ref: '#/components/schemas/Message'
         responses:
           201:
-            description: "Message posted"
+            description: "Send message"
         """
 
-        try:
-            data = MessageSchema().loads(request.data or '{}')
-        except ValidationError as error:
-            return jsonify(code=400, error=error.messages), 400
+        
+        data = MessageSchema().loads(request.data or '{}')
         message = self.notification_coordinator.send_message(data)
         response = """Message Post: \n recipient_id<{0}> - title<{1}> -
                       content<{2}> - kind<{3}>""".format(
@@ -42,24 +42,25 @@ class MessageResource(MethodView):
 
         return response, 201
     
-    def get(self) -> str:
+    def get(self) -> Tuple[str, int]:
         """
         ---
         summary: Return all message.
         tags:
           - Messages
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Message'
         responses:
-          201:
-            description: "Succesful response"
+          200:
+            description: "Successful response"
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Message'
         """
-        try:
-            data = MessageSchema().loads(request.data or '{}')
-        except ValidationError as error:
-            return jsonify(code=400, error=error.messages), 400
-        return 201
+        domain, limit, offset = get_request_filter(request)
+
+        messages = MessageSchema().dump(
+            self.instark_informer.search_messages(domain), many=True)
+
+        return jsonify(messages)
