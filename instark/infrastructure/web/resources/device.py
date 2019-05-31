@@ -12,7 +12,7 @@ class DeviceResource(MethodView):
         self.registration_coordinator = resolver['RegistrationCoordinator']
         self.instark_informer = resolver['InstarkInformer']
 
-    def post(self) -> Tuple[str, int]:
+    def put(self) -> Tuple[str, int]:
         """
         ---
         summary: Create device.
