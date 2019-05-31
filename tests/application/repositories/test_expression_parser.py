@@ -1,15 +1,15 @@
 from pytest import fixture
 from unittest.mock import Mock
-from instark.application.repositories import ExpressionParser
+from instark.application.utilities.query_parser import QueryParser
 
 
 @fixture
-def parser() -> ExpressionParser:
-    return ExpressionParser()
+def parser() -> QueryParser:
+    return QueryParser()
 
 
 def test_expression_parser_object_creation(parser):
-    assert isinstance(parser, ExpressionParser)
+    assert isinstance(parser, QueryParser)
 
 
 def test_expression_parser_parse_tuple(parser):

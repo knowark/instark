@@ -8,7 +8,7 @@ from .types import (
 from .instark_informer import InstarkInformer
 
 
-class MemoryInstarkInformer(InstarkInformer):
+class StandardInstarkInformer(InstarkInformer):
 
     def __init__(self, device_repository: DeviceRepository,
                  channel_repository: ChannelRepository,

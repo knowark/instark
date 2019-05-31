@@ -16,4 +16,4 @@ class RegistrationCoordinator:
             registration_dict['id'] = self.id_service.generate_id()
         device = Device(**registration_dict)
         self.device_repository.add(device)
-        return device 
+        return device

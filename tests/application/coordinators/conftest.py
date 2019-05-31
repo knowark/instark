@@ -1,9 +1,12 @@
 from pytest import fixture
 from instark.application.repositories import (
-    ExpressionParser, MemoryDeviceRepository, MemoryChannelRepository,
+    MemoryDeviceRepository, MemoryChannelRepository,
     MemorySubscriptionRepository, MemoryMessageRepository)
+from instark.application.utilities.query_parser import QueryParser
 from instark.application.services import (
     StandardIdService, MemoryDeliveryService)
+from instark.application.utilities.tenancy import TenantProvider, Tenant
+
 
 
 @fixture
@@ -13,22 +16,22 @@ def id_service():
 
 @fixture
 def device_repository():
-    return MemoryDeviceRepository(ExpressionParser())
+    return MemoryDeviceRepository(QueryParser(), TenantProvider)
 
 
 @fixture
 def channel_repository():
-    return MemoryChannelRepository(ExpressionParser())
+    return MemoryChannelRepository(QueryParser(), TenantProvider)
 
 
 @fixture
 def device_channel_repository():
-    return MemorySubscriptionRepository(ExpressionParser())
+    return MemorySubscriptionRepository(QueryParser(), TenantProvider)
 
 
 @fixture
 def message_repository():
-    return MemoryMessageRepository(ExpressionParser())
+    return MemoryMessageRepository(QueryParser(), TenantProvider)
 
 
 @fixture

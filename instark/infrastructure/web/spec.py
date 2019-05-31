@@ -39,7 +39,6 @@ def create_spec() -> APISpec:
                 name="Nubark",
                 url="https://www.nubark.com"
             )))
-
     _register_schemas(spec)
 
     return spec

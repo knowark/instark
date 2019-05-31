@@ -30,6 +30,13 @@ def test_channel_coordinator_create_channel(subscription_coordinator):
     assert len(subscription_coordinator.channel_repository.items) == 2
 
 
+def test_get_channels(subscription_coordinator):
+    channel_dict = {'id': '001', 'name': 'Channel 1', 'code': 'CH001'}
+    subscription_coordinator.get_channels(channel_dict['id'])
+
+    assert len(subscription_coordinator.channel_repository.items) > 0
+
+
 def test_subscription_coordinator_subscribe(subscription_coordinator):
     subscription_dict = {'device_id': '001', 'channel_id': '001'}
     subscription_coordinator.subscribe(subscription_dict)

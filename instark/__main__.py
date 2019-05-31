@@ -1,22 +1,26 @@
+"""
+Instark entrypoint
+"""
 import os
+import sys
+from injectark import Injectark
+from .infrastructure.core import build_factory, build_config, Config
+from .infrastructure.cli import Cli
 from .infrastructure.web import create_app, ServerApplication
-from .infrastructure.config import (
-    DevelopmentConfig, ProductionRegistry, MemoryRegistry, Context)
 
 
 def main():  # pragma: no cover
-    ConfigClass = DevelopmentConfig  # type: Type[Config]
-    RegistryClass = ProductionRegistry  # type: Type[Registry]
+    mode = os.environ.get('INSTARK_DEVELOPMENT', 'PROD')
+    config_path = os.environ.get('INSTARK_CONFIG', 'config.json')
+    config = build_config(config_path, mode)
 
-    if os.environ.get('INSTARK_DEVELOPMENT'):
-        ConfigClass = DevelopmentConfig
-        RegistryClass = MemoryRegistry
+    factory = build_factory(config)
+    strategy = config['strategy']
 
-    config = ConfigClass()
-    context = Context(config, RegistryClass(config))
+    resolver = Injectark(strategy=strategy, factory=factory)
+    # Cli(config, resolver)
+    app = create_app(config, resolver)
     gunicorn_config = config['gunicorn']
-
-    app = create_app(context)
     ServerApplication(app, gunicorn_config).run()
 
 

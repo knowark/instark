@@ -1,13 +1,16 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
-from ...application.repositories import (
-    ExpressionParser, MemoryDeviceRepository, MemoryChannelRepository,
+from ....application.repositories import (
+    MemoryDeviceRepository, MemoryChannelRepository,
     MemorySubscriptionRepository, MemoryMessageRepository)
-from ...application.services import StandardIdService, MemoryDeliveryService
-from ...application.coordinators import (
+from ....application.utilities.query_parser import QueryParser
+from ....application.services import StandardIdService, MemoryDeliveryService
+from ....application.coordinators import (
     RegistrationCoordinator, SubscriptionCoordinator, NotificationCoordinator)
-from ...application.informers import MemoryInstarkInformer
-from ...infrastructure.delivery import FirebaseDeliveryService
+from ....application.informers import StandardInstarkInformer
+from ....application.utilities.tenancy import StandardTenantProvider, Tenant
+from ....infrastructure.delivery import FirebaseDeliveryService
+from ..tenancy import TenantSupplier, MemoryTenantSupplier
 from .config import Config
 
 
@@ -21,12 +24,13 @@ class MemoryRegistry(Registry):
 
     def __init__(self, config: Config) -> None:
         super().__init__(config)
-
-        parser = ExpressionParser()
-        device_repository = MemoryDeviceRepository(parser)
-        channel_repository = MemoryChannelRepository(parser)
-        device_channel_repository = MemorySubscriptionRepository(parser)
-        message_repository = MemoryMessageRepository(parser)
+        parser = QueryParser()
+        tenant_provider = StandardTenantProvider(Tenant(name='servagro'))
+        device_repository = MemoryDeviceRepository(parser, tenant_provider)
+        channel_repository = MemoryChannelRepository(parser, tenant_provider)
+        device_channel_repository = MemorySubscriptionRepository(parser,
+                                                                 tenant_provider)
+        message_repository = MemoryMessageRepository(parser, tenant_provider)
 
         id_service = StandardIdService()
         delivery_service = MemoryDeliveryService()
@@ -42,7 +46,7 @@ class MemoryRegistry(Registry):
             id_service, channel_repository, device_repository,
             message_repository, delivery_service)
 
-        instark_informer = MemoryInstarkInformer(
+        instark_informer = StandardInstarkInformer(
             device_repository, channel_repository,
             message_repository, device_channel_repository)
 
