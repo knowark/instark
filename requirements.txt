@@ -38,7 +38,6 @@ injectark==0.3.0
 itsdangerous==1.1.0
 Jinja2==2.10.1
 jsonschema==3.0.1
-jwt==0.5.4
 livereload==2.6.1
 MarkupSafe==1.1.1
 marshmallow==3.0.0rc4
@@ -60,6 +59,7 @@ pyasn1-modules==0.2.5
 pycodestyle==2.5.0
 pycparser==2.19
 Pygments==2.4.0
+PyJWT==1.7.1
 pyparsing==2.4.0
 pyrsistent==0.15.2
 pytest==4.5.0

@@ -23,26 +23,23 @@ class Authenticate:
 
             authorization = request.headers.get('Authorization', "")
             token = authorization.replace('Bearer ', '')
-            print('authorization>>>>>>>>>', authorization, '\n')
-            print('token>>>>>>>>>>>>>>>>>>', token, '\n')
-            token_payload = self.jwt_supplier.decode(
-                    token, verify=False)
-            print('token_payload>>>>>>>>>>>', token_payload)
+            
             if not token:
                 token = request.args.get('access_token')
 
             try:
                 token_payload = self.jwt_supplier.decode(
                     token, verify=False)
-                print('token_payload>>>>>>>>>>>', token_payload)
-                tenant_dict = self.tenant_supplier.get_tenant(
-                    token_payload['tid'])
-                print('Tennant>>>>>>>>>>', tenant_dict)
-                token_payload = self.jwt_supplier.decode(token, secret=None)
-               
-                self.session_coordinator.set_tenant(tenant_dict)
+                # tenant_dict = self.tenant_supplier.get_tenant(
+                #     token_payload['tid'])
+                print('token_payload>>>>>>>>>>>>>>', token_payload, '\n')
+                tenant_dict = {"name": "Servagro"}
+                # token_payload = self.jwt_supplier.decode(token, secret=None)
                 
+                self.session_coordinator.set_tenant(tenant_dict)
+                print('UserSchema()', UserSchema())
                 user_dict = UserSchema().load(token_payload)
+                print('User', user_dict)
                 self.session_coordinator.set_user(user_dict)
             except Exception as e:
                 raise AuthenticationError(

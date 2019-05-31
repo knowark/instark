@@ -35,6 +35,13 @@ class HttpFactory(MemoryFactory):
     def jwt_supplier(self) -> JwtSupplier:
         secret = self.access_config['secret']
         return JwtSupplier(secret)
+    
+    def jwt_supplier(self) -> JwtSupplier:
+        secret = 'secret'
+        secret_file = self.config.get('secrets', {}).get('jwt')
+        # if secret_file:
+        #     secret = Path(secret_file).read_text().strip()
+        return JwtSupplier(secret)
 
     def firebase_delivery_service(self) -> FirebaseDeliveryService:
        

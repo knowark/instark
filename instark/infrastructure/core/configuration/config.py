@@ -66,11 +66,11 @@ class DevelopmentConfig(TrialConfig):
             "CatalogService": {
                 "method": "memory_catalog_service"
             },
-            "ProvisionService": {
-                "method": "memory_provision_service"
-            },
             "TenantSupplier": {
                 "method": "tenant_supplier"
+            },
+            "ProvisionService": {
+                "method": "memory_provision_service"
             },
             "DeviceRepository": {
                 "method": "memory_device_repository"
@@ -136,7 +136,7 @@ class ProductionConfig(DevelopmentConfig):
         }
         self['factory'] = 'HttpFactory'
         self['strategy'].update({
-            "Jwt": {
+            "JwtSupplier": {
                 "method": "jwt_supplier"
             },
             "Authenticate": {
