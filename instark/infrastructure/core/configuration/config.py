@@ -142,7 +142,7 @@ class ProductionConfig(DevelopmentConfig):
             "Authenticate": {
                 "method": "middleware_authenticate"
             },
-            # "DeliveryService": {
-            #     "method": "firebase_delivery_service"
-            # }
+            "DeliveryService": {
+                "method": "firebase_delivery_service"
+            }
         })
