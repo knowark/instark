@@ -12,7 +12,7 @@ class MessageResource(MethodView):
         self.notification_coordinator = resolver['NotificationCoordinator']
         self.instark_informer = resolver['InstarkInformer']
 
-    def post(self) -> Tuple[str, int]:
+    def put(self) -> Tuple[str, int]:
         """
         ---
         summary: Send message.
