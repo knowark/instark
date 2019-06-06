@@ -25,7 +25,6 @@ class NotificationCoordinator:
 
         if message.kind == 'Direct':
             device = self.device_repository.get(message.recipient_id)
-            print('Delivery service >>>>>>>>', self.delivery_service)
             response = self.delivery_service.send(
                 device.locator, message.title, message.content)
         else:

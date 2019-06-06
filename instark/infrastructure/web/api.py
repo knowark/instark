@@ -17,6 +17,8 @@ def create_api(app: Flask, resolver: Injectark) -> None:
     app.add_url_rule("/", view_func=root_view)
 
     # Middleware
+    print('Resolver DICT##############', dir(resolver))
+    print('Auth!!!!!!!!!!!!!!!!', resolver['Authenticate'])
     authenticate = resolver['Authenticate']
 
     # Message Resource

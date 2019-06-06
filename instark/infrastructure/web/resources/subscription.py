@@ -1,3 +1,4 @@
+import json
 from typing import Tuple
 from flask import request, jsonify
 from flask.views import MethodView
@@ -31,12 +32,9 @@ class SubscriptionResource(MethodView):
 
         data = SubscriptionSchema().loads(request.data or '{}')
         subscription = self.subscription_coordinator.subscribe(data)
-        response = 'Subscribe Post: \n channel_id<{0}> - device_id<{1}>'.format(
-            subscription.channel_id,
-            subscription.device_id,
-        )
+        json_subscription = json.dumps(data, sort_keys=True, indent=4)
 
-        return response, 201
+        return json_subscription, 201
   
     def get(self) -> Tuple[str, int]:
         """

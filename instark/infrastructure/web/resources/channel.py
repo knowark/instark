@@ -1,3 +1,4 @@
+import json
 from typing import Any, Dict, Tuple
 from flask import request, jsonify
 from flask.views import MethodView
@@ -56,10 +57,6 @@ class ChannelResource(MethodView):
         data = ChannelSchema().loads(request.data)
 
         channel = self.subscription_coordinator.create_channel(data)
-        
-        response = 'Channel Post: \n name<{0}> - code<{1}>'.format(
-            channel.name,
-            channel.code,
-        )
+        json_channel = json.dumps(data, sort_keys=True, indent=4)
 
-        return response, 201
+        return json_channel, 201

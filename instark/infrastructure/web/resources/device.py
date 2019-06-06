@@ -1,3 +1,4 @@
+import json
 from typing import Tuple
 from flask import request, jsonify
 from flask.views import MethodView
@@ -33,11 +34,9 @@ class DeviceResource(MethodView):
         data = DeviceSchema().loads(request.data or '{}')
        
         device = self.registration_coordinator.register_device(data)
-        response = 'Device Post: \n name<{0}> - locator<{1}>'.format(
-            device.name,
-            device.locator,
-        )
-        return response, 201
+        json_device = json.dumps(data, sort_keys=True, indent=4)
+
+        return json_device, 201
     
     def get(self) -> Tuple[str, int]:
         """

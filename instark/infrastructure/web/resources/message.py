@@ -1,3 +1,4 @@
+import json
 from typing import Tuple
 from flask import request, jsonify
 from flask.views import MethodView
@@ -29,18 +30,15 @@ class MessageResource(MethodView):
             description: "Send message"
         """
 
+        print('Request Data>>>>>>>>>>>>>', request.data)
+        data = MessageSchema().loads(request.data)
         
-        data = MessageSchema().loads(request.data or '{}')
+        print('Data>>>>>>>>>>>>>', data)
         message = self.notification_coordinator.send_message(data)
-        response = """Message Post: \n recipient_id<{0}> - title<{1}> -
-                      content<{2}> - kind<{3}>""".format(
-            message.recipient_id,
-            message.title,
-            message.content,
-            message.kind,
-        )
+        print('message>>>>>>>>>>', message)
+        json_message = json.dumps(data, sort_keys=True, indent=4)
 
-        return response, 201
+        return json_message, 201
     
     def get(self) -> Tuple[str, int]:
         """

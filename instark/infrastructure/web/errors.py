@@ -20,6 +20,6 @@ def register_error_handler(app: Flask):
             'message': str(error),
             'trace': traceback
         }), code
-
+    
     for cls in HTTPException.__subclasses__():
         app.register_error_handler(cls, handle_error)

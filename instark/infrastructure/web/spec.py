@@ -28,6 +28,7 @@ class ResourcePlugin(BasePlugin):
 
 
 def create_spec() -> APISpec:
+    
     spec = APISpec(
         title="Instark",
         version="1.3.0",
@@ -39,6 +40,7 @@ def create_spec() -> APISpec:
                 name="Nubark",
                 url="https://www.nubark.com"
             )))
+    
     _register_schemas(spec)
 
     return spec
