@@ -1,16 +1,16 @@
 import sys
+import json
 from argparse import ArgumentParser, Namespace
 from injectark import Injectark
 from ..core import Config
 from ..web import create_app, ServerApplication
+
 
 class Cli:
     def __init__(self, config: Config, resolver: Injectark) -> None:
         self.config = config
         self.resolver = resolver
         self.registry = resolver
-        print('config++++++++++', config)
-        print('resolver--------', resolver)
 
         args = self.parse()
         args.func(args)

@@ -32,7 +32,6 @@ class Authenticate:
                     token, verify=False)
                 # tenant_dict = self.tenant_supplier.get_tenant(
                 #     token_payload['tid'])
-                print('token_payload>>>>>>>>>>>>>>', token_payload, '\n')
                 tenant_dict = {"name": "Servagro"}
                 # token_payload = self.jwt_supplier.decode(token, secret=None)
                 
