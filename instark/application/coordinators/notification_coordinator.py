@@ -22,7 +22,6 @@ class NotificationCoordinator:
         if 'id' not in message_dict:
             message_dict['id'] = self.id_service.generate_id()
         message = Message(**message_dict)
-
         if message.kind.lower() == 'direct':
             device = self.device_repository.get(message.recipient_id)
             response = self.delivery_service.send(
