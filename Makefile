@@ -6,8 +6,7 @@ test:
 	pytest
 
 coverage-application: 
-	pytest -x --cov=instark/application tests/application/ \
-	--cov-report term-missing -s
+	pytest -x --cov=instark/application tests/application/ --cov-report term-missing -s
 
 coverage-infrastructure: 
 	pytest -x --cov=instark/infrastructure tests/infrastructure/ \

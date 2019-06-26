@@ -51,7 +51,7 @@ class MemoryRepository(Repository, Generic[T]):
         id = getattr(item, 'id')
         if id not in self.data[self._location]:
             return False
-        del self.items[id]
+        del self.data[self._location][item.id]
         return True
 
     def load(self, data: Dict[str, Dict[str, T]]) -> None:

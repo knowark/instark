@@ -1,9 +1,26 @@
 from typing import Dict
-from pytest import fixture
+from pytest import fixture, raises
 from instark.application.repositories.repository import MemoryRepository
 from instark.application.repositories import Repository
-from instark.application.utilities.tenancy import StandardTenantProvider, Tenant
-from instark.application.utilities.query_parser import QueryParser
+from instark.application.utilities.tenancy import Tenant, StandardTenantProvider
+from instark.application.utilities import QueryParser, EntityNotFoundError
+
+class DummyEntity:
+    def __init__(self, id: str = "", field_1: str = "") -> None:
+        self.id = id
+        self.field_1 = field_1
+
+@fixture
+def filled_memory_repository(memory_repository) -> MemoryRepository:
+    data_dict = {
+        "default": {
+            "1": DummyEntity('1', 'value_1'),
+            "2": DummyEntity('2', 'value_2'),
+            "3": DummyEntity('3', 'value_3')
+        }
+    }
+    memory_repository.load(data_dict)
+    return memory_repository
 
 
 def test_memory_repository_implementation() -> None:
@@ -12,85 +29,87 @@ def test_memory_repository_implementation() -> None:
 
 @fixture
 def memory_repository() -> MemoryRepository:
+    tenant_service = StandardTenantProvider(Tenant(name="Default"))
     parser = QueryParser()
-    tenant_provider = StandardTenantProvider(Tenant(name="Default"))
-    entity_dict = {
-        "1": 'value_1',
-        "2": 'value_2',
-        "3": 'value_3',
-    }
-    repository = MemoryRepository(parser)
-    repository.load(entity_dict)
+    repository = MemoryRepository(parser, tenant_service)
+    repository.load({"default": {}})
     return repository
 
 
-# def test_memory_repository_get(memory_repository) -> None:
-#     item = memory_repository.get("1")
+def test_memory_repository_get(filled_memory_repository) -> None:
+    item = filled_memory_repository.get("1")
 
-#     assert item and item.field_1 == "value_1"
-
-
-# def test_memory_repository_add() -> None:
-#     parser = QueryParser()
-#     memory_repository = MemoryRepository(parser)
-
-#     item = {"1", "value_1"}
-
-#     is_saved = memory_repository.add(item)
-
-#     assert len(memory_repository.items) == 1
-#     assert is_saved
-#     assert "1" in memory_repository.items.keys()
-#     assert item in memory_repository.items.values()
+    assert item and item.field_1 == "value_1"
 
 
-# def test_memory_repository_search(memory_repository):
-#     domain = [('field_1', '=', "value_3")]
-
-#     items = memory_repository.search(domain)
-
-#     assert len(items) == 1
-#     for item in items:
-#         assert item.id == '3'
-#         assert item.field_1 == "value_3"
+def test_memory_repository_get_missing(filled_memory_repository) -> None:
+    with raises(EntityNotFoundError):
+        filled_memory_repository.get("999999999")
 
 
-# def test_memory_repository_search_all(memory_repository):
-#     items = memory_repository.search([])
+def test_memory_repository_add() -> None:
+    parser = QueryParser()
+    tenant_service = StandardTenantProvider(Tenant(name="Default"))
+    repository = MemoryRepository(parser, tenant_service)
 
-#     assert len(items) == 3
+    item = DummyEntity("1", "value_1")
+    is_saved = repository.add(item)
 
-
-# def test_memory_repository_search_limit(memory_repository):
-#     items = memory_repository.search([], limit=2)
-
-#     assert len(items) == 2
-
-
-# def test_memory_repository_search_limit_zero(memory_repository):
-#     items = memory_repository.search([], limit=0)
-
-#     assert len(items) == 3
+    assert len(repository.data) == 1
+    assert is_saved
+    assert "1" in repository.data['default'].keys()
+    assert item in repository.data['default'].values()
 
 
-# def test_memory_repository_search_offset(memory_repository):
-#     items = memory_repository.search([], offset=2)
+def test_memory_repository_search(filled_memory_repository):
+    domain = [('field_1', '=', "value_3")]
 
-#     assert len(items) == 1
+    items = filled_memory_repository.search(domain)
 
-
-# def test_memory_repository_remove_true(memory_repository):
-#     item = memory_repository.items["2"]
-#     deleted = memory_repository.remove(item)
-
-#     assert deleted is True
-#     assert len(memory_repository.items) == 2
-#     assert "2" not in memory_repository.items
+    assert len(items) == 1
+    for item in items:
+        assert item.id == '3'
+        assert item.field_1 == "value_3"
 
 
-# def test_memory_repository_remove_false(memory_repository):
-#     item = {'id': '6', 'field_1': 'MISSING'}
-#     deleted = memory_repository.remove(item)
+def test_memory_repository_search_all(filled_memory_repository):
+    items = filled_memory_repository.search([])
 
-#     assert deleted is False
-#     assert len(memory_repository.items) == 3
+    assert len(items) == 3
+
+
+def test_memory_repository_search_limit(filled_memory_repository):
+    items = filled_memory_repository.search([], limit=2)
+
+    assert len(items) == 2
+
+
+def test_memory_repository_search_limit_zero(filled_memory_repository):
+    items = filled_memory_repository.search([], limit=0)
+
+    assert len(items) == 3
+
+
+def test_memory_repository_search_offset(filled_memory_repository):
+    items = filled_memory_repository.search([], offset=2)
+
+    assert len(items) == 1
+
+
+def test_memory_repository_remove_true(filled_memory_repository):
+    item = filled_memory_repository.data['default']["2"]
+    deleted = filled_memory_repository.remove(item)
+    items = filled_memory_repository.data['default']
+    assert deleted is True
+    assert len(items) == 2
+    assert "2" not in items
+
+
+def test_memory_repository_remove_false(filled_memory_repository):
+    item = DummyEntity(**{'id': '6', 'field_1': 'MISSING'})
+    deleted = filled_memory_repository.remove(item)
+
+    items = filled_memory_repository.data['default']
+    assert deleted is False
+    assert len(items) == 3
+
