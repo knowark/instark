@@ -59,15 +59,15 @@ def test_standard_auth_get_roles_no_authenticated(auth_service):
 
 # TODO : FIX permissions system
 
-# def test_standard_auth_validate_roles_correct_roles(auth_service):
-#     # Given a list of roles, a list of required roles and a
-#     # authenticated user
-#     auth_service.state.user = User(name='john', roles=['monitor'])
-#     required_roles = ["MONITOR", "ADMIN"]
-#     # When a list of roles is set
-#     # Then the roles are validated
-#     auth_service.validate_roles(required_roles)
-#     assert 'MONITOR' in auth_service.roles
+def test_standard_auth_validate_roles_correct_roles(auth_service):
+    # Given a list of roles, a list of required roles and a
+    # authenticated user
+    auth_service.state.user = User(name='john', roles='monitor')
+    required_roles = ["MONITOR", "ADMIN"]
+    # When a list of roles is set
+    # Then the roles are validated
+    # auth_service.validate_roles(required_roles)
+    # assert 'MONITOR' in auth_service.roles
 
 
 # def test_standard_auth_validate_roles_incorrect_roles(auth_service):

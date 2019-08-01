@@ -23,7 +23,7 @@ class FirebaseDeliveryService(DeliveryService):
             token=locator)
         return messaging.send(message)
 
-    def broadcast(self, str, code: str, title: str, content: str) -> str:
+    def broadcast(self, code: str, title: str, content: str) -> str:
         notification = messaging.Notification(body=content)
         message = messaging.Message(
             data={

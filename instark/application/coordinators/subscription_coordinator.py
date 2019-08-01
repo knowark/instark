@@ -28,11 +28,9 @@ class SubscriptionCoordinator:
     def subscribe(self, subscription_dict: SubscriptionDict) -> None:
         if 'id' not in subscription_dict:
             subscription_dict['id'] = self.id_service.generate_id()
-
         device_channel = Subscription(**subscription_dict)
         device = self.device_repository.get(device_channel.device_id)
         channel = self.channel_repository.get(device_channel.channel_id)
         self.delivery_service.subscribe(channel.code, device.locator)
-
         self.device_channel_repository.add(device_channel)
         return device_channel

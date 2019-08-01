@@ -64,7 +64,7 @@ class StandardAuthService(AuthService):
         required_roles = required_roles or []
         required_roles.append(self.Roles.ADMIN)
         required_roles_set = set(required_roles)
-        roles_set = set(self.roles)
+        roles_set = set(self.roles) if self.roles else '' 
         if not roles_set & required_roles_set:
             raise AuthorizationError("Unable to validate roles.")
 
