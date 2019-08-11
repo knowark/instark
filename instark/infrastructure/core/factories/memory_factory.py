@@ -50,6 +50,11 @@ class MemoryFactory(Factory):
         tenant_provider: TenantProvider
     ) -> MemoryMessageRepository:
         return MemoryMessageRepository(query_parser, tenant_provider)
+    
+    # Tenancy
+
+    def memory_tenant_supplier(self) -> MemoryTenantSupplier:
+        return MemoryTenantSupplier()
 
     def standard_tenant_provider(self) -> StandardTenantProvider:
         return StandardTenantProvider()
@@ -62,8 +67,13 @@ class MemoryFactory(Factory):
     def standart_id_service(self) -> StandardIdService:
         return StandardIdService()
 
+    # def memory_auth_service(self) -> StandardAuthService:
+    #     return StandardAuthService()
+    
     def memory_auth_service(self) -> StandardAuthService:
-        return StandardAuthService()
+        print(self.config)
+        dominion = self.config['authorization']['dominion']
+        return StandardAuthService(dominion)
 
     # Coordinators
 
@@ -112,3 +122,5 @@ class MemoryFactory(Factory):
         return StandardInstarkInformer(device_repository, channel_repository,
                                        message_repository,
                                        device_channel_repository)
+    
+    

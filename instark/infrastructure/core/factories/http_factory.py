@@ -17,13 +17,14 @@ from ...web.middleware import Authenticate
 from ...core.crypto import JwtSupplier
 from ...delivery import FirebaseDeliveryService
 from ..configuration import Config
-from ..tenancy import TenantSupplier, MemoryTenantSupplier
+from ..tenancy import TenantSupplier, JsonTenantSupplier, MemoryTenantSupplier
 from .memory_factory import MemoryFactory
 
 
 class HttpFactory(MemoryFactory):
     def __init__(self, config: Config) -> None:
-        self.config = config
+        super().__init__(config)
+        # self.config = config
 
     def middleware_authenticate(
             self, jwt_supplier: JwtSupplier,
@@ -31,16 +32,19 @@ class HttpFactory(MemoryFactory):
             session_coordinator: SessionCoordinator) -> Authenticate:
         return Authenticate(
             jwt_supplier, tenant_supplier, session_coordinator)
-
-    def jwt_supplier(self) -> JwtSupplier:
-        secret = self.access_config['secret']
-        return JwtSupplier(secret)
     
+    def json_tenant_supplier(self) -> TenantSupplier:
+        # catalog_path = self.config['tenancy']['json']
+        catalog_path = '/opt/instark/tenants.json'
+        # directory_data = self.config['data']['json']['default']
+        directory_data = ''
+        return JsonTenantSupplier(catalog_path, directory_data)
+
     def jwt_supplier(self) -> JwtSupplier:
         secret = 'secret'
         secret_file = self.config.get('secrets', {}).get('jwt')
-        # if secret_file:
-        #     secret = Path(secret_file).read_text().strip()
+        if secret_file:
+            secret = Path(secret_file).read_text().strip()
         return JwtSupplier(secret)
 
     def firebase_delivery_service(self) -> FirebaseDeliveryService:
