@@ -24,7 +24,6 @@ from .memory_factory import MemoryFactory
 class HttpFactory(MemoryFactory):
     def __init__(self, config: Config) -> None:
         super().__init__(config)
-        # self.config = config
 
     def middleware_authenticate(
             self, jwt_supplier: JwtSupplier,
@@ -34,8 +33,7 @@ class HttpFactory(MemoryFactory):
             jwt_supplier, tenant_supplier, session_coordinator)
     
     def json_tenant_supplier(self) -> TenantSupplier:
-        # catalog_path = self.config['tenancy']['json']
-        catalog_path = '/opt/instark/tenants.json'
+        catalog_path = self.config['tenancy']['json']
         # directory_data = self.config['data']['json']['default']
         directory_data = ''
         return JsonTenantSupplier(catalog_path, directory_data)

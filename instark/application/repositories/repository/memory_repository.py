@@ -24,11 +24,6 @@ class MemoryRepository(Repository, Generic[T]):
         return item
 
     def add(self, item: T) -> T:
-        # print('item>>>>>>>>>>>', item)
-        # setattr(item, 'id', getattr(item, 'id') or str(uuid4()))
-        # print('Locator>>>>>>>>>>>>>', self.data[self._location])
-        # self.data[self._location][getattr(item, 'id')] = item
-        # return item
         item.id = item.id or str(uuid4())
         self.data[self._location][item.id] = item
         return item

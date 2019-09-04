@@ -30,12 +30,8 @@ class MessageResource(MethodView):
             description: "Send message"
         """
 
-        print('Request Data>>>>>>>>>>>>>', request.data)
         data = MessageSchema().loads(request.data)
-        
-        print('Data>>>>>>>>>>>>>', data)
         message = self.notification_coordinator.send_message(data)
-        print('message>>>>>>>>>>', message)
         json_message = json.dumps(data, sort_keys=True, indent=4)
 
         return json_message, 201

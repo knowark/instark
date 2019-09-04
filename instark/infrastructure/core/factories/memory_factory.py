@@ -66,12 +66,8 @@ class MemoryFactory(Factory):
 
     def standart_id_service(self) -> StandardIdService:
         return StandardIdService()
-
-    # def memory_auth_service(self) -> StandardAuthService:
-    #     return StandardAuthService()
     
     def memory_auth_service(self) -> StandardAuthService:
-        print(self.config)
         dominion = self.config['authorization']['dominion']
         return StandardAuthService(dominion)
 

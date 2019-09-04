@@ -5,7 +5,6 @@ from instark.application.services import (AuthenticationError,
                                             AuthorizationError)
 
 
-
 def test_auth_service_repository_methods():
     abstract_methods = AuthService.__abstractmethods__
 
@@ -18,7 +17,8 @@ def test_auth_service_repository_methods():
 @fixture
 def auth_service() -> StandardAuthService:
     # Given a memory auth_service has been created
-    auth_service = StandardAuthService(User(name="eecheverry"))
+    dominion = 'maindominion'
+    auth_service = StandardAuthService(dominion, User(name="eecheverry"))
     return auth_service
 
 
@@ -50,6 +50,21 @@ def test_standard_auth_get_user(auth_service):
     # Then the current request user is returned
     assert user.name == "eecheverry"
 
+
+def test_standard_auth_roles_authenticated(auth_service):
+    # When the get_roles method is called and there is
+    # a valid authentication
+    auth_service.state.user = User(
+        name='john',
+        authorization={
+            'maindominion': {
+                'roles': ['admin']
+            }
+        })
+    roles = auth_service.roles
+    assert roles == []
+
+
 def test_standard_auth_get_roles_no_authenticated(auth_service):
     # When the get_roles method is called and there isn't
     # a valid authentication
@@ -59,10 +74,15 @@ def test_standard_auth_get_roles_no_authenticated(auth_service):
 
 # TODO : FIX permissions system
 
+
 def test_standard_auth_validate_roles_correct_roles(auth_service):
     # Given a list of roles, a list of required roles and a
     # authenticated user
-    auth_service.state.user = User(name='john', roles='monitor')
+    auth_service.state.user = User(name='john',  authorization={
+        'maindominion': {
+            'roles': ['monitor']
+        }
+    })
     required_roles = ["MONITOR", "ADMIN"]
     # When a list of roles is set
     # Then the roles are validated
@@ -70,12 +90,16 @@ def test_standard_auth_validate_roles_correct_roles(auth_service):
     # assert 'MONITOR' in auth_service.roles
 
 
-# def test_standard_auth_validate_roles_incorrect_roles(auth_service):
-#     # Given a list of roles, a list of required roles and a
-#     # authenticated user
-#     auth_service.state.user = User(name='john', roles=['monitor'])
-#     required_roles = ["ADMIN"]
-#     # When a list of roles is setted
-#     # Then an authorizationerror is raised
-#     with raises(AuthorizationError):
-#         auth_service.validate_roles(required_roles)
+def test_standard_auth_validate_roles_incorrect_roles(auth_service):
+    # Given a list of roles, a list of required roles and a
+    # authenticated user
+    auth_service.state.user = User(name='john',  authorization={
+        'maindominion': {
+            'roles': ['monitor']
+        }
+    })
+    required_roles = ["ADMIN"]
+    # When a list of roles is setted
+    # Then an authorizationerror is raised
+    with raises(AuthorizationError):
+        auth_service.validate_roles(required_roles)

@@ -40,15 +40,14 @@ def test_notification_coordinator_instantiation(notification_coordinator):
 def test_notification_coordinator_send_direct_message(
         notification_coordinator):
     notification_coordinator.delivery_service.response = 'a1b2c3'
-    notification_coordinator.device_repository.load({
-        'default' : {
-            '1': Device(**{'id':'1', 'name':'Device 1', 'locator':'ABC123'})
-        }
-    })
+    notification_coordinator.device_repository.load(
+        Device(**{'id':'1', 'name':'Device 1', 'locator':'ABC123'})
+    )
     message_dict = {
         'recipient_id': '1',
-        'kind': 'Direct',
-        'content': 'Hello'
+        'kind': 'direct',
+        'content': 'Hello',
+        'title': 'Tittle notification'
     }
     # notification_coordinator.send_message(message_dict)
 

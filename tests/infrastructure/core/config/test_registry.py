@@ -1,2 +1,2 @@
-from instark.infrastructure.core.config import (
+from instark.infrastructure.core.configuration import (
     TrialConfig, DevelopmentConfig, MemoryRegistry)

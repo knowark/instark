@@ -17,7 +17,9 @@ class Config(defaultdict, ABC):
         self['mode'] = 'BASE'
         self['flask'] = {}
         self['database'] = {}
-        self['tenancy'] = {}
+        self['tenancy'] = {
+            'json': Path.home() / 'tenants.json'
+        }
         self['secrets'] = {}
         self['strategy'] = {}
         self['environment'] = {
@@ -25,6 +27,7 @@ class Config(defaultdict, ABC):
         }
         self['gunicorn'] = {
             'bind': '%s:%s' % ('0.0.0.0', '8080'),
+            # 'workers': 1,
             'workers': self.number_of_workers(),
             'worker_class': 'gevent',
             'debug': False
@@ -51,7 +54,6 @@ class DevelopmentConfig(TrialConfig):
             'debug': True,
             'accesslog': '-',
             'loglevel': 'debug',
-            'workers': 1
         })
         self['authentication'] = {
             "type": "jwt",
@@ -135,9 +137,6 @@ class ProductionConfig(DevelopmentConfig):
             'accesslog': '-',
             'loglevel': 'debug'
         })
-        self['tenancy'] = {
-            'json':  Path.home() / 'tenants.json'
-        },
         self['authentication'] = {
             "type": "jwt",
             "secret_file": str(Path.home().joinpath('sign.txt'))
@@ -156,6 +155,14 @@ class ProductionConfig(DevelopmentConfig):
             "Authenticate": {
                 "method": "middleware_authenticate"
             },
+
+            # Delivery service
+
+            # For local test
+            # "DeliveryService": {
+            #     "method": "memory_delivery_service"
+            # },
+            # For production
             "DeliveryService": {
                 "method": "firebase_delivery_service"
             },
