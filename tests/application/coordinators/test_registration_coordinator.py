@@ -4,12 +4,6 @@ from instark.application.repositories import (MemoryDeviceRepository)
 from instark.application.utilities import (
     QueryParser, StandardTenantProvider, Tenant)
 
-@fixture
-def device_repository() -> MemoryDeviceRepository:
-    tenant_provider = StandardTenantProvider(Tenant(name="Default"))
-    parser = QueryParser()
-    device_repository = MemoryDeviceRepository(parser, tenant_provider)
-    return device_repository
 
 @fixture
 def registration_coordinator(id_service, device_repository):
