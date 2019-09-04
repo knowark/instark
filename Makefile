@@ -10,23 +10,35 @@ test:
 
 COVFILE ?= .coverage
 PWD = $(shell pwd)
+PROJECT = instark
 
-coverage-application: 
-	mypy instark/application
-	pytest -x --cov=instark/application tests/application/ --cov-report term-missing -s
+coverage-application:
+	mypy $(PROJECT)/application
+	export COVERAGE_FILE=$(PWD)/$(COVFILE); pytest -x \
+	--cov=$(PWD)/$(PROJECT)/application $(PWD)/tests/application/ \
+	--cov-report term-missing \
+	--cov-report xml:$(PWD)/$(COVFILE).xml -s -vv \
+	-o cache_dir=/tmp/pytest/cache
 
-coverage-infrastructure: 
-	mypy instark/infrastructure
-	pytest -x --cov=instark/infrastructure tests/infrastructure/ \
-	--cov-report term-missing -s
+coverage-infrastructure:
+	mypy $(PROJECT)/infrastructure
+	export COVERAGE_FILE=$(PWD)/$(COVFILE); pytest -x \
+	--cov=$(PWD)/$(PROJECT)/infrastructure $(PWD)/tests/infrastructure/ \
+	--cov-report term-missing \
+	--cov-report xml:$(PWD)/$(COVFILE).xml -s -vv \
+	-o cache_dir=/tmp/pytest/cache
 
 coverage: 
-	mypy instark
-	pytest -x --cov=instark tests/ --cov-report term-missing -s
+	mypy $(PROJECT)
+	export COVERAGE_FILE=$(PWD)/$(COVFILE); pytest -x \
+	--cov=$(PWD)/$(PROJECT) $(PWD)/tests/ \
+	--cov-report term-missing \
+	--cov-report xml:$(PWD)/$(COVFILE).xml -s -vv \
+	-o cache_dir=/tmp/pytest/cache
 
 update:
 	pip-review --auto
 	pip freeze > requirements.txt
 
 serve:
-	python -m instark serve
+	python -m $(PROJECT) serve
