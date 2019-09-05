@@ -10,7 +10,7 @@ from .infrastructure.web import create_app, ServerApplication
 
 
 def main():  # pragma: no cover
-    mode = os.environ.get('INSTARK_DEVELOPMENT', 'PROD')
+    mode = os.environ.get('INSTARK_MODE', 'PROD')
     config_path = os.environ.get('INSTARK_CONFIG', 'config.json')
     config = build_config(config_path, mode)
 

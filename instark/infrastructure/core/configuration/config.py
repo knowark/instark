@@ -58,6 +58,9 @@ class DevelopmentConfig(TrialConfig):
             "type": "jwt",
             "secret_file": str(Path.home().joinpath('sign.txt'))
         }
+        self['authorization'] = {
+            "dominion": "proser"
+        }
         self['secrets'] = {
             "jwt": str(Path.home().joinpath('sign.txt'))
         }
@@ -147,9 +150,6 @@ class ProductionConfig(DevelopmentConfig):
         self['authentication'] = {
             "type": "jwt",
             "secret_file": str(Path.home().joinpath('sign.txt'))
-        }
-        self['authorization'] = {
-            "dominion": "proser"
         }
         self['secrets'] = {
             "jwt": str(Path.home().joinpath('sign.txt'))
