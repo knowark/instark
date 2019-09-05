@@ -27,12 +27,11 @@ class Config(defaultdict, ABC):
         }
         self['gunicorn'] = {
             'bind': '%s:%s' % ('0.0.0.0', '8080'),
-            # 'workers': 1,
-            'workers': self.number_of_workers(),
+            'workers': 1,
             'worker_class': 'gevent',
             'debug': False
         }
-    
+
     def number_of_workers(self):
         return (multiprocessing.cpu_count() * 2) + 1
 
@@ -65,6 +64,14 @@ class DevelopmentConfig(TrialConfig):
         self['factory'] = 'MemoryFactory'
 
         self['strategy'].update({
+            # Security
+            "JwtSupplier": {
+                "method": "jwt_supplier"
+            },
+            "Authenticate": {
+                "method": "middleware_authenticate"
+            },
+
             # Query parser
             "QueryParser": {
                 "method": "query_parser"
@@ -81,7 +88,7 @@ class DevelopmentConfig(TrialConfig):
             "TenantSupplier": {
                 "method": "memory_tenant_supplier"
             },
-            
+
             "ProvisionService": {
                 "method": "memory_provision_service"
             },
@@ -148,13 +155,10 @@ class ProductionConfig(DevelopmentConfig):
             "jwt": str(Path.home().joinpath('sign.txt'))
         }
         self['factory'] = 'HttpFactory'
+        self['gunicorn'].update({
+            'workers': self.number_of_workers()
+        })
         self['strategy'].update({
-            "JwtSupplier": {
-                "method": "jwt_supplier"
-            },
-            "Authenticate": {
-                "method": "middleware_authenticate"
-            },
 
             # Delivery service
 

@@ -16,11 +16,29 @@ from ....application.coordinators import (
     RegistrationCoordinator, SubscriptionCoordinator, NotificationCoordinator,
     SessionCoordinator)
 from ....application.informers import StandardInstarkInformer
+from ...web.middleware import Authenticate
+from ...core.crypto import JwtSupplier
 
 
 class MemoryFactory(Factory):
     def __init__(self, config: Config) -> None:
         self.config = config
+
+    # Security
+
+    def middleware_authenticate(
+            self, jwt_supplier: JwtSupplier,
+            tenant_supplier: TenantSupplier,
+            session_coordinator: SessionCoordinator) -> Authenticate:
+        return Authenticate(
+            jwt_supplier, tenant_supplier, session_coordinator)
+
+    def jwt_supplier(self) -> JwtSupplier:
+        secret = 'secret'
+        secret_file = self.config.get('secrets', {}).get('jwt')
+        if secret_file:
+            secret = Path(secret_file).read_text().strip()
+        return JwtSupplier(secret)
 
     # Repositories
 
@@ -50,7 +68,7 @@ class MemoryFactory(Factory):
         tenant_provider: TenantProvider
     ) -> MemoryMessageRepository:
         return MemoryMessageRepository(query_parser, tenant_provider)
-    
+
     # Tenancy
 
     def memory_tenant_supplier(self) -> MemoryTenantSupplier:
@@ -66,7 +84,7 @@ class MemoryFactory(Factory):
 
     def standart_id_service(self) -> StandardIdService:
         return StandardIdService()
-    
+
     def memory_auth_service(self) -> StandardAuthService:
         dominion = self.config['authorization']['dominion']
         return StandardAuthService(dominion)
@@ -118,5 +136,3 @@ class MemoryFactory(Factory):
         return StandardInstarkInformer(device_repository, channel_repository,
                                        message_repository,
                                        device_channel_repository)
-    
-    
