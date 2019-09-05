@@ -41,15 +41,6 @@ class TrialConfig(Config):
         super().__init__()
         self['mode'] = TEST
         self['gunicorn'].update({
-            'debug': True
-        })
-
-
-class DevelopmentConfig(TrialConfig):
-    def __init__(self):
-        super().__init__()
-        self['mode'] = DEV
-        self['gunicorn'].update({
             'debug': True,
             'accesslog': '-',
             'loglevel': 'debug',
@@ -64,7 +55,7 @@ class DevelopmentConfig(TrialConfig):
         self['secrets'] = {
             "jwt": str(Path.home().joinpath('sign.txt'))
         }
-        self['factory'] = 'MemoryFactory'
+        self['factory'] = 'TrialFactory'
 
         self['strategy'].update({
             # Security
@@ -111,6 +102,9 @@ class DevelopmentConfig(TrialConfig):
                 "method": "memory_message_repository"
             },
             # Delivery service
+            "IdService": {
+                "method": "standard_id_service"
+            },
             "DeliveryService": {
                 "method": "memory_delivery_service"
             },
@@ -138,6 +132,18 @@ class DevelopmentConfig(TrialConfig):
         })
 
 
+class DevelopmentConfig(TrialConfig):
+    def __init__(self):
+        super().__init__()
+        self["mode"] = DEV
+        self['factory'] = 'MemoryFactory'
+        self["strategy"].update({
+            "TenantSupplier": {
+                "method": "trial_memory_tenant_supplier"
+            }
+        })
+
+
 class ProductionConfig(DevelopmentConfig):
     def __init__(self):
         super().__init__()
@@ -161,12 +167,6 @@ class ProductionConfig(DevelopmentConfig):
         self['strategy'].update({
 
             # Delivery service
-
-            # For local test
-            # "DeliveryService": {
-            #     "method": "memory_delivery_service"
-            # },
-            # For production
             "DeliveryService": {
                 "method": "firebase_delivery_service"
             },

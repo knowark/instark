@@ -1,17 +1,21 @@
+from flask import Flask, jsonify
 from traceback import format_tb
 from werkzeug.exceptions import HTTPException
-from flask import Flask, jsonify
-
-from flask import jsonify
 
 
 def register_error_handler(app: Flask):
 
     def handle_error(error):
-        code = error.code or 500
+        code = 500
+
+        print("ERROR::::: ", error)
+
+        if isinstance(error, HTTPException):
+            code = error.code or code
 
         exception = type(error).__name__
         traceback = format_tb(error.__traceback__)
+
         return jsonify(error={
             'exception': exception,
             'message': str(error),
