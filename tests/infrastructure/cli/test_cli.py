@@ -38,7 +38,7 @@ def test_cli_provision(cli, monkeypatch, namespace):
     cli.provision(namespace)
     tenants = cli.resolver["TenantSupplier"].search_tenants("")
 
-    assert len(tenants) == 1
+    assert len(tenants) == 2
     assert tenants[0]["name"] == "custom"
 
     print("TENANTS::::", tenants)

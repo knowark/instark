@@ -13,14 +13,20 @@ from instark.infrastructure.web import (
 
 
 @fixture
-def app() -> Flask:
+def app(tmp_path) -> Flask:
     config = DevelopmentConfig()
+    sign_file = tmp_path / "sign.txt"
+    sign_file.write_text("knowark")
+    config['secrets'].update({
+        "jwt": str(sign_file)
+    })
     strategy = config['strategy']
     factory = build_factory(config)
 
     resolver = Injectark(strategy=strategy, factory=factory)
 
     app = create_app(config, resolver)
+    app.debug = True
     app = cast(Flask, app.test_client())
 
     return app
@@ -32,8 +38,8 @@ def headers() -> dict:
     payload_dict = {
         "tid": "1",
         "uid": "1",
-        "name": "John Doe",
-        "email": "johndoe@nubark.com",
+        "name": "jjalvarez",
+        "email": "jjalvarez@nubark.com",
         "attributes": {},
         "authorization": {},
         "exp": int(datetime.now().timestamp()) + 5

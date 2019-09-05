@@ -72,12 +72,7 @@ class TrialFactory(Factory):
     # Tenancy
 
     def memory_tenant_supplier(self) -> MemoryTenantSupplier:
-        memory_tenant_supplier = MemoryTenantSupplier()
-        memory_tenant_supplier.arranger.cataloguer.catalog = {
-            "c5934df0-cab9-4660-af14-c95272a92ab7": Tenant(
-                id="c5934df0-cab9-4660-af14-c95272a92ab7", name="servagro", location="servagro")
-        }
-        return memory_tenant_supplier
+        return MemoryTenantSupplier()
 
     def standard_tenant_provider(self) -> StandardTenantProvider:
         return StandardTenantProvider()
