@@ -28,8 +28,8 @@ class MemoryRegistry(Registry):
         tenant_provider = StandardTenantProvider(Tenant(name='servagro'))
         device_repository = MemoryDeviceRepository(parser, tenant_provider)
         channel_repository = MemoryChannelRepository(parser, tenant_provider)
-        device_channel_repository = MemorySubscriptionRepository(parser,
-                                                                 tenant_provider)
+        device_channel_repository = MemorySubscriptionRepository(
+            parser, tenant_provider)
         message_repository = MemoryMessageRepository(parser, tenant_provider)
 
         id_service = StandardIdService()
