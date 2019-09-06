@@ -71,10 +71,6 @@ class TrialConfig(Config):
                 "method": "query_parser"
             },
 
-            "CatalogService": {
-                "method": "memory_catalog_service"
-            },
-
             # Tenancy
             "TenantProvider": {
                 "method": "standard_tenant_provider"
@@ -83,9 +79,6 @@ class TrialConfig(Config):
                 "method": "memory_tenant_supplier"
             },
 
-            "ProvisionService": {
-                "method": "memory_provision_service"
-            },
             "DeviceRepository": {
                 "method": "memory_device_repository"
             },
@@ -125,9 +118,6 @@ class TrialConfig(Config):
             },
             "InstarkInformer": {
                 "method": "memory_instark_informer"
-            },
-            "TenantSupplier": {
-                "method": "memory_tenant_supplier"
             }
         })
 

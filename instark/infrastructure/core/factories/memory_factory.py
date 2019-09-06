@@ -11,6 +11,6 @@ class MemoryFactory(TrialFactory):
     def trial_memory_tenant_supplier(self) -> MemoryTenantSupplier:
         memory_tenant_supplier = MemoryTenantSupplier()
         memory_tenant_supplier.arranger.cataloguer.catalog = {
-            "1": Tenant(id="1", name="default", location="default")
+            "1": Tenant(id="1", name="origin", location="origin")
         }
         return memory_tenant_supplier
