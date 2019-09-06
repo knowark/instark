@@ -2,13 +2,16 @@ from typing import Dict
 from pytest import fixture, raises
 from instark.application.repositories.repository import MemoryRepository
 from instark.application.repositories import Repository
-from instark.application.utilities.tenancy import Tenant, StandardTenantProvider
+from instark.application.utilities.tenancy import (
+    Tenant, StandardTenantProvider)
 from instark.application.utilities import QueryParser, EntityNotFoundError
+
 
 class DummyEntity:
     def __init__(self, id: str = "", field_1: str = "") -> None:
         self.id = id
         self.field_1 = field_1
+
 
 @fixture
 def filled_memory_repository(memory_repository) -> MemoryRepository:
@@ -31,7 +34,7 @@ def test_memory_repository_implementation() -> None:
 def memory_repository() -> MemoryRepository:
     tenant_service = StandardTenantProvider(Tenant(name="Default"))
     parser = QueryParser()
-    repository = MemoryRepository(parser, tenant_service)
+    repository: MemoryRepository = MemoryRepository(parser, tenant_service)
     repository.load({"default": {}})
     return repository
 
@@ -50,7 +53,7 @@ def test_memory_repository_get_missing(filled_memory_repository) -> None:
 def test_memory_repository_add() -> None:
     parser = QueryParser()
     tenant_service = StandardTenantProvider(Tenant(name="Default"))
-    repository = MemoryRepository(parser, tenant_service)
+    repository: MemoryRepository = MemoryRepository(parser, tenant_service)
 
     item = DummyEntity("1", "value_1")
     is_saved = repository.add(item)
@@ -112,4 +115,3 @@ def test_memory_repository_remove_false(filled_memory_repository):
     items = filled_memory_repository.data['default']
     assert deleted is False
     assert len(items) == 3
-
