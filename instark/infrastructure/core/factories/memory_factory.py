@@ -6,7 +6,7 @@ from ....application.utilities import Tenant
 
 class MemoryFactory(TrialFactory):
     def __init__(self, config: Config) -> None:
-        self.config = config
+        super().__init__(config)
 
     def trial_memory_tenant_supplier(self) -> MemoryTenantSupplier:
         memory_tenant_supplier = MemoryTenantSupplier()

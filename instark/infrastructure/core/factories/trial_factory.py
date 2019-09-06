@@ -71,9 +71,6 @@ class TrialFactory(Factory):
 
     # Tenancy
 
-    def memory_tenant_supplier(self) -> MemoryTenantSupplier:
-        return MemoryTenantSupplier()
-
     def standard_tenant_provider(self) -> StandardTenantProvider:
         return StandardTenantProvider()
 
