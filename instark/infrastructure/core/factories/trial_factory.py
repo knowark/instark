@@ -17,7 +17,7 @@ from ....application.coordinators import (
     SessionCoordinator)
 from ....application.informers import StandardInstarkInformer
 from ...web.middleware import Authenticate
-from ...core.crypto import JwtSupplier
+from ...core import JwtSupplier
 
 
 class TrialFactory(Factory):

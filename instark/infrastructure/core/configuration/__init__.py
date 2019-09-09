@@ -2,8 +2,6 @@ from pathlib import Path
 from json import load
 from typing import Optional
 from .config import Config, TrialConfig, DevelopmentConfig, ProductionConfig
-from .registry import Registry, MemoryRegistry, ProductionRegistry
-from .context import Context
 
 
 def build_config(config_path: str, mode: str) -> Config:

@@ -1,6 +1,6 @@
+from typing import Dict
 import json
 import jwt
-from typing import Any, Dict
 
 
 class JwtSupplier:
