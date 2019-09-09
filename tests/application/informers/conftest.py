@@ -2,12 +2,15 @@ from pytest import fixture
 from instark.application.models import Device, Channel, Message, Subscription
 from instark.application.repositories import (
     DeviceRepository, MemoryDeviceRepository,
+    ChannelRepository, MemoryChannelRepository,
     MessageRepository, MemoryMessageRepository,
     SubscriptionRepository, MemorySubscriptionRepository)
 from instark.application.utilities.query_parser import QueryParser
-from instark.application.utilities.tenancy import Tenant, StandardTenantProvider
+from instark.application.utilities.tenancy import (
+    Tenant, StandardTenantProvider)
 from instark.application.informers.instark_informer import InstarkInformer
-from instark.application.informers.standard_instark_informer import StandardInstarkInformer
+from instark.application.informers.standard_instark_informer import (
+    StandardInstarkInformer)
 
 
 @fixture
@@ -28,7 +31,7 @@ def device_repository() -> DeviceRepository:
 def channel_repository():
     parser = QueryParser()
     tenant_service = StandardTenantProvider(Tenant(name="Default"))
-    channel_repository = MemoryDeviceRepository(parser, tenant_service)
+    channel_repository = MemoryChannelRepository(parser, tenant_service)
     channel_repository.load({
         'default': {
             '001': Channel(id='001', name='Channel 1', code='CH001'),

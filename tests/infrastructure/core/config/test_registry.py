@@ -1,6 +1,6 @@
 from pytest import fixture
 from json import dump
-from instark.infrastructure.core.configuration import (
+from instark.infrastructure.core import (
     ProductionConfig, ProductionRegistry, Context)
 from instark.infrastructure.core.configuration import \
     registry as registry_module
