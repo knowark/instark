@@ -6,9 +6,9 @@ class MemoryDeliveryService(DeliveryService):
 
     def __init__(self, response=''):
         self.response = response
-        self.code = None
-        self.locator = None
-        self.title = None
+        self.code = ""
+        self.locator = ""
+        self.title = ""
 
     def send(self, locator: str, title: str, content: str) -> str:
         self.locator = locator

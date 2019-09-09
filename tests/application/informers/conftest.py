@@ -17,8 +17,8 @@ def device_repository() -> DeviceRepository:
     device_repository = MemoryDeviceRepository(parser, tenant_service)
     device_repository.load({
         'default': {
-            '001': Device(**{'id':'001', 'name':'DEV001', 'locator':'1'}),
-            '002': Device(**{'id':'002', 'name':'DEV002', 'locator':'2'})
+            '001': Device(**{'id': '001', 'name': 'DEV001', 'locator': '1'}),
+            '002': Device(**{'id': '002', 'name': 'DEV002', 'locator': '2'})
         }
     })
     return device_repository
@@ -30,11 +30,11 @@ def channel_repository():
     tenant_service = StandardTenantProvider(Tenant(name="Default"))
     channel_repository = MemoryDeviceRepository(parser, tenant_service)
     channel_repository.load({
-        'default' : {
-            '001': Channel(**{'id':'001', 'name':'Channel 1', 'code':'CH001'}),
-            '002': Channel(**{'id':'002', 'name':'Channel 2', 'code':'CH002'}),
-            '003': Channel(**{'id':'003', 'name':'Channel 3', 'code':'CH003'})
-        }    
+        'default': {
+            '001': Channel(id='001', name='Channel 1', code='CH001'),
+            '002': Channel(id='002', name='Channel 2', code='CH002'),
+            '003': Channel(id='003', name='Channel 3', code='CH003')
+        }
     })
     return channel_repository
 
@@ -45,9 +45,9 @@ def message_repository():
     tenant_service = StandardTenantProvider(Tenant(name="Default"))
     message_repository = MemoryMessageRepository(parser, tenant_service)
     message_repository.load({
-        'default' : {
-            '001': Message(** {'id':'001', 'recipient_id':'001', 'kind':'direct',
-                        'content':'Super!', 'title': 'Hello'})
+        'default': {
+            '001': Message(id='001', recipient_id='001', kind='direct',
+                           content='Super!', title='Hello')
         }
     })
     return message_repository
@@ -57,14 +57,15 @@ def message_repository():
 def device_channel_repository():
     parser = QueryParser()
     tenant_service = StandardTenantProvider(Tenant(name="Default"))
-    device_channel_repository = MemorySubscriptionRepository(parser, tenant_service)
+    device_channel_repository = MemorySubscriptionRepository(
+        parser, tenant_service)
     device_channel_repository.load({
-        'default' : {
-            '001': Subscription(**{'id':'001', 'device_id':'001',
-                                'channel_id':'001'}),
-            '002': Subscription(**{'id':'001', 'device_id':'002',
-                                'channel_id':'001'})
-        }    
+        'default': {
+            '001': Subscription(**{'id': '001', 'device_id': '001',
+                                   'channel_id': '001'}),
+            '002': Subscription(**{'id': '001', 'device_id': '002',
+                                   'channel_id': '001'})
+        }
     })
     return device_channel_repository
 

@@ -25,11 +25,11 @@ class NotificationCoordinator:
         if message.kind.lower() == 'direct':
             device = self.device_repository.get(message.recipient_id)
             response = self.delivery_service.send(
-                device.locator, message.title, message.content)
+                device.locator, str(message.title), message.content)
         else:
             channel = self.channel_repository.get(message.recipient_id)
             response = self.delivery_service.broadcast(
-                channel.code, message.title, message.content)
+                channel.code, str(message.title), message.content)
 
         if not response:
             raise ValueError("The message couldn't be sent")

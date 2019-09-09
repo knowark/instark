@@ -17,14 +17,14 @@ def subscription_coordinator(id_service, channel_repository,
         device_channel_repository, delivery_service)
     subscription_coordinator.channel_repository.load({
         'default': {
-            '001': Channel(**{'id': '001', 'name': 'Surveillance',
-                              'code': 'surveillance'})
+            '001': Channel(id='001', name='Surveillance',
+                           code='surveillance')
         }
     })
     subscription_coordinator.device_repository.load({
         'default': {
-            '001': Device(**{'id': '001', 'name': 'Android SSX10',
-                             'locator': 'ABC123'})
+            '001': Device(id='001', name='Android SSX10',
+                             locator='ABC123')
         }
     })
     return subscription_coordinator
