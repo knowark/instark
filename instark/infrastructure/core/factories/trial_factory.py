@@ -24,6 +24,17 @@ class TrialFactory(Factory):
     def __init__(self, config: Config) -> None:
         self.config = config
 
+    # Tenancy
+
+    def query_parser(self) -> QueryParser:
+        return QueryParser()
+
+    def memory_tenant_supplier(self) -> MemoryTenantSupplier:
+        return MemoryTenantSupplier()
+
+    def standard_tenant_provider(self) -> StandardTenantProvider:
+        return StandardTenantProvider()
+
     # Security
 
     def middleware_authenticate(
@@ -42,24 +53,18 @@ class TrialFactory(Factory):
 
     # Repositories
 
-    def query_parser(self) -> QueryParser:
-        return QueryParser()
-
     def memory_device_repository(
-        self, query_parser: QueryParser,
-        tenant_provider: TenantProvider
+        self, query_parser: QueryParser, tenant_provider: TenantProvider
     ) -> MemoryDeviceRepository:
         return MemoryDeviceRepository(query_parser, tenant_provider)
 
     def memory_channel_repository(
-        self, query_parser: QueryParser,
-        tenant_provider: TenantProvider
+        self, query_parser: QueryParser, tenant_provider: TenantProvider
     ) -> MemoryChannelRepository:
         return MemoryChannelRepository(query_parser, tenant_provider)
 
     def memory_subscription_repository(
-        self, query_parser: QueryParser,
-        tenant_provider: TenantProvider
+        self, query_parser: QueryParser, tenant_provider: TenantProvider
     ) -> MemorySubscriptionRepository:
         return MemorySubscriptionRepository(query_parser, tenant_provider)
 
@@ -68,14 +73,6 @@ class TrialFactory(Factory):
         tenant_provider: TenantProvider
     ) -> MemoryMessageRepository:
         return MemoryMessageRepository(query_parser, tenant_provider)
-
-    # Tenancy
-
-    def memory_tenant_supplier(self) -> MemoryTenantSupplier:
-        return MemoryTenantSupplier()
-
-    def standard_tenant_provider(self) -> StandardTenantProvider:
-        return StandardTenantProvider()
 
     # Services
 
