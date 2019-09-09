@@ -1,4 +1,5 @@
 import os
+import jwt
 from typing import cast
 from pytest import fixture
 from flask import Flask
@@ -45,7 +46,10 @@ def headers() -> dict:
         "exp": int(datetime.now().timestamp()) + 5
     }
 
-    jwt_supplier = JwtSupplier('knowark')
-    token = jwt_supplier.encode(payload_dict)
+    token = jwt.encode(payload_dict, 'knowark',
+                       algorithm='HS256').decode('utf-8')
+
+    # jwt_supplier = JwtSupplier('knowark')
+    # token = jwt_supplier.encode(payload_dict)
 
     return {"Authorization": (token)}
