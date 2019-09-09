@@ -10,14 +10,14 @@ from ....application.coordinators import (
 from ....application.informers import StandardInstarkInformer
 from ....application.utilities.tenancy import StandardTenantProvider, Tenant
 from ....infrastructure.delivery import FirebaseDeliveryService
-from ..tenancy import TenantSupplier, MemoryTenantSupplier
+# from ..tenancy import TenantSupplier, MemoryTenantSupplier
 from .config import Config
 
 
 class Registry(dict, ABC):
     @abstractmethod
     def __init__(self, config: Config) -> None:
-        pass
+        self.config = config
 
 
 class MemoryRegistry(Registry):
