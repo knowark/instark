@@ -1,7 +1,25 @@
-from pytest import fixture
-from instark.infrastructure.core.configuration import (
-    TrialConfig, DevelopmentConfig, ProductionConfig, build_config
-)
+import os
+import json
+from pytest import raises, fixture
+from instark.infrastructure.core import (
+    TrialConfig, DevelopmentConfig, ProductionConfig, load_config,
+    build_config)
+
+
+@fixture
+def config_data(tmp_path):
+    config_directory = tmp_path / 'configuration'
+    config_directory.mkdir()
+    config_file = config_directory / "config.json"
+
+    config_dict = {
+        'mode': 'PROD',
+        'factory': 'WebFactory'
+    }
+
+    config_file.write_text(json.dumps(config_dict))
+
+    return config_file, config_dict
 
 
 def test_trial_config():
@@ -14,17 +32,44 @@ def test_development_config():
     assert config['mode'] == 'DEV'
 
 
-@fixture
-def custom_config(tmp_path):
-    custom_config = tmp_path / "config.json"
-    custom_config.write_text("{}")
-    return custom_config
+def test_configuration_load_config_no_file():
+    path = ''
+    result = load_config(path)
+    assert result is None
 
 
-def test_build_config(custom_config):
-    config = build_config("config.json", "DEV")
+def test_configuration_load_config_with_file(config_data):
+    config_file, config_dict = config_data
+    config_file.write_text(json.dumps(config_dict))
+
+    result = load_config(str(config_file))
+    assert result == config_dict
+
+
+def test_configuration_build_config_default():
+    path = '/tmp/config.json'
+    mode = 'DEV'
+
+    config = build_config(path, mode)
+
     assert isinstance(config, DevelopmentConfig)
-    config = build_config("config.json", "PROD")
+
+
+def test_configuration_build_config_production(config_data):
+    config_file, config_dict = config_data
+    config_file.write_text(json.dumps(config_dict))
+    mode = 'PROD'
+
+    config = build_config(config_file, mode)
+
     assert isinstance(config, ProductionConfig)
-    config = build_config(custom_config, "PROD")
+
+
+def test_configuration_build_config_none_production_build(config_data):
+    config_file, config_dict = config_data
+    config_file.write_text(json.dumps(config_dict))
+    mode = 'PROD'
+
+    config = build_config("", mode)
+
     assert isinstance(config, ProductionConfig)
