@@ -49,7 +49,4 @@ def headers() -> dict:
     token = jwt.encode(payload_dict, 'knowark',
                        algorithm='HS256').decode('utf-8')
 
-    # jwt_supplier = JwtSupplier('knowark')
-    # token = jwt_supplier.encode(payload_dict)
-
     return {"Authorization": (token)}
