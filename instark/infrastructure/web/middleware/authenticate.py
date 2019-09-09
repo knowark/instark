@@ -21,7 +21,7 @@ class Authenticate:
             # tenant_dict = {"name": "Knowark"}
             # self.session_coordinator.set_tenant(tenant_dict)
             authorization = request.headers.get('Authorization', "")
-            token = authorization.replace('Bearer ', '')
+            token = str(authorization.replace('Bearer ', ''))
 
             if not token:
                 token = str(request.args.get('access_token'))
