@@ -19,12 +19,11 @@ class JsonTenantSupplier(TenantSupplier):
             'cataloguer': cataloguer,
             'provisioner_kind': 'directory',
             'provision_template': (
-                directory_data + f"/{directory_template}"),
+                str(directory_data) + f"/{directory_template}"),
             'data_directory': directory_data,
         })
 
     def get_tenant(self, tenant_id: str) -> Dict[str, Any]:
-        print('Provider>>>>>>', self.provider.get_tenant(tenant_id))
         return self.provider.get_tenant(tenant_id)
 
     def create_tenant(self, tenant_dict: Dict[str, Any]) -> None:

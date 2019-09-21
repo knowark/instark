@@ -10,7 +10,7 @@ from .infrastructure.web import create_app, ServerApplication
 
 
 def main():  # pragma: no cover
-    mode = os.environ.get('INSTARK_DEVELOPMENT', 'PROD')
+    mode = os.environ.get('INSTARK_MODE', 'PROD')
     config_path = os.environ.get('INSTARK_CONFIG', 'config.json')
     config = build_config(config_path, mode)
 
@@ -18,10 +18,8 @@ def main():  # pragma: no cover
     strategy = config['strategy']
 
     resolver = Injectark(strategy=strategy, factory=factory)
-    # Cli(config, resolver)
-    app = create_app(config, resolver)
-    gunicorn_config = config['gunicorn']
-    ServerApplication(app, gunicorn_config).run()
+
+    Cli(config, resolver).run(sys.argv[1:])
 
 
 if __name__ == '__main__':  # pragma: no cover

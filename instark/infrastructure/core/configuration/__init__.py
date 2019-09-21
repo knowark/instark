@@ -1,9 +1,7 @@
 from pathlib import Path
 from json import load
 from typing import Optional
-from .config import *
-from .context import *
-from .registry import *
+from .config import Config, TrialConfig, DevelopmentConfig, ProductionConfig
 
 
 def build_config(config_path: str, mode: str) -> Config:
@@ -14,16 +12,13 @@ def build_config(config_path: str, mode: str) -> Config:
     loaded_config = load_config(config_path)
     if loaded_config is not None:
         production_config.update(loaded_config)
-
     return production_config
 
 
 def load_config(config_path: str) -> Optional[Config]:
     path = Path(config_path)
-    if not path.exists():
-        path = Path(Path.home() / 'config.json')
-        if not path.exists():
-            return None
+    if not path.exists() or path.is_dir():
+        return None
 
-    with path.open() as f:
+    with open(config_path) as f:
         return load(f)

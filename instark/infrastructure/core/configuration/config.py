@@ -15,6 +15,13 @@ class Config(defaultdict, ABC):
     @abstractmethod
     def __init__(self):
         self['mode'] = 'BASE'
+        self['flask'] = {}
+        self['database'] = {}
+        self['tenancy'] = {
+            'json': Path.home() / 'tenants.json'
+        }
+        self['secrets'] = {}
+        self['strategy'] = {}
         self['environment'] = {
             'home': '/opt/instark'
         }
@@ -24,13 +31,9 @@ class Config(defaultdict, ABC):
             'worker_class': 'gevent',
             'debug': False
         }
-        self['flask'] = {}
-        self['database'] = {}
-        self['tenancy'] = {
-            'json': Path.home() / 'tenants.json'
-        }
-        self['secrets'] = {}
-        self['strategy'] = {}
+
+    def number_of_workers(self):
+        return (multiprocessing.cpu_count() * 2) + 1
 
 
 class TrialConfig(Config):
@@ -38,40 +41,44 @@ class TrialConfig(Config):
         super().__init__()
         self['mode'] = TEST
         self['gunicorn'].update({
-            'debug': True
-        })
-
-
-class DevelopmentConfig(TrialConfig):
-    def __init__(self):
-        super().__init__()
-        self['mode'] = DEV
-        self['gunicorn'].update({
             'debug': True,
             'accesslog': '-',
-            'loglevel': 'debug'
+            'loglevel': 'debug',
         })
         self['authentication'] = {
             "type": "jwt",
             "secret_file": str(Path.home().joinpath('sign.txt'))
         }
+        self['authorization'] = {
+            "dominion": "proser"
+        }
         self['secrets'] = {
             "jwt": str(Path.home().joinpath('sign.txt'))
         }
-        self['factory'] = 'MemoryFactory'
+        self['factory'] = 'TrialFactory'
+
         self['strategy'].update({
+            # Security
+            "JwtSupplier": {
+                "method": "jwt_supplier"
+            },
+            "Authenticate": {
+                "method": "middleware_authenticate"
+            },
+
+            # Query parser
             "QueryParser": {
                 "method": "query_parser"
             },
-            "CatalogService": {
-                "method": "memory_catalog_service"
+
+            # Tenancy
+            "TenantProvider": {
+                "method": "standard_tenant_provider"
             },
             "TenantSupplier": {
-                "method": "tenant_supplier"
+                "method": "memory_tenant_supplier"
             },
-            "ProvisionService": {
-                "method": "memory_provision_service"
-            },
+
             "DeviceRepository": {
                 "method": "memory_device_repository"
             },
@@ -87,10 +94,10 @@ class DevelopmentConfig(TrialConfig):
             "MessageRepository": {
                 "method": "memory_message_repository"
             },
-            "TenantProvider": {
-                "method": "standard_tenant_provider"
-            },
             # Delivery service
+            "IdService": {
+                "method": "standard_id_service"
+            },
             "DeliveryService": {
                 "method": "memory_delivery_service"
             },
@@ -111,9 +118,18 @@ class DevelopmentConfig(TrialConfig):
             },
             "InstarkInformer": {
                 "method": "memory_instark_informer"
-            },
+            }
+        })
+
+
+class DevelopmentConfig(TrialConfig):
+    def __init__(self):
+        super().__init__()
+        self["mode"] = DEV
+        self['factory'] = 'MemoryFactory'
+        self["strategy"].update({
             "TenantSupplier": {
-                "method": "memory_tenant_supplier"
+                "method": "trial_memory_tenant_supplier"
             }
         })
 
@@ -135,14 +151,23 @@ class ProductionConfig(DevelopmentConfig):
             "jwt": str(Path.home().joinpath('sign.txt'))
         }
         self['factory'] = 'HttpFactory'
+        self['gunicorn'].update({
+            'workers': self.number_of_workers()
+        })
         self['strategy'].update({
-            "JwtSupplier": {
-                "method": "jwt_supplier"
-            },
-            "Authenticate": {
-                "method": "middleware_authenticate"
-            },
+
+            # Delivery service
             "DeliveryService": {
                 "method": "firebase_delivery_service"
-            }
+            },
+
+            # Tenancy
+
+            "TenantProvider": {
+                "method": "standard_tenant_provider"
+            },
+
+            "TenantSupplier": {
+                "method": "json_tenant_supplier"
+            },
         })

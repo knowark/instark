@@ -1,17 +1,16 @@
 from ....application.services import DeliveryService
-import firebase_admin
-from firebase_admin import credentials, messaging
+from firebase_admin import credentials, messaging, initialize_app
 # import for create Android notification
-from firebase_admin.messaging import AndroidConfig, AndroidNotification
+# from firebase_admin.messaging import AndroidConfig, AndroidNotification
 # import for create Web notification
-from firebase_admin.messaging import WebpushConfig, WebpushNotification
-from firebase_admin.messaging import WebpushFcmOptions
+# from firebase_admin.messaging import WebpushConfig, WebpushNotification
+# from firebase_admin.messaging import WebpushFcmOptions
 
 
 class FirebaseDeliveryService(DeliveryService):
     def __init__(self, certificate_path: str) -> None:
         credentials_ = credentials.Certificate(certificate_path)
-        firebase_admin.initialize_app(credentials_)
+        initialize_app(credentials_)
 
     def send(self, locator: str, title: str, content: str) -> str:
         notification = messaging.Notification(body=content)
@@ -23,7 +22,7 @@ class FirebaseDeliveryService(DeliveryService):
             token=locator)
         return messaging.send(message)
 
-    def broadcast(self, str, code: str, title: str, content: str) -> str:
+    def broadcast(self, code: str, title: str, content: str) -> str:
         notification = messaging.Notification(body=content)
         message = messaging.Message(
             data={

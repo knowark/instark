@@ -24,13 +24,8 @@ class MemoryRepository(Repository, Generic[T]):
         return item
 
     def add(self, item: T) -> T:
-        # print('item>>>>>>>>>>>', item)
-        # setattr(item, 'id', getattr(item, 'id') or str(uuid4()))
-        # print('Locator>>>>>>>>>>>>>', self.data[self._location])
-        # self.data[self._location][getattr(item, 'id')] = item
-        # return item
-        item.id = item.id or str(uuid4())
-        self.data[self._location][item.id] = item
+        setattr(item, 'id', getattr(item, 'id') or str(uuid4()))
+        self.data[self._location][getattr(item, 'id')] = item
         return item
 
     def search(self, domain: QueryDomain, limit=0, offset=0) -> List[T]:
@@ -51,7 +46,7 @@ class MemoryRepository(Repository, Generic[T]):
         id = getattr(item, 'id')
         if id not in self.data[self._location]:
             return False
-        del self.items[id]
+        del self.data[self._location][id]
         return True
 
     def load(self, data: Dict[str, Dict[str, T]]) -> None:

@@ -1,4 +1,5 @@
 from pytest import fixture
+from typing import List
 from unittest.mock import Mock
 from instark.application.utilities.query_parser import QueryParser
 
@@ -106,7 +107,7 @@ def test_expression_parser_parse_multiple_terms(parser):
 
 
 def test_expression_parser_with_empty_list(parser):
-    domain = []
+    domain: List = []
     result = parser.parse(domain)
     mock_object = Mock()
     mock_object.field = 7
