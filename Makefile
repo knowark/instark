@@ -14,26 +14,26 @@ PROJECT = instark
 
 coverage-application:
 	mypy $(PROJECT)/application
-	export COVERAGE_FILE=$(PWD)/$(COVFILE); pytest -x \
-	--cov=$(PWD)/$(PROJECT)/application $(PWD)/tests/application/ \
+	export COVERAGE_FILE=$(COVFILE); pytest -x \
+	--cov=$(PROJECT)/application tests/application/ \
 	--cov-report term-missing \
-	--cov-report xml:$(PWD)/$(COVFILE).xml -s -vv \
+	--cov-report xml:$(COVFILE).xml -s -vv \
 	-o cache_dir=/tmp/pytest/cache
 
 coverage-infrastructure:
 	mypy $(PROJECT)/infrastructure
-	export COVERAGE_FILE=$(PWD)/$(COVFILE); pytest -x \
-	--cov=$(PWD)/$(PROJECT)/infrastructure $(PWD)/tests/infrastructure/ \
+	export COVERAGE_FILE=$(COVFILE); pytest -x \
+	--cov=$(PROJECT)/infrastructure tests/infrastructure/ \
 	--cov-report term-missing \
-	--cov-report xml:$(PWD)/$(COVFILE).xml -s -vv \
+	--cov-report xml:$(COVFILE).xml -s -vv \
 	-o cache_dir=/tmp/pytest/cache
 
 coverage: 
 	mypy $(PROJECT)
-	export COVERAGE_FILE=$(PWD)/$(COVFILE); pytest -x \
-	--cov=$(PWD)/$(PROJECT) $(PWD)/tests/ \
+	export COVERAGE_FILE=$(COVFILE); pytest -x \
+	--cov=$(PROJECT) tests/ \
 	--cov-report term-missing \
-	--cov-report xml:$(PWD)/$(COVFILE).xml -s -vv \
+	--cov-report xml: $(COVFILE).xml -s -vv \
 	-o cache_dir=/tmp/pytest/cache
 
 update:
