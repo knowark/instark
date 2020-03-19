@@ -6,20 +6,20 @@ from ..utilities.types import T, QueryDomain
 class Repository(ABC, Generic[T]):
 
     @abstractmethod
-    def get(self, id: str) -> T:
+    async def get(self, id: str) -> T:
         "Get method to be implemented."
 
     @abstractmethod
-    def add(self, item: T) -> T:
+    async def add(self, item: T) -> T:
         "Add method to be implemented."
 
     @abstractmethod
-    def search(self, domain: QueryDomain,
+    async def search(self, domain: QueryDomain,
                limit: int = 0, offset: int = 0) -> List[T]:
         "Search items matching a query domain"
 
     @abstractmethod
-    def remove(self, user: T) -> bool:
+    async def remove(self, user: T) -> bool:
         "Remove method to be implemented."
 
     @abstractmethod

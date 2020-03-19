@@ -19,19 +19,19 @@ class StandardInstarkInformer(InstarkInformer):
         self.message_repository = message_repository
         self.device_channel_repository = device_channel_repository
 
-    def search_devices(self, domain: SearchDomain) -> DeviceDictList:
+    async def search_devices(self, domain: SearchDomain) -> DeviceDictList:
         return [vars(device) for device in
-                self.device_repository.search(domain)]
+                await self.device_repository.search(domain)]
 
-    def search_channels(self, domain: SearchDomain) -> ChannelDictList:
+    async def search_channels(self, domain: SearchDomain) -> ChannelDictList:
         return [vars(channel) for channel in
-                self.channel_repository.search(domain)]
+                await self.channel_repository.search(domain)]
 
-    def search_device_channels(self, domain: SearchDomain
+    async def search_device_channels(self, domain: SearchDomain
                                ) -> SubscriptionDictList:
         return [vars(device_channel) for device_channel in
-                self.device_channel_repository.search(domain)]
+                await self.device_channel_repository.search(domain)]
 
-    def search_messages(self, domain: SearchDomain) -> MessageDictList:
+    async def search_messages(self, domain: SearchDomain) -> MessageDictList:
         return [vars(message) for message in
-                self.message_repository.search(domain)]
+                await self.message_repository.search(domain)]

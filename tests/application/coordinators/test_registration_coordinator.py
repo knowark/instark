@@ -14,8 +14,8 @@ def test_registation_coordinator_instantiation(registration_coordinator):
     assert registration_coordinator is not None
 
 
-def test_registation_coordinator_register_device(registration_coordinator):
+async def test_registation_coordinator_register_device(registration_coordinator):
     registration_dict = {'name': 'DEV001', 'locator': 'a1b2c3d4'}
-    registration_coordinator.register_device(registration_dict)
+    await registration_coordinator.register_device(registration_dict)
 
     assert len(registration_coordinator.device_repository.data) == 1

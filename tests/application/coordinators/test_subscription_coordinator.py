@@ -32,9 +32,9 @@ def test_subscription_coordinator_instantiation(subscription_coordinator):
     assert subscription_coordinator is not None
 
 
-def test_channel_coordinator_create_channel(subscription_coordinator):
+async def test_channel_coordinator_create_channel(subscription_coordinator):
     channel_dict = {'name': 'Channel 2', 'code': 'CH002'}
-    subscription_coordinator.create_channel(channel_dict)
+    await subscription_coordinator.create_channel(channel_dict)
 
 # def test_get_channels(subscription_coordinator):
 #     channel_dict = {'id': '001', 'name': 'Channel 1', 'code': 'CH001'}
@@ -42,9 +42,9 @@ def test_channel_coordinator_create_channel(subscription_coordinator):
 #     assert len(subscription_coordinator.channel_repository.items) > 0
 
 
-def test_subscription_coordinator_subscribe(subscription_coordinator):
+async def test_subscription_coordinator_subscribe(subscription_coordinator):
     subscription_dict = {'device_id': '001', 'channel_id': '001'}
-    subscription_coordinator.subscribe(subscription_dict)
+    await subscription_coordinator.subscribe(subscription_dict)
     assert len(subscription_coordinator.device_channel_repository.data) == 1
 
 
