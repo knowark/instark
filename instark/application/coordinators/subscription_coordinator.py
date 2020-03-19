@@ -18,19 +18,19 @@ class SubscriptionCoordinator:
         self.device_channel_repository = device_channel_repository
         self.delivery_service = delivery_service
 
-    def create_channel(self, channel_dict: ChannelDict) -> Channel:
+    async def create_channel(self, channel_dict: ChannelDict) -> Channel:
         if 'id' not in channel_dict:
             channel_dict['id'] = self.id_service.generate_id()
         channel = Channel(**channel_dict)
-        self.channel_repository.add(channel)
+        await self.channel_repository.add(channel)
         return channel
 
-    def subscribe(self, subscription_dict: SubscriptionDict) -> Subscription:
+    async def subscribe(self, subscription_dict: SubscriptionDict) -> Subscription:
         if 'id' not in subscription_dict:
             subscription_dict['id'] = self.id_service.generate_id()
         device_channel = Subscription(**subscription_dict)
-        device = self.device_repository.get(device_channel.device_id)
-        channel = self.channel_repository.get(device_channel.channel_id)
+        device = await self.device_repository.get(device_channel.device_id)
+        channel = await self.channel_repository.get(device_channel.channel_id)
         self.delivery_service.subscribe(channel.code, device.locator)
-        self.device_channel_repository.add(device_channel)
+        await self.device_channel_repository.add(device_channel)
         return device_channel

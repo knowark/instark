@@ -1,6 +1,7 @@
 from .repository import Repository
-from .device_repository import DeviceRepository, MemoryDeviceRepository
-from .channel_repository import ChannelRepository, MemoryChannelRepository
-from .message_repository import MessageRepository, MemoryMessageRepository
-from .subscription_repository import (
+from .memory_repository import MemoryRepository
+from .memory_model_repositories import (
+    ChannelRepository, MemoryChannelRepository,
+    DeviceRepository, MemoryDeviceRepository,
+    MessageRepository, MemoryMessageRepository,
     SubscriptionRepository, MemorySubscriptionRepository)

@@ -1,6 +1,8 @@
+from .entity import Entity
 
-class Device:
-    def __init__(self, **attributes):
-        self.id = attributes['id']
+
+class Device(Entity):
+    def __init__(self, **attributes) -> None:
+        super().__init__(**attributes)
         self.name = attributes.get('name', '')
         self.locator = attributes['locator']

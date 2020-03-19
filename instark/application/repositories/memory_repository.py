@@ -3,10 +3,10 @@ from uuid import uuid4
 from collections import defaultdict
 from typing import List, Dict, TypeVar, Optional, Generic, Union
 from .repository import Repository
-from ...utilities.tenancy import TenantProvider
-from ...utilities.query_parser import QueryParser
-from ...utilities.types import T, QueryDomain
-from ...utilities.exceptions import EntityNotFoundError
+from ..utilities.tenancy import TenantProvider
+from ..utilities.query_parser import QueryParser
+from ..utilities.types import T, QueryDomain
+from ..utilities.exceptions import EntityNotFoundError
 
 
 class MemoryRepository(Repository, Generic[T]):
@@ -16,19 +16,19 @@ class MemoryRepository(Repository, Generic[T]):
         self.parser = parser
         self.tenant_provider = tenant_provider
 
-    def get(self, id: str) -> T:
+    async def get(self, id: str) -> T:
         item = self.data[self._location].get(id)
         if not item:
             raise EntityNotFoundError(
                 f"The entity with id {id} was not found.")
         return item
 
-    def add(self, item: T) -> T:
+    async def add(self, item: T) -> T:
         setattr(item, 'id', getattr(item, 'id') or str(uuid4()))
         self.data[self._location][getattr(item, 'id')] = item
         return item
 
-    def search(self, domain: QueryDomain, limit=0, offset=0) -> List[T]:
+    async def search(self, domain: QueryDomain, limit=0, offset=0) -> List[T]:
         items = []
         limit = int(limit) if limit > 0 else 100
         offset = int(offset) if offset > 0 else 0
@@ -42,7 +42,7 @@ class MemoryRepository(Repository, Generic[T]):
 
         return items
 
-    def remove(self, item: T) -> bool:
+    async def remove(self, item: T) -> bool:
         id = getattr(item, 'id')
         if id not in self.data[self._location]:
             return False

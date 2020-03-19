@@ -11,9 +11,9 @@ class RegistrationCoordinator:
         self.id_service = id_service
         self.device_repository = device_repository
 
-    def register_device(self, registration_dict: RegistrationDict):
+    async def register_device(self, registration_dict: RegistrationDict):
         if 'id' not in registration_dict:
             registration_dict['id'] = self.id_service.generate_id()
         device = Device(**registration_dict)
-        self.device_repository.add(device)
+        await self.device_repository.add(device)
         return device

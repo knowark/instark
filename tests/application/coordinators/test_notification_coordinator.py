@@ -20,7 +20,7 @@ def test_notification_coordinator_instantiation(notification_coordinator):
     assert notification_coordinator is not None
 
 
-def test_notification_coordinator_send_direct_message(
+async def test_notification_coordinator_send_direct_message(
         notification_coordinator):
     notification_coordinator.delivery_service.response = 'a1b2c3'
     notification_coordinator.device_repository.load({
@@ -34,11 +34,11 @@ def test_notification_coordinator_send_direct_message(
         'content': 'Hello',
         'title': 'Tittle notification'
     }
-    notification_coordinator.send_message(message_dict)
-    assert len(notification_coordinator.message_repository.search([])) == 1
+    await notification_coordinator.send_message(message_dict)
+    assert len(await notification_coordinator.message_repository.search([])) == 1
 
 
-def test_notification_coordinator_send_direct_message_failed(
+async def test_notification_coordinator_send_direct_message_failed(
         notification_coordinator):
     notification_coordinator.device_repository.load({
         'default': {
@@ -50,10 +50,10 @@ def test_notification_coordinator_send_direct_message_failed(
     notification_coordinator.delivery_service.response = ''
 
     with raises(ValueError):
-        notification_coordinator.send_message(message_dict)
+        await notification_coordinator.send_message(message_dict)
 
 
-def test_notification_coordinator_send_channel_message(
+async def test_notification_coordinator_send_channel_message(
         notification_coordinator):
     notification_coordinator.delivery_service.response = 'BROADCAST'
     notification_coordinator.channel_repository.load({
@@ -64,10 +64,10 @@ def test_notification_coordinator_send_channel_message(
     message_dict = {
         'recipient_id': '1', 'kind': 'Channel', 'content': 'Hello'}
 
-    notification_coordinator.send_message(message_dict)
+    await notification_coordinator.send_message(message_dict)
 
-    assert len(notification_coordinator.message_repository.search([])) == 1
+    assert len(await notification_coordinator.message_repository.search([])) == 1
 
-    for message in notification_coordinator.message_repository.search([]):
+    for message in await notification_coordinator.message_repository.search([]):
         assert message.recipient_id == '1'
         assert message.kind == 'Channel'

@@ -18,16 +18,16 @@ class NotificationCoordinator:
         self.message_repository = message_repository
         self.delivery_service = delivery_service
 
-    def send_message(self, message_dict: NotificationDict) -> Message:
+    async def send_message(self, message_dict: NotificationDict) -> Message:
         if 'id' not in message_dict:
             message_dict['id'] = self.id_service.generate_id()
         message = Message(**message_dict)
         if message.kind.lower() == 'direct':
-            device = self.device_repository.get(message.recipient_id)
+            device = await self.device_repository.get(message.recipient_id)
             response = self.delivery_service.send(
                 device.locator, str(message.title), message.content)
         else:
-            channel = self.channel_repository.get(message.recipient_id)
+            channel = await self.channel_repository.get(message.recipient_id)
             response = self.delivery_service.broadcast(
                 channel.code, str(message.title), message.content)
 
@@ -35,5 +35,5 @@ class NotificationCoordinator:
             raise ValueError("The message couldn't be sent")
 
         message.backend_id = response
-        self.message_repository.add(message)
+        await self.message_repository.add(message)
         return message
