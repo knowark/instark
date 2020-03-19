@@ -1,6 +1,6 @@
 from typing import Dict
 from pytest import fixture, raises
-from instark.application.repositories.repository import MemoryRepository
+from instark.application.repositories import MemoryRepository
 from instark.application.repositories import Repository
 from instark.application.utilities.tenancy import (
     Tenant, StandardTenantProvider)
