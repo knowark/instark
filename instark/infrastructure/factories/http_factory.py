@@ -1,21 +1,21 @@
 from pathlib import Path
-from ....application.utilities import (
+from ...application.utilities import (
     QueryParser, TenantProvider, StandardTenantProvider)
-from ....application.repositories import (
+from ...application.repositories import (
     DeviceRepository, MemoryDeviceRepository,
     ChannelRepository, MemoryChannelRepository,
     SubscriptionRepository, MemorySubscriptionRepository,
     MessageRepository, MemoryMessageRepository)
-from ....application.services import (
+from ...application.services import (
     AuthService, StandardAuthService, StandardIdService, MemoryDeliveryService,
     DeliveryService, IdService)
-from ....application.coordinators import (
+from ...application.coordinators import (
     RegistrationCoordinator, SubscriptionCoordinator, NotificationCoordinator,
     SessionCoordinator)
-from ....application.informers import StandardInstarkInformer
-from ...delivery import FirebaseDeliveryService
+from ...application.informers import StandardInstarkInformer
+from ..delivery import FirebaseDeliveryService
 from ..configuration import Config
-from ..tenancy import TenantSupplier, JsonTenantSupplier, MemoryTenantSupplier
+from ..core.tenancy import TenantSupplier, JsonTenantSupplier, MemoryTenantSupplier
 from .memory_factory import MemoryFactory
 
 

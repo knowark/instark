@@ -1,7 +1,7 @@
 from pytest import fixture
 from json import dump
 from injectark import Injectark
-from instark.infrastructure.core.configuration.config import (
+from instark.infrastructure.configuration.config import (
     TrialConfig, DevelopmentConfig, ProductionConfig)
 
 

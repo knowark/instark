@@ -3,7 +3,7 @@ import json
 from argparse import ArgumentParser, Namespace
 from injectark import Injectark
 from typing import List
-from ..core import Config
+from ..configuration import Config
 from ..web import create_app, ServerApplication
 
 

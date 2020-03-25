@@ -1,6 +1,7 @@
-from instark.infrastructure.core import (
-    TrialConfig, Config, build_factory, Factory)
-
+from instark.infrastructure.configuration import (
+    TrialConfig, Config)
+from instark.infrastructure.factories import (
+    build_factory, Factory)
 
 def test_build_factory():
     config = TrialConfig()

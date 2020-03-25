@@ -1,6 +1,6 @@
 from unittest.mock import Mock
 from instark.infrastructure.web import ServerApplication
-from instark.infrastructure.core import Config
+from instark.infrastructure.configuration import Config
 
 
 def test_server_application_calls() -> None:

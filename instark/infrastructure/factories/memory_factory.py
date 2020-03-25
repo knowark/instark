@@ -1,7 +1,7 @@
 from .trial_factory import TrialFactory
 from ..configuration import Config
-from ..tenancy import MemoryTenantSupplier
-from ....application.utilities import Tenant
+from ..core.tenancy import MemoryTenantSupplier
+from ...application.utilities import Tenant
 
 
 class MemoryFactory(TrialFactory):

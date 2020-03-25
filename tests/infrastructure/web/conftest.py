@@ -6,8 +6,10 @@ from flask import Flask
 from datetime import datetime
 from flask.testing import FlaskClient
 from injectark import Injectark
-from instark.infrastructure.core import (
-    build_factory, DevelopmentConfig, build_config, Config, JwtSupplier)
+from instark.infrastructure.core import JwtSupplier
+from instark.infrastructure.factories import build_factory
+from instark.infrastructure.configuration import (
+    DevelopmentConfig, build_config, Config)
 from instark.infrastructure.cli import Cli
 from instark.infrastructure.web import (
     create_app, ServerApplication, register_error_handler)

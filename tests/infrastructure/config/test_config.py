@@ -1,7 +1,7 @@
 import os
 import json
 from pytest import raises, fixture
-from instark.infrastructure.core import (
+from instark.infrastructure.configuration import (
     TrialConfig, DevelopmentConfig, ProductionConfig, load_config,
     build_config)
 

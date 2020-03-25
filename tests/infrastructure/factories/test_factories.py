@@ -1,7 +1,7 @@
 import inspect
 from pytest import fixture, mark
 from injectark import Injectark
-from instark.infrastructure.core import build_factory
+from instark.infrastructure.factories import build_factory
 
 
 def test_config(test_data):

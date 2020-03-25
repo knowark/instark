@@ -21,7 +21,7 @@ coverage-application:
 	-o cache_dir=/tmp/pytest/cache
 
 coverage-infrastructure:
-	mypy $(PROJECT)/infrastructure
+	#mypy $(PROJECT)/infrastructure
 	export COVERAGE_FILE=$(COVFILE); pytest -x \
 	--cov=$(PROJECT)/infrastructure tests/infrastructure/ \
 	--cov-report term-missing \

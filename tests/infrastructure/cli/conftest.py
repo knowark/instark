@@ -1,7 +1,8 @@
 from pytest import fixture
 from injectark import Injectark
-from instark.infrastructure.core import (
-    Config, DevelopmentConfig, build_factory)
+from instark.infrastructure.factories import build_factory
+from instark.infrastructure.configuration import (
+    Config, DevelopmentConfig)
 from instark.infrastructure.cli import Cli
 from argparse import Namespace
 

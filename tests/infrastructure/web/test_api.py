@@ -2,7 +2,7 @@ from pytest import raises
 from flask import Flask, request
 from json import loads, dumps
 from instark.infrastructure.core.common.exceptions import AuthenticationError
-from instark.infrastructure.core.configuration import ProductionConfig
+from instark.infrastructure.configuration import ProductionConfig
 
 
 def test_production_config_retrieve() -> None:

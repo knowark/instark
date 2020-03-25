@@ -1,23 +1,23 @@
 from pathlib import Path
 from .factory import Factory
 from ..configuration import Config
-from ..tenancy import TenantSupplier, MemoryTenantSupplier
-from ....application.utilities import (
+from ..core.tenancy import TenantSupplier, MemoryTenantSupplier
+from ...application.utilities import (
     QueryParser, Tenant, TenantProvider, StandardTenantProvider)
-from ....application.repositories import (
+from ...application.repositories import (
     DeviceRepository, MemoryDeviceRepository,
     ChannelRepository, MemoryChannelRepository,
     SubscriptionRepository, MemorySubscriptionRepository,
     MessageRepository, MemoryMessageRepository)
-from ....application.services import (
+from ...application.services import (
     AuthService, StandardAuthService, StandardIdService, MemoryDeliveryService,
     DeliveryService, IdService)
-from ....application.coordinators import (
+from ...application.coordinators import (
     RegistrationCoordinator, SubscriptionCoordinator, NotificationCoordinator,
     SessionCoordinator)
-from ....application.informers import StandardInstarkInformer
-from ...web.middleware import Authenticate
-from ...core import JwtSupplier
+from ...application.informers import StandardInstarkInformer
+from ..web.middleware import Authenticate
+from ..core import JwtSupplier
 
 
 class TrialFactory(Factory):
