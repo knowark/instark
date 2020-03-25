@@ -4,7 +4,7 @@ from instark.infrastructure.factories import (
     build_factory, Factory)
 
 def test_build_factory():
-    config = TrialConfig()
+    config = TrialConfig('DEV')
 
     factory = build_factory(config)
 
@@ -21,14 +21,27 @@ def test_factory_methods() -> None:
 def test_build_factory_multiple_factories() -> None:
     methods = Factory.__abstractmethods__  # type: ignore
 
-    factories = ['MemoryFactory', 'HttpFactory']
+    factories = ['MemoryFactory', 'trialFactory']
 
     class MockConfig(Config):
         def __init__(self, name):
             self['factory'] = name
-            self['data'] = {"json": {"default": ""}}
 
     for name in factories:
         config = MockConfig(name)
         factory = build_factory(config)
         assert type(factory).__name__ == name
+        
+
+def test_factory_extract() -> None:
+    class MockFactory(Factory):
+        def __init__(self, context):
+            pass
+
+        def _my_method(self):
+            pass
+
+    factory = MockFactory({})
+    method = factory.extract('_my_method')
+
+    assert method == factory._my_method

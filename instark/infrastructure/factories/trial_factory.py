@@ -1,135 +1,115 @@
-from pathlib import Path
-from .factory import Factory
 from ..configuration import Config
-from ..core.tenancy import TenantSupplier, MemoryTenantSupplier
 from ...application.utilities import (
-    QueryParser, Tenant, TenantProvider, StandardTenantProvider)
+    QueryParser, Tenant, TenantProvider, StandardTenantProvider,
+    AuthProvider, StandardAuthProvider)
+from ...application.models import (
+    channel, device, message, subscription)
+)   
 from ...application.repositories import (
-    DeviceRepository, MemoryDeviceRepository,
-    ChannelRepository, MemoryChannelRepository,
-    SubscriptionRepository, MemorySubscriptionRepository,
-    MessageRepository, MemoryMessageRepository)
-from ...application.services import (
-    AuthService, StandardAuthService, StandardIdService, MemoryDeliveryService,
-    DeliveryService, IdService)
-from ...application.coordinators import (
-    RegistrationCoordinator, SubscriptionCoordinator, NotificationCoordinator,
-    SessionCoordinator)
-from ...application.informers import StandardInstarkInformer
-from ..web.middleware import Authenticate
-from ..core import JwtSupplier
+    MemorychannelRepository, MemoryChannelRepository,
+    MemorySubscriptionRepository, MemoryMessageRepository)
+from .memory_factory import MemoryFactory
+
+from ...infrastructure.core import (
+    TenantSupplier, MemoryTenantSupplier)
 
 
-class TrialFactory(Factory):
+class TrialFactory(MemoryFactory):
     def __init__(self, config: Config) -> None:
         self.config = config
 
     # Tenancy
 
-    def query_parser(self) -> QueryParser:
-        return QueryParser()
+    def trial_tenant_provider(self) -> StandardTenantProvider:
+        tenant_provider = StandardTenantProvider()
+        tenant_provider.setup(Tenant(name="Default"))
+        return tenant_provider
 
-    def memory_tenant_supplier(self) -> MemoryTenantSupplier:
-        return MemoryTenantSupplier()
-
-    def standard_tenant_provider(self) -> StandardTenantProvider:
-        return StandardTenantProvider()
-
-    # Security
-
-    def middleware_authenticate(
-            self, jwt_supplier: JwtSupplier,
-            tenant_supplier: TenantSupplier,
-            session_coordinator: SessionCoordinator) -> Authenticate:
-        return Authenticate(
-            jwt_supplier, tenant_supplier, session_coordinator)
-
-    def jwt_supplier(self) -> JwtSupplier:
-        secret = 'secret'
-        secret_file = self.config.get('secrets', {}).get('jwt')
-        if secret_file:
-            secret = Path(secret_file).read_text().strip()
-        return JwtSupplier(secret)
-
-    # Repositories
-
-    def memory_device_repository(
-        self, query_parser: QueryParser, tenant_provider: TenantProvider
-    ) -> MemoryDeviceRepository:
-        return MemoryDeviceRepository(query_parser, tenant_provider)
+    def trial_auth_provider(self) -> StandardAuthProvider:
+        auth_provider = StandardAuthProvider()
+        auth_provider.setup(User(id='001', name='johndoe'))
+        return auth_provider
 
     def memory_channel_repository(
-        self, query_parser: QueryParser, tenant_provider: TenantProvider
-    ) -> MemoryChannelRepository:
-        return MemoryChannelRepository(query_parser, tenant_provider)
+        self, query_parser: QueryParser,
+        tenant_provider: TenantProvider,
+        auth_provider: AuthProvider
+    ) -> MemorychannelRepository:
+        channel_repository = MemorychannelRepository(
+            query_parser, tenant_provider, auth_provider)
+        """channel_repository.load({
+            "default": {
+                'LMK123': channel(
+                    **{'id': 'LMK123', 'name': 'General Survey'}),
+                'QWT987': channel(
+                    **{'id': 'QWT987', 'name': 'Surveillance'}),
+                'HJK456': channel(
+                    **{'id': 'HJK456', 'name': 'Inspections'})
+            }
+        })"""
+        return channel_repository
 
-    def memory_subscription_repository(
-        self, query_parser: QueryParser, tenant_provider: TenantProvider
-    ) -> MemorySubscriptionRepository:
-        return MemorySubscriptionRepository(query_parser, tenant_provider)
+    def memory_device_repository(
+        self, query_parser: QueryParser,
+        tenant_provider: TenantProvider,
+        auth_provider: AuthProvider
+    ) -> MemorydeviceRepository:
+        device_repository = MemorydeviceRepository(
+            query_parser, tenant_provider, auth_provider)
+        """device_repository.load({
+            "default": {
+                '001': device(
+                    **{'id': '001', 'name': 'Are alarms working?',
+                       'type': 'selection', 'channel_id': 'LMK123'}),
+            }
+        })"""
+        return device_repository
 
     def memory_message_repository(
         self, query_parser: QueryParser,
-        tenant_provider: TenantProvider
-    ) -> MemoryMessageRepository:
-        return MemoryMessageRepository(query_parser, tenant_provider)
+        tenant_provider: TenantProvider,
+        auth_provider: AuthProvider
+    ) -> MemorymessageRepository:
+        message_repository = MemorymessageRepository(
+            query_parser, tenant_provider, auth_provider)
+        """message_repository.load({
+            "default": {
+                'ABC': message(
+                    **{'id': 'ABC', 'name': 'Yes',
+                       'device_id': 'ABC'}),
+            }
+        })"""
+        return message_repository
 
-    # Services
+    def memory_subscription_repository(
+        self, query_parser: QueryParser,
+        tenant_provider: TenantProvider,
+        auth_provider: AuthProvider
+    ) -> MemorysubscriptionRepository:
+        subscription_repository = MemorysubscriptionRepository(
+            query_parser, tenant_provider, auth_provider)
+        """subscription_repository.load({
+            "default": {
+                '001': subscription(
+                    **{'id': '001', 'name': 'General Survey subscription',
+                       'channel_id': 'LMK123'}),
+                '002': subscription(
+                    **{'id': '002', 'name': 'General Survey subscription',
+                       'channel_id': 'LMK123'}),
+            }
+        })"""
+        return subscription_repository
 
-    def memory_delivery_service(self) -> MemoryDeliveryService:
-        return MemoryDeliveryService('Fake Response')
+    def trial_tenant_supplier(self) -> MemoryTenantSupplier:
+        tenant_supplier = MemoryTenantSupplier()
+        tenant_supplier.create_tenant({
+            'id': '001',
+            'name': 'Default',
+            'zone': 'default',
+            'data': {
+                'memory': {
+                    'default': 'default'
+                }
+            }})
+        return tenant_supplier
 
-    def standard_id_service(self) -> StandardIdService:
-        return StandardIdService()
-
-    def memory_auth_service(self) -> StandardAuthService:
-        dominion = self.config['authorization']['dominion']
-        return StandardAuthService(dominion)
-
-    # Coordinators
-
-    def registration_coordinator(
-        self, id_service: IdService,
-        device_repository: DeviceRepository
-    ) -> RegistrationCoordinator:
-        return RegistrationCoordinator(id_service, device_repository)
-
-    def subscription_coordinator(
-        self, id_service: IdService,
-        channel_repository: ChannelRepository,
-        device_repository: DeviceRepository,
-        device_channel_repository: SubscriptionRepository,
-        delivery_service: DeliveryService
-    ) -> SubscriptionCoordinator:
-        return SubscriptionCoordinator(id_service, channel_repository,
-                                       device_repository,
-                                       device_channel_repository,
-                                       delivery_service)
-
-    def notification_coordinator(
-        self, id_service: IdService,
-        channel_repository: ChannelRepository,
-        device_repository: DeviceRepository,
-        message_repository: MessageRepository,
-        delivery_service: DeliveryService
-    ) -> NotificationCoordinator:
-        return NotificationCoordinator(id_service, channel_repository,
-                                       device_repository, message_repository,
-                                       delivery_service)
-
-    def session_coordinator(
-        self, tenant_provider: TenantProvider, auth_service: AuthService
-    ) -> SessionCoordinator:
-        return SessionCoordinator(tenant_provider, auth_service)
-
-    # Reporters
-
-    def memory_instark_informer(
-        self, device_repository: DeviceRepository,
-        channel_repository: ChannelRepository,
-        message_repository: MessageRepository,
-        device_channel_repository: SubscriptionRepository
-    ) -> StandardInstarkInformer:
-        return StandardInstarkInformer(device_repository, channel_repository,
-                                       message_repository,
-                                       device_channel_repository)
