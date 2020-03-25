@@ -1,5 +1,5 @@
 import os
-import json
+import rapidjson as json
 from pytest import raises, fixture
 from instark.infrastructure.configuration import (
     TrialConfig, DevelopmentConfig, ProductionConfig, load_config,
@@ -70,6 +70,6 @@ def test_configuration_build_config_none_production_build(config_data):
     config_file.write_text(json.dumps(config_dict))
     mode = 'PROD'
 
-    config = build_config("", mode)
+    config = build_config(mode)
 
     assert isinstance(config, ProductionConfig)

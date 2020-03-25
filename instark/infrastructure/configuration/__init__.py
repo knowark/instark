@@ -1,10 +1,10 @@
 from pathlib import Path
-from json import load
+from rapidjson import load
 from typing import Optional
-from .config import Config, TrialConfig, DevelopmentConfig, ProductionConfig
+from .config import Config, DevelopmentConfig, ProductionConfig, TrialConfig 
 
 
-def build_config(config_path: str, mode: str) -> Config:
+def build_config(config_path: str, mode: str = "") -> Config:
     if mode == 'DEV':
         return DevelopmentConfig()
 
