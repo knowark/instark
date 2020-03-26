@@ -1,4 +1,4 @@
-from questionark.infrastructure.core import (
+from instark.infrastructure.core import (
     SetupSupplier, MemorySetupSupplier)
 
 

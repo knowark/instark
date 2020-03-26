@@ -1,4 +1,5 @@
 from marshmallow import Schema, fields, EXCLUDE
+from .entity import EntitySchema
 
 
 class UserSchema(EntitySchema):

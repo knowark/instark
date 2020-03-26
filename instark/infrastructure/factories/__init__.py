@@ -4,6 +4,7 @@ from .factory import Factory
 from .memory_factory import MemoryFactory
 from .sql_factory import SqlFactory
 from .trial_factory import TrialFactory
+from .strategies import build_strategy
 
 
 def build_factory(config: Config) -> Factory:

@@ -1,8 +1,7 @@
 from ..configuration import Config
 from .factory import Factory
 from ...application.utilities import (Tenant,
-    query_parser, TenantProvider, StandardTenantProvider,
-    AuthProvider, StandardAuthProvider)
+    QueryParser, TenantProvider, StandardTenantProvider)
 from ...application.repositories import (
     DeviceRepository, MemoryDeviceRepository,
     ChannelRepository, MemoryChannelRepository,
@@ -31,8 +30,8 @@ class MemoryFactory(Factory):
     def standard_tenant_provider(self) -> StandardTenantProvider:
         return StandardTenantProvider()
 
-    def standard_auth_provider(self) -> StandardAuthProvider:
-        return StandardAuthProvider()
+    def standard_auth_service(self) -> StandardAuthService:
+        return StandardAuthService()
 
     def memory_tenant_supplier(self) -> MemoryTenantSupplier:
         return MemoryTenantSupplier()
@@ -108,9 +107,9 @@ class MemoryFactory(Factory):
     ) -> SessionCoordinator:
         return SessionCoordinator(tenant_provider, auth_service)
 
-    # Reporters
+    # Informers
 
-    def memory_instark_informer(
+    def standard_instark_informer(
         self, device_repository: DeviceRepository,
         channel_repository: ChannelRepository,
         message_repository: MessageRepository,
@@ -119,3 +118,10 @@ class MemoryFactory(Factory):
         return StandardInstarkInformer(device_repository, channel_repository,
                                        message_repository,
                                        device_channel_repository)
+
+
+    def memory_tenant_supplier(self) -> MemoryTenantSupplier:
+        return MemoryTenantSupplier()
+
+    def memory_setup_supplier(self) -> MemorySetupSupplier:
+        return MemorySetupSupplier()

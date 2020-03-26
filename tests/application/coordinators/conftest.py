@@ -7,6 +7,7 @@ from instark.application.services import (
     StandardIdService, MemoryDeliveryService)
 from instark.application.utilities.tenancy import (
     StandardTenantProvider, Tenant)
+from instark.application.services.auth import auth_service, StandardAuthService
 
 
 @fixture
@@ -21,22 +22,22 @@ def tenant_provider():
 
 @fixture
 def device_repository(tenant_provider):
-    return MemoryDeviceRepository(QueryParser(), tenant_provider)
+    return MemoryDeviceRepository(QueryParser(), tenant_provider, auth_service)
 
 
 @fixture
 def channel_repository(tenant_provider):
-    return MemoryChannelRepository(QueryParser(), tenant_provider)
+    return MemoryChannelRepository(QueryParser(), tenant_provider, auth_service)
 
 
 @fixture
 def device_channel_repository(tenant_provider):
-    return MemorySubscriptionRepository(QueryParser(), tenant_provider)
+    return MemorySubscriptionRepository(QueryParser(), tenant_provider, auth_service)
 
 
 @fixture
 def message_repository(tenant_provider):
-    return MemoryMessageRepository(QueryParser(), tenant_provider)
+    return MemoryMessageRepository(QueryParser(), tenant_provider, auth_service)
 
 
 @fixture

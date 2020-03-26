@@ -5,6 +5,7 @@ from instark.application.repositories import Repository
 from instark.application.utilities.tenancy import (
     Tenant, StandardTenantProvider)
 from instark.application.utilities import QueryParser, EntityNotFoundError
+from instark.application.services.auth import auth_service, StandardAuthService
 
 
 class DummyEntity:
@@ -34,7 +35,7 @@ def test_memory_repository_implementation() -> None:
 def memory_repository() -> MemoryRepository:
     tenant_service = StandardTenantProvider(Tenant(name="Default"))
     parser = QueryParser()
-    repository: MemoryRepository = MemoryRepository(parser, tenant_service)
+    repository: MemoryRepository = MemoryRepository(parser, tenant_service, auth_service)
     repository.load({"default": {}})
     return repository
 
@@ -53,7 +54,7 @@ async def test_memory_repository_get_missing(filled_memory_repository) -> None:
 async def test_memory_repository_add() -> None:
     parser = QueryParser()
     tenant_service = StandardTenantProvider(Tenant(name="Default"))
-    repository: MemoryRepository = MemoryRepository(parser, tenant_service)
+    repository: MemoryRepository = MemoryRepository(parser, tenant_service, auth_service)
 
     item = DummyEntity("1", "value_1")
     is_saved = await repository.add(item)

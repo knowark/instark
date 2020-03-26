@@ -1,20 +1,26 @@
-from abc import ABC, abstractmethod
+#from abc import ABC, abstractmethod
+import time
 from uuid import uuid4
 from collections import defaultdict
-from typing import List, Dict, TypeVar, Optional, Generic, Union
-from .repository import Repository
-from ..utilities.tenancy import TenantProvider
+from typing import List, Dict, TypeVar, Optional, Generic, Union, Any
+from ..models import T
+from ..utilities.tenancy import TenantProvider, StandardTenantProvider
+from ..services.auth import AuthService, StandardAuthService
 from ..utilities.query_parser import QueryParser
 from ..utilities.types import T, QueryDomain
 from ..utilities.exceptions import EntityNotFoundError
+from .repository import Repository
 
 
 class MemoryRepository(Repository, Generic[T]):
     def __init__(self,  parser: QueryParser,
-                 tenant_provider: TenantProvider) -> None:
+                 tenant_provider: TenantProvider,
+                 auth_service: AuthService) -> None:
         self.data: Dict[str, Dict[str, T]] = defaultdict(dict)
         self.parser = parser
-        self.tenant_provider = tenant_provider
+        self.tenant_provider: TenantProvider = tenant_provider
+        self.auth_service: AuthService = auth_service
+        self.max_items = 10_000
 
     async def get(self, id: str) -> T:
         item = self.data[self._location].get(id)

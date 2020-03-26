@@ -6,9 +6,10 @@ from filtrark import SqlParser, SafeEval
 from pytest import fixture, raises
 from asyncpg import connect
 from instark.application.utilities import (
-    Tenant, StandardTenantProvider, User, StandardAuthProvider)
+    Tenant, StandardTenantProvider)
+from instark.application.services import User, StandardAuthService
 from instark.application.models import Entity
-from questiinstarkonark.infrastructure.data import (
+from instark.infrastructure.data import (
     ConnectionManager, DefaultConnectionManager,
     SqlTransactionManager, SqlRepository)
 
@@ -93,14 +94,14 @@ def transaction_manager(connection_manager, tenant_provider):
 def sample_repository(connection_manager, tenant_provider, samples_table
                       ) -> SqlRepository:
     parser = SqlParser(SafeEval())
-    auth_provider = StandardAuthProvider()
-    auth_provider.setup(User(id='001', name='johndoe'))
+    auth_service = StandardAuthService()
+    auth_service.setup(User(id='001', name='johndoe'))
 
     sql_repository: SqlRepository = SqlRepository(
         table=samples_table,
         constructor=SampleEntity,
         tenant_provider=tenant_provider,
-        auth_provider=auth_provider,
+        auth_service=auth_service,
         connection_manager=connection_manager,
         parser=parser)
 

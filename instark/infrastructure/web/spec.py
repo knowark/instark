@@ -18,7 +18,7 @@ class ResourcePlugin(BasePlugin):
         if not resource:
             return
 
-        for method in self.methods:
+        for method in operations or self.methods:
             function = getattr(resource, method, None)
             if not function:
                 continue

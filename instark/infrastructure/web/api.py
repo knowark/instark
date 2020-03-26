@@ -8,48 +8,35 @@ from .spec import create_spec
 
 
 def create_api(app: web.Application, resolver: Injectark) -> None:
-
     # Restful API
     spec = create_spec()
 
-    # Root Resource (Api Specification)
-    #root_view = RootResource.as_view('root', spec=spec)
-    #app.add_url_rule("/", view_func=root_view)
+    # Root Resource
     bind_routes(app, '/', RootResource(spec))
 
-    # Middleware
-    #authenticate = resolver['Authenticate']
-
-    # Message Resource
-    bind_routes(app, '/Messages', MessageResource(injector))
-    spec.path(path="/Messages", operations={
-    'head': {}, 'get': {}, 'put': {},
-    resource=MessageResource)
-
     # Channel Resource
-    Channel Resource
-    bind_routes(app, '/Channels', ChannelResource(injector))
-    spec.path(path="/Channels", operations={
-    'head': {}, 'get': {}, 'post': {},
-    resource=ChannelResource)
+    bind_routes(app, '/channels', ChannelResource(resolver))
+    spec.path(path="/channels", operations={
+    'head': {}, 'get': {}, 'post': {}},resource=ChannelResource)
 
     # Device Resource
-    Device Resource
-    bind_routes(app, '/Devices', DeviceResource(injector))
-    spec.path(path="/Devices", operations={
-    'head': {}, 'get': {}, 'put': {},
-    resource=DeviceResource)
+    bind_routes(app, '/devices', DeviceResource(resolver))
+    spec.path(path="/devices", operations={
+    'head': {}, 'get': {}, 'put': {}},resource=DeviceResource)
+
+    # Message Resource
+    bind_routes(app, '/messages', MessageResource(resolver))
+    spec.path(path="/messages", operations={
+    'head': {}, 'get': {}, 'put': {}}, resource=MessageResource)
 
     # Subscription Resource
-    Subscription Resource
-    bind_routes(app, '/Subscriptions', SubscriptionResource(injector))
-    spec.path(path="/Subscriptions", operations={
-    'head': {}, 'get': {}, 'post': {},
-    resource=SubscriptionResource)
+    bind_routes(app, '/subscriptions', SubscriptionResource(resolver))
+    spec.path(path="/subscriptions", operations={
+    'head': {}, 'get': {}, 'post': {}},resource=SubscriptionResource)
 
 
 
-    def bind_routes(app: web.Application, path: str, resource: Any):
+def bind_routes(app: web.Application, path: str, resource: Any):
     general_methods = ['head', 'get', 'put', 'delete', 'post', 'patch']
     identified_methods = ['get', 'delete']
     for method in general_methods + identified_methods:

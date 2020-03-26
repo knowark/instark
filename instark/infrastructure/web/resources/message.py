@@ -5,12 +5,11 @@ from ..schemas import MessageSchema
 from ..helpers import get_request_filter
 
 
-class MessageResource():
-
+class MessageResource:
     def __init__(self, resolver: Injectark) -> None:
-        #self.notification_coordinator = resolver['NotificationCoordinator']
         self.resolver = resolver
-        self.instark_informer = resolver['InstarkInformer']
+        self.notification_coordinator = self.resolver['NotificationCoordinator']
+        self.instark_informer = self.resolver['InstarkInformer']
 
     async def head(self, request) -> int:
         """
@@ -23,7 +22,7 @@ class MessageResource():
 
         headers = {
             'Total-Count': str(await self.instark_informer.count(
-                'answer', domain))
+                'message', domain))
         }
 
         return web.Response(headers=headers)

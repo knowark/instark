@@ -1,13 +1,15 @@
 import os
 from pathlib import Path
 from filtrark import SqlParser, SafeEval
-from ...application.utilities import QueryParser, TenantProvider, AuthProvider
+from ...application.utilities import QueryParser, TenantProvider
+from ...application.services import AuthService
 from ..data import (
     ConnectionManager, DefaultConnectionManager, SqlTransactionManager,
-    SqlQuestionnaireRepository, SqlQuestionRepository, SqlOptionRepository,
-    SqlAssessmentRepository, SqlAnswerRepository, SqlSelectionRepository)
-from ..config import Config
-from ..core import SchemaTenantSupplier, SchemaSetupSupplier
+    SqlChannelRepository, SqlDeviceRepository, SqlMessageRepository,
+    SqlSubscriptionRepository)
+from ..configuration import Config
+from ..core.tenancy import SchemaTenantSupplier
+from ..core.setup import SchemaSetupSupplier
 from .memory_factory import MemoryFactory
 
 
@@ -21,8 +23,8 @@ class SqlFactory(MemoryFactory):
     def sql_connection_manager(self) -> DefaultConnectionManager:
         settings = []
         for zone, config in self.config['zones'].items():
-            options = {'name': zone, 'dsn': config['dsn']}
-            settings.append(options)
+            Messages = {'name': zone, 'dsn': config['dsn']}
+            settings.append(Messages)
 
         return DefaultConnectionManager(settings)
 
@@ -32,64 +34,47 @@ class SqlFactory(MemoryFactory):
     ) -> SqlTransactionManager:
         return SqlTransactionManager(connection_manager, tenant_provider)
 
-    def sql_questionnaire_repository(
+    def sql_channel_repository(
             self, tenant_provider: TenantProvider,
-            auth_provider: AuthProvider,
+            auth_service: AuthService,
             connection_manager: ConnectionManager,
-            sql_parser: SqlParser) -> SqlQuestionnaireRepository:
-        return SqlQuestionnaireRepository(
-            tenant_provider, auth_provider, connection_manager, sql_parser)
+            sql_parser: SqlParser) -> SqlChannelRepository:
+            
+        return SqlChannelRepository(
+            tenant_provider, auth_service, connection_manager, sql_parser)
 
-    def sql_question_repository(
+    def sql_device_repository(
             self, tenant_provider: TenantProvider,
-            auth_provider: AuthProvider,
+            auth_service: AuthService,
             connection_manager: ConnectionManager,
-            sql_parser: SqlParser) -> SqlQuestionRepository:
+            sql_parser: SqlParser) -> SqlDeviceRepository:
 
-        return SqlQuestionRepository(
-            tenant_provider, auth_provider, connection_manager, sql_parser)
+        return SqlDeviceRepository(
+            tenant_provider, auth_service, connection_manager, sql_parser)
 
-    def sql_option_repository(
+    def sql_message_repository(
             self, tenant_provider: TenantProvider,
-            auth_provider: AuthProvider,
+            auth_service: AuthService,
             connection_manager: ConnectionManager,
-            sql_parser: SqlParser) -> SqlOptionRepository:
+            sql_parser: SqlParser) -> SqlMessageRepository:
 
-        return SqlOptionRepository(
-            tenant_provider, auth_provider, connection_manager, sql_parser)
+        return SqlMessageRepository(
+            tenant_provider, auth_service, connection_manager, sql_parser)
 
-    def sql_assessment_repository(
+    def sql_subscription_repository(
             self, tenant_provider: TenantProvider,
-            auth_provider: AuthProvider,
+            auth_service: AuthService,
             connection_manager: ConnectionManager,
-            sql_parser: SqlParser) -> SqlAssessmentRepository:
+            sql_parser: SqlParser) -> SqlSubscriptionRepository:
 
-        return SqlAssessmentRepository(
-            tenant_provider, auth_provider, connection_manager, sql_parser)
+        return SqlSubscriptionRepository(
+            tenant_provider, auth_service, connection_manager, sql_parser)
 
-    def sql_answer_repository(
-            self, tenant_provider: TenantProvider,
-            auth_provider: AuthProvider,
-            connection_manager: ConnectionManager,
-            sql_parser: SqlParser) -> SqlAnswerRepository:
-
-        return SqlAnswerRepository(
-            tenant_provider, auth_provider, connection_manager, sql_parser)
-
-    def sql_selection_repository(
-            self, tenant_provider: TenantProvider,
-            auth_provider: AuthProvider,
-            connection_manager: ConnectionManager,
-            sql_parser: SqlParser) -> SqlSelectionRepository:
-
-        return SqlSelectionRepository(
-            tenant_provider, auth_provider, connection_manager, sql_parser)
 
     def schema_tenant_supplier(self) -> SchemaTenantSupplier:
         catalog = self.config['tenancy']['dsn']
         zones = {key: value['dsn'] for key, value in
                  self.config['zones'].items()}
-
         return SchemaTenantSupplier(catalog, zones)
 
     def schema_setup_supplier(self) -> SchemaSetupSupplier:

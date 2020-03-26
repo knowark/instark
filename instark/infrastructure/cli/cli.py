@@ -4,7 +4,7 @@ import logging
 from pathlib import Path
 from argparse import ArgumentParser, Namespace
 from injectark import Injectark
-#from migrark import sql_migrate
+from migrark import sql_migrate
 from typing import List
 from ..configuration import Config
 from ..web import create_app, run_app #ServerApplication
@@ -43,7 +43,7 @@ class Cli:
             self.parser.exit()
         
         # Migrate
-        """migrate_parser = subparsers.add_parser(
+        migrate_parser = subparsers.add_parser(
             'migrate', help='Upgrade tenant schema version.')
         migrate_parser.set_defaults(func=self.migrate)
         migrate_parser.add_argument(
@@ -51,7 +51,11 @@ class Cli:
             required=True)
         migrate_parser.add_argument(
             "-v", "--version", help="Migration version to upgrade",
-            required=True)"""
+            required=True)
+
+        if len(argv) == 0:
+            self.parser.print_help()
+            self.parser.exit()
 
         return self.parser.parse_args(argv)
 
@@ -73,7 +77,7 @@ class Cli:
         tenant_supplier.create_tenant(tenant_dict)
         logger.info('END PROVISION')#print('...END PROVISION::::')
 
-    """async def migrate(self, args: Namespace) -> None:
+    async def migrate(self, args: Namespace) -> None:
         logger.info(f'MIGRATE: {vars(args)}')
         tenant_supplier = self.injector['TenantSupplier']
         tenant = tenant_supplier.resolve_tenant(args.tenant)
@@ -84,6 +88,6 @@ class Cli:
                                'sql' / 'migrations').absolute())
         sql_migrate(database_uri, migrations_path, schema=tenant['slug'],
                     target_version=args.version)
-        logger.info('END MIGRATE') """
+        logger.info('END MIGRATE')
 
     

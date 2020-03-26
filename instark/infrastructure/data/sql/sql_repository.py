@@ -7,7 +7,8 @@ from filtrark.sql_parser import SqlParser
 from ....application.models import T
 from ....application.repositories import Repository
 from ....application.utilities import (
-    QueryDomain, TenantProvider, AuthProvider, EntityNotFoundError)
+    QueryDomain, TenantProvider, EntityNotFoundError)
+from ....application.services import AuthService
 from .connection import ConnectionManager
 
 
@@ -16,20 +17,20 @@ class SqlRepository(Repository, Generic[T]):
                  table: str,
                  constructor: Callable,
                  tenant_provider: TenantProvider,
-                 auth_provider: AuthProvider,
+                 auth_service: AuthService,
                  connection_manager: ConnectionManager,
                  parser: SqlParser) -> None:
         self.table = table
         self.constructor = constructor
         self.tenant_provider = tenant_provider
-        self.auth_provider = auth_provider
+        self.auth_service = auth_service
         self.connection_manager = connection_manager
         self.parser = parser
         self.max_items = 10_000
 
     async def add(self, item: Union[T, List[T]]) -> List[T]:
         tenant = self.tenant_provider.tenant
-        user = self.auth_provider.user
+        user = self.auth_service.user
 
         records = []
         items = item if isinstance(item, list) else [item]
@@ -61,7 +62,7 @@ class SqlRepository(Repository, Generic[T]):
     async def search(self, domain: QueryDomain, limit=10_000, offset=0
                      ) -> List[T]:
         tenant = self.tenant_provider.tenant
-        user = self.auth_provider.user
+        user = self.auth_service.user
 
         filter, parameters = self.parser.parse(
             domain, jsonb_collection='data')
@@ -87,7 +88,7 @@ class SqlRepository(Repository, Generic[T]):
         if not item:
             return False
         tenant = self.tenant_provider.tenant
-        user = self.auth_provider.user
+        user = self.auth_service.user
         items = item if isinstance(item, list) else [item]
         ids = [item.id for item in items]
         placeholders = ", ".join(f'${i + 1}' for i in range(len(ids)))
@@ -104,7 +105,7 @@ class SqlRepository(Repository, Generic[T]):
 
     async def count(self, domain: QueryDomain=None) -> int:
         tenant = self.tenant_provider.tenant
-        user = self.auth_provider.user
+        user = self.auth_service.user
 
         filter, parameters = self.parser.parse(
             domain, jsonb_collection='data')

@@ -6,8 +6,8 @@ base = {
     "TenantProvider": {
         "method": "standard_tenant_provider"
     },
-    "AuthProvider": {
-        "method": "standard_auth_provider"
+    "AuthService": {
+        "method": "standard_auth_service"
     },
     "TransactionManager": {
         "method": "memory_transaction_manager"
@@ -40,9 +40,6 @@ base = {
     },
     # --- INFORMERS ---
     "InstarkInformer": {
-        "method": "instark_informer"
-    },
-    "<StandardInstarkInformer": {
         "method": "standard_instark_informer"
     },
     # --- SUPPLIERS ---
@@ -51,5 +48,12 @@ base = {
     },
     "SetupSupplier": {
         "method": "memory_setup_supplier"
+    },
+    # --- SERVICES ---
+    "IdService": {
+        "method": "standard_id_service"
+    },
+    "DeliveryService": {
+        "method": "memory_delivery_service"
     },
 }

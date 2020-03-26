@@ -10,7 +10,7 @@ from injectark import Injectark
 #from instark.infrastructure.core import JwtSupplier
 from instark.infrastructure.factories import build_strategy, build_factory
 from instark.infrastructure.configuration import build_config
-from instark.infrastructure.cli import Cli
+#from instark.infrastructure.cli import Cli
 from instark.infrastructure.web import create_app
 
 

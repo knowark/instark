@@ -38,25 +38,6 @@ async def test_cli_parse_empty_argv(cli):
 async def test_cli_serve(cli, monkeypatch):
     called = False
     namespace = Namespace(port=8080) #check port server
-    
-    """class MockServerApplication:
-        def __init__(self, app, options):
-            pass
-
-        def run(self):
-            nonlocal called
-            called = True
-
-    create_app_called = False
-
-    def mock_create_app_function(config, resolver):
-        nonlocal create_app_called
-        create_app_called = True
-
-    monkeypatch.setattr(
-        cli_module, 'ServerApplication', MockServerApplication)
-    monkeypatch.setattr(
-        cli_module, 'create_app', mock_create_app_function)"""
 
     async def mock_run_app(app, port):
         nonlocal called
@@ -77,6 +58,25 @@ async def test_cli_provision(cli):
     result = await cli.provision(namespace)
 
     assert result is None
+
+async def test_cli_migrate(cli, monkeypatch):
+    called = False
+    namespace = Namespace()
+    namespace.tenant = 'Default'
+    namespace.version = ""
+
+    def mock_sql_migrate_function(
+            database_uri, migrations_path, schema, target_version):
+        nonlocal called
+        called = True
+
+    monkeypatch.setattr(
+        cli_module, 'sql_migrate', mock_sql_migrate_function)
+
+    await cli.migrate(namespace)
+
+    assert called
+    
     """namespace.name = "custom"
     cli.provision(namespace)
     tenants = cli.resolver["TenantSupplier"].search_tenants("")

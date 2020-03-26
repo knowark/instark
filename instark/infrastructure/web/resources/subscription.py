@@ -5,12 +5,11 @@ from ..schemas import SubscriptionSchema
 from ..helpers import get_request_filter
 
 
-class SubscriptionResource():
+class SubscriptionResource:
 
     def __init__(self, resolver: Injectark) -> None:
-        #self.subscription_coordinator = resolver['SubscriptionCoordinator']
         self.resolver = resolver
-        self.instark_informer = resolver['InstarkInformer']
+        self.instark_informer = self.resolver['InstarkInformer']
 
     async def head(self, request) -> int:
         """
@@ -23,7 +22,7 @@ class SubscriptionResource():
 
         headers = {
             'Total-Count': str(await self.instark_informer.count(
-                'answer', domain))
+                'subscription', domain))
         }
 
         return web.Response(headers=headers)

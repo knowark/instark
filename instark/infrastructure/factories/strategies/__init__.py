@@ -1,6 +1,6 @@
 from typing import List, Dict, Any
 from .base import base
-from .trial import check
+from .trial import trial
 from .sql import sql
 
 

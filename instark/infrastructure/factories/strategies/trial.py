@@ -2,8 +2,8 @@ trial = {
     "TenantProvider": {
         "method": "trial_tenant_provider"
     },
-    "AuthProvider": {
-        "method": "trial_auth_provider"
+    "AuthService": {
+        "method": "trial_auth_service"
     },
     "TenantSupplier": {
         "method": "trial_tenant_supplier"

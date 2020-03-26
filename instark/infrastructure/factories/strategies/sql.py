@@ -30,5 +30,9 @@ sql = {
     },
     "SetupSupplier": {
         "method": "schema_setup_supplier"
-    }
+    },
+    # --- SERVICES ---
+    "IdService": {
+        "method": "standard_id_service"
+    },
 }

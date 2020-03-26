@@ -5,9 +5,9 @@ from ..utilities.types import T, QueryDomain
 
 class Repository(ABC, Generic[T]):
 
-    @abstractmethod
+    """@abstractmethod
     async def get(self, id: str) -> T:
-        "Get method to be implemented."
+        "Get method to be implemented."""
 
     @abstractmethod
     async def add(self, item: T) -> T:
@@ -22,6 +22,3 @@ class Repository(ABC, Generic[T]):
     async def remove(self, user: T) -> bool:
         "Remove method to be implemented."
 
-    @abstractmethod
-    def load(self, items: Dict[str, T]) -> None:
-        "load method to be implemented."

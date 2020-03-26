@@ -1,76 +1,56 @@
 from filtrark.sql_parser import SqlParser
-from ....application.utilities import (
-    TenantProvider, AuthProvider)
+from ....application.utilities import TenantProvider
+from ....application.services import AuthService
 from ....application.models import (
-    Questionnaire, Question, Option, Assessment, Answer, Selection)
+    channel, device, message, subscription)
 from ....application.repositories import (
-    QuestionnaireRepository, QuestionRepository, OptionRepository,
-    AssessmentRepository, AnswerRepository, SelectionRepository)
+    ChannelRepository, DeviceRepository, MessageRepository,
+    SubscriptionRepository)
 from .connection import ConnectionManager
 from .sql_repository import SqlRepository
 
 
-class SqlQuestionnaireRepository(SqlRepository, QuestionnaireRepository):
-    """Sql Questionnaire Repository"""
+class SqlChannelRepository(SqlRepository, ChannelRepository):
+    """Sql Channel Repository"""
 
     def __init__(self, tenant_provider: TenantProvider,
-                 auth_provider: AuthProvider,
+                 auth_service: AuthService,
                  connection_manager: ConnectionManager,
                  parser: SqlParser) -> None:
-        super().__init__('questionnaires', Questionnaire, tenant_provider,
-                         auth_provider, connection_manager, parser)
+        super().__init__('channels', channel, tenant_provider,
+                         auth_service, connection_manager, parser)
 
 
-class SqlQuestionRepository(SqlRepository, QuestionRepository):
-    """Sql Question Repository"""
+class SqlDeviceRepository(SqlRepository, DeviceRepository):
+    """Sql Device Repository"""
 
     def __init__(self, tenant_provider: TenantProvider,
-                 auth_provider: AuthProvider,
+                 auth_service: AuthService,
                  connection_manager: ConnectionManager,
                  parser: SqlParser) -> None:
-        super().__init__('questions', Question, tenant_provider,
-                         auth_provider, connection_manager, parser)
+        super().__init__('devices', device, tenant_provider,
+                         auth_service, connection_manager, parser)
 
 
-class SqlOptionRepository(SqlRepository, OptionRepository):
-    """Sql Option Repository"""
+class SqlMessageRepository(SqlRepository, MessageRepository):
+    """Sql Message Repository"""
 
     def __init__(self, tenant_provider: TenantProvider,
-                 auth_provider: AuthProvider,
+                 auth_service: AuthService,
                  connection_manager: ConnectionManager,
                  parser: SqlParser) -> None:
-        super().__init__('options', Option, tenant_provider,
-                         auth_provider, connection_manager, parser)
+        super().__init__('messages', message, tenant_provider,
+                         auth_service, connection_manager, parser)
 
 
-class SqlAssessmentRepository(SqlRepository, AssessmentRepository):
-    """Sql Assessment Repository"""
+class SqlSubscriptionRepository(SqlRepository, SubscriptionRepository):
+    """Sql Subscription Repository"""
 
     def __init__(self, tenant_provider: TenantProvider,
-                 auth_provider: AuthProvider,
+                 auth_service: AuthService,
                  connection_manager: ConnectionManager,
                  parser: SqlParser) -> None:
-        super().__init__('assessments', Assessment, tenant_provider,
-                         auth_provider, connection_manager, parser)
+        super().__init__('subscriptions', subscription, tenant_provider,
+                         auth_service, connection_manager, parser)
 
 
-class SqlAnswerRepository(SqlRepository, AnswerRepository):
-    """Sql Answer Repository"""
-
-    def __init__(self, tenant_provider: TenantProvider,
-                 auth_provider: AuthProvider,
-                 connection_manager: ConnectionManager,
-                 parser: SqlParser) -> None:
-        super().__init__('answers', Answer, tenant_provider,
-                         auth_provider, connection_manager, parser)
-
-
-class SqlSelectionRepository(SqlRepository, SelectionRepository):
-    """Sql Selection Repository"""
-
-    def __init__(self, tenant_provider: TenantProvider,
-                 auth_provider: AuthProvider,
-                 connection_manager: ConnectionManager,
-                 parser: SqlParser) -> None:
-        super().__init__('selections', Selection, tenant_provider,
-                         auth_provider, connection_manager, parser)

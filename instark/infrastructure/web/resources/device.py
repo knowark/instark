@@ -1,14 +1,13 @@
 from injectark import Injectark
 from aiohttp import web
 from rapidjson import dumps, loads
-from ..helpers import get_request_filter
 from ..schemas import DeviceSchema
+from ..helpers import get_request_filter
 
 
 class DeviceResource():
 
     def __init__(self, resolver: Injectark) -> None:
-        #self.registration_coordinator = resolver['RegistrationCoordinator']
         self.resolver = resolver
         self.instark_informer = resolver['InstarkInformer']
 
@@ -23,7 +22,7 @@ class DeviceResource():
 
         headers = {
             'Total-Count': str(await self.instark_informer.count(
-                'answer', domain))
+                'device', domain))
         }
 
         return web.Response(headers=headers)
@@ -76,7 +75,7 @@ class DeviceResource():
         """
         
         #data = DeviceSchema().loads(request.data or '{}')
-        data = QuestionnaireSchema(
+        data = DeviceSchema(
             many=True).loads(await request.text())
        
         device = await self.registration_coordinator.register_device(data)

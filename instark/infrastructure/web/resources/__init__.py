@@ -17,12 +17,6 @@ class RootResource():
         if 'api' in request.args:
             return web.json_response(self.spec.to_dict())
 
-        """template = render_template(
-            'index.html', url="/?api", version=__version__)
-        response = make_response(template, 200, {
-            'Content-Type': 'text/html'
-        })"""
-
         context = {'url': '/?api', 'version': __version__}
         response = render_template(
             'index.html', request, context)

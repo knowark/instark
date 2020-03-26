@@ -1,15 +1,13 @@
 from ..configuration import Config
 from ...application.utilities import (
-    QueryParser, Tenant, TenantProvider, StandardTenantProvider,
-    AuthProvider, StandardAuthProvider)
+    QueryParser, Tenant, TenantProvider, StandardTenantProvider)
+from ...application.services import AuthService, StandardAuthService
 from ...application.models import (
-    channel, device, message, subscription)
-)   
+    channel, device, message, subscription)  
 from ...application.repositories import (
-    MemorychannelRepository, MemoryChannelRepository,
+    MemoryChannelRepository, MemoryDeviceRepository,
     MemorySubscriptionRepository, MemoryMessageRepository)
 from .memory_factory import MemoryFactory
-
 from ...infrastructure.core import (
     TenantSupplier, MemoryTenantSupplier)
 
@@ -25,18 +23,18 @@ class TrialFactory(MemoryFactory):
         tenant_provider.setup(Tenant(name="Default"))
         return tenant_provider
 
-    def trial_auth_provider(self) -> StandardAuthProvider:
-        auth_provider = StandardAuthProvider()
-        auth_provider.setup(User(id='001', name='johndoe'))
-        return auth_provider
+    def trial_auth_service(self) -> StandardAuthService:
+        auth_service = StandardAuthService()
+        auth_service.setup(User(id='001', name='johndoe'))
+        return auth_service
 
     def memory_channel_repository(
         self, query_parser: QueryParser,
         tenant_provider: TenantProvider,
-        auth_provider: AuthProvider
-    ) -> MemorychannelRepository:
-        channel_repository = MemorychannelRepository(
-            query_parser, tenant_provider, auth_provider)
+        auth_service: AuthService
+    ) -> MemoryChannelRepository:
+        channel_repository = MemoryChannelRepository(
+            query_parser, tenant_provider, auth_service)
         """channel_repository.load({
             "default": {
                 'LMK123': channel(
@@ -52,10 +50,10 @@ class TrialFactory(MemoryFactory):
     def memory_device_repository(
         self, query_parser: QueryParser,
         tenant_provider: TenantProvider,
-        auth_provider: AuthProvider
-    ) -> MemorydeviceRepository:
-        device_repository = MemorydeviceRepository(
-            query_parser, tenant_provider, auth_provider)
+        auth_service: AuthService
+    ) -> MemoryDeviceRepository:
+        device_repository = MemoryDeviceRepository(
+            query_parser, tenant_provider, auth_service)
         """device_repository.load({
             "default": {
                 '001': device(
@@ -68,10 +66,10 @@ class TrialFactory(MemoryFactory):
     def memory_message_repository(
         self, query_parser: QueryParser,
         tenant_provider: TenantProvider,
-        auth_provider: AuthProvider
-    ) -> MemorymessageRepository:
-        message_repository = MemorymessageRepository(
-            query_parser, tenant_provider, auth_provider)
+        auth_service: AuthService
+    ) -> MemoryMessageRepository:
+        message_repository = MemoryMessageRepository(
+            query_parser, tenant_provider, auth_service)
         """message_repository.load({
             "default": {
                 'ABC': message(
@@ -84,10 +82,10 @@ class TrialFactory(MemoryFactory):
     def memory_subscription_repository(
         self, query_parser: QueryParser,
         tenant_provider: TenantProvider,
-        auth_provider: AuthProvider
-    ) -> MemorysubscriptionRepository:
-        subscription_repository = MemorysubscriptionRepository(
-            query_parser, tenant_provider, auth_provider)
+        auth_service: AuthService
+    ) -> MemorySubscriptionRepository:
+        subscription_repository = MemorySubscriptionRepository(
+            query_parser, tenant_provider, auth_service)
         """subscription_repository.load({
             "default": {
                 '001': subscription(

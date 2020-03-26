@@ -8,15 +8,15 @@ from aiohttp_jinja2 import setup
 from injectark import Injectark
 from .api import create_api
 from .generators import setup_generators
-from middleware import middlewares
+from .middleware import middlewares
 #from .errors import register_error_handler
 
-def create_app(config, injector: Injectark) -> web.Application:
-    app = web.Application(middlewares=middlewares(injector))
+def create_app(config, resolver: Injectark) -> web.Application:
+    app = web.Application(middlewares=middlewares(resolver))
     templates = str(Path(__file__).parent / 'templates')
     setup(app, loader=FileSystemLoader(templates))
     setup_generators(app)
-    create_api(app, injector)
+    create_api(app, resolver)
     enable_cors(app)
 
     return app

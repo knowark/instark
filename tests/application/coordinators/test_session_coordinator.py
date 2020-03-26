@@ -10,7 +10,7 @@ from instark.application.coordinators import SessionCoordinator
 
 @fixture
 def auth_service() -> AuthService:
-    return StandardAuthService('maindominion')
+    return StandardAuthService()
 
 
 @fixture
