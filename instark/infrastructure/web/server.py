@@ -1,4 +1,4 @@
-import multiprocessing
+"""import multiprocessing
 from gunicorn import glogging
 from gunicorn.app.base import BaseApplication
 from gunicorn.workers import sync, ggevent
@@ -18,4 +18,4 @@ class ServerApplication(BaseApplication):
             self.cfg.set(key.lower(), value)
 
     def load(self):
-        return self.application
+        return self.application"""

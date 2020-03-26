@@ -1,42 +1,36 @@
-import json
-from typing import Tuple
-from flask import request, jsonify
-from flask.views import MethodView
-from marshmallow import ValidationError
+from injectark import Injectark
+from aiohttp import web
+from rapidjson import dumps, loads
 from ..schemas import MessageSchema
 from ..helpers import get_request_filter
 
 
-class MessageResource(MethodView):
+class MessageResource():
 
-    def __init__(self, resolver) -> None:
-        self.notification_coordinator = resolver['NotificationCoordinator']
+    def __init__(self, resolver: Injectark) -> None:
+        #self.notification_coordinator = resolver['NotificationCoordinator']
+        self.resolver = resolver
         self.instark_informer = resolver['InstarkInformer']
 
-    def post(self) -> Tuple[str, int]:
+    async def head(self, request) -> int:
         """
         ---
-        summary: Send message.
+        summary: Return answers HEAD headers.
         tags:
-          - Messages
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Message'
-        responses:
-          201:
-            description: "Send message"
+          - Answers
         """
+        domain, _, _ = get_request_filter(request)
 
-        data = MessageSchema().loads(request.data)
-        message = self.notification_coordinator.send_message(data)
-        json_message = json.dumps(data, sort_keys=True, indent=4)
+        headers = {
+            'Total-Count': str(await self.instark_informer.count(
+                'answer', domain))
+        }
 
-        return json_message, 201
-    
-    def get(self) -> Tuple[str, int]:
+        return web.Response(headers=headers)
+
+
+    #def get(self) -> Tuple[str, int]:
+    async def get(self, request: web.Request):
         """
         ---
         summary: Return all message.
@@ -55,6 +49,41 @@ class MessageResource(MethodView):
         domain, limit, offset = get_request_filter(request)
 
         messages = MessageSchema().dump(
-            self.instark_informer.search_messages(domain), many=True)
+            await self.instark_informer.search(
+              'message',domain,limit=limit,
+                offset=offset), many=True)
 
-        return jsonify(messages)
+        #return jsonify(messages)
+        return web.json_response(messages, dumps=dumps)
+
+
+
+    #def post(self) -> Tuple[str, int]:
+    async def put(self, request: web.Request):
+        """
+        ---
+        summary: Send message.
+        tags:
+          - Messages
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        responses:
+          201:
+            description: "Send message"
+        """
+
+        #data = MessageSchema().loads(request.data)
+        data = MessageSchema(
+            many=True).loads(await request.text())
+
+        message = await self.notification_coordinator.send_message(data)
+
+       # return json_message, 201
+        return web.Response(status=200)
+
+    
+    

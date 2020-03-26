@@ -1,44 +1,35 @@
-import json
-from typing import Tuple
-from flask import request, jsonify
-from flask.views import MethodView
-from marshmallow import ValidationError
+from injectark import Injectark
+from aiohttp import web
+from rapidjson import dumps, loads
 from ..helpers import get_request_filter
 from ..schemas import DeviceSchema
 
 
-class DeviceResource(MethodView):
+class DeviceResource():
 
-    def __init__(self, resolver) -> None:
-        self.registration_coordinator = resolver['RegistrationCoordinator']
+    def __init__(self, resolver: Injectark) -> None:
+        #self.registration_coordinator = resolver['RegistrationCoordinator']
+        self.resolver = resolver
         self.instark_informer = resolver['InstarkInformer']
 
-    def put(self) -> Tuple[str, int]:
+    async def head(self, request) -> int:
         """
         ---
-        summary: Create device.
+        summary: Return answers HEAD headers.
         tags:
-          - Devices
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Device'
-        responses:
-          201:
-            description: "Device created"
+          - Answers
         """
+        domain, _, _ = get_request_filter(request)
 
-        
-        data = DeviceSchema().loads(request.data or '{}')
-       
-        device = self.registration_coordinator.register_device(data)
-        json_device = json.dumps(data, sort_keys=True, indent=4)
+        headers = {
+            'Total-Count': str(await self.instark_informer.count(
+                'answer', domain))
+        }
 
-        return json_device, 201
-    
-    def get(self) -> Tuple[str, int]:
+        return web.Response(headers=headers)
+
+    #def get(self) -> Tuple[str, int]:
+    async def get(self, request: web.Request):
         """
         ---
         summary: Return all devices.
@@ -58,6 +49,39 @@ class DeviceResource(MethodView):
         domain, limit, offset = get_request_filter(request)
 
         devices = DeviceSchema().dump(
-            self.instark_informer.search_devices(domain), many=True)
+            await self.instark_informer.search(
+                'device',domain, limit=limit,
+                offset=offset), many=True)
 
-        return jsonify(devices)
+        #return jsonify(devices)
+        return web.json_response(devices, dumps=dumps)
+    
+    #async def put(self) -> Tuple[str, int]:
+    async def put(self, request: web.Request):
+
+        """
+        ---
+        summary: Create device.
+        tags:
+          - Devices
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+        responses:
+          201:
+            description: "Device created"
+        """
+        
+        #data = DeviceSchema().loads(request.data or '{}')
+        data = QuestionnaireSchema(
+            many=True).loads(await request.text())
+       
+        device = await self.registration_coordinator.register_device(data)
+
+        #return json_device, 201
+        return web.Response(status=200)
+    
+  

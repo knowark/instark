@@ -1,25 +1,67 @@
-from flask import Flask, jsonify
+from typing import Any
+from aiohttp import web
 from injectark import Injectark
-from .middleware import Authenticate
 from .resources import(
     RootResource, MessageResource, ChannelResource,
     DeviceResource, SubscriptionResource)
 from .spec import create_spec
 
 
-def create_api(app: Flask, resolver: Injectark) -> None:
+def create_api(app: web.Application, resolver: Injectark) -> None:
 
     # Restful API
     spec = create_spec()
 
     # Root Resource (Api Specification)
-    root_view = RootResource.as_view('root', spec=spec)
-    app.add_url_rule("/", view_func=root_view)
+    #root_view = RootResource.as_view('root', spec=spec)
+    #app.add_url_rule("/", view_func=root_view)
+    bind_routes(app, '/', RootResource(spec))
 
     # Middleware
-    authenticate = resolver['Authenticate']
+    #authenticate = resolver['Authenticate']
 
     # Message Resource
+    bind_routes(app, '/Messages', MessageResource(injector))
+    spec.path(path="/Messages", operations={
+    'head': {}, 'get': {}, 'put': {},
+    resource=MessageResource)
+
+    # Channel Resource
+    Channel Resource
+    bind_routes(app, '/Channels', ChannelResource(injector))
+    spec.path(path="/Channels", operations={
+    'head': {}, 'get': {}, 'post': {},
+    resource=ChannelResource)
+
+    # Device Resource
+    Device Resource
+    bind_routes(app, '/Devices', DeviceResource(injector))
+    spec.path(path="/Devices", operations={
+    'head': {}, 'get': {}, 'put': {},
+    resource=DeviceResource)
+
+    # Subscription Resource
+    Subscription Resource
+    bind_routes(app, '/Subscriptions', SubscriptionResource(injector))
+    spec.path(path="/Subscriptions", operations={
+    'head': {}, 'get': {}, 'post': {},
+    resource=SubscriptionResource)
+
+
+
+    def bind_routes(app: web.Application, path: str, resource: Any):
+    general_methods = ['head', 'get', 'put', 'delete', 'post', 'patch']
+    identified_methods = ['get', 'delete']
+    for method in general_methods + identified_methods:
+        handler = getattr(resource, method, None)
+        if not handler:
+            continue
+        if method in identified_methods:
+            app.router.add_route(method, path + "/{id}", handler)
+        if method in general_methods:
+            app.router.add_route(method, path, handler)
+
+    """# Message Resource
     spec.path(path="/messages", resource=MessageResource)
     message_view = authenticate(MessageResource.as_view(
         'messages', resolver=resolver))
@@ -41,4 +83,4 @@ def create_api(app: Flask, resolver: Injectark) -> None:
     spec.path(path="/subscriptions", resource=SubscriptionResource)
     subscription_view = authenticate(SubscriptionResource.as_view(
         'subscriptions', resolver=resolver))
-    app.add_url_rule("/subscriptions", view_func=subscription_view)
+    app.add_url_rule("/subscriptions", view_func=subscription_view)"""

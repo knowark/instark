@@ -1,21 +1,43 @@
-import os
-import jwt
-from typing import cast
+#import os
+#import jwt
+#from typing import cast
+#from flask import Flask
+#from datetime import datetime
+#from flask.testing import FlaskClient
 from pytest import fixture
-from flask import Flask
-from datetime import datetime
-from flask.testing import FlaskClient
+from aiohttp import web
 from injectark import Injectark
-from instark.infrastructure.core import JwtSupplier
-from instark.infrastructure.factories import build_factory
-from instark.infrastructure.configuration import (
-    DevelopmentConfig, build_config, Config)
+#from instark.infrastructure.core import JwtSupplier
+from instark.infrastructure.factories import build_strategy, build_factory
+from instark.infrastructure.configuration import build_config
 from instark.infrastructure.cli import Cli
-from instark.infrastructure.web import (
-    create_app, ServerApplication, register_error_handler)
+from instark.infrastructure.web import create_app
 
 
 @fixture
+def app(loop, aiohttp_client):
+    """Create app testing client"""
+    config = build_config('DEV')
+    strategy = build_strategy(config['strategies'])
+    factory = build_factory(config)
+
+    resolver = Injectark(strategy, factory)
+
+    app = create_app(config, resolver)
+
+    return loop.run_until_complete(aiohttp_client(app))
+
+
+@fixture
+def headers() -> dict:
+    return {
+        "From": "john@doe.com",
+        "TenantId": "001",
+        "UserId": "001",
+        "Roles": "user"
+    }
+
+"""@fixture
 def app(tmp_path) -> Flask:
     config = DevelopmentConfig()
     sign_file = tmp_path / "sign.txt"
@@ -51,4 +73,4 @@ def headers() -> dict:
     token = jwt.encode(payload_dict, 'knowark',
                        algorithm='HS256').decode('utf-8')
 
-    return {"Authorization": (token)}
+    return {"Authorization": (token)}"""

@@ -1,49 +1,49 @@
-from typing import Callable
-from functools import wraps
-from flask import request
+import rapidjson as json
+from typing import Callable, Dict, Any
+from aiohttp import web
+from injectark import Injectark
 from ....application.coordinators import SessionCoordinator
-from ...core import TenantSupplier, JwtSupplier, AuthenticationError
-from ..schemas import UserSchema
+from ...core import TenantSupplier
 
 
-class Authenticate:
+def authenticate_middleware_factory(injector: Injectark) -> Callable:
+    session_coordinator: SessionCoordinator = injector['SessionCoordinator']
+    tenant_supplier: TenantSupplier = injector['TenantSupplier']
 
-    def __init__(self, jwt_supplier: JwtSupplier,
-                 tenant_supplier: TenantSupplier,
-                 session_coordinator: SessionCoordinator) -> None:
-        self.jwt_supplier = jwt_supplier
-        self.tenant_supplier = tenant_supplier
-        self.session_coordinator = session_coordinator
+    @web.middleware
+    async def middleware(request: web.Request, handler: Callable):
+        if request.path == '/':
+            return await handler(request)
 
-    def __call__(self, method: Callable) -> Callable:
-        @wraps(method)
-        def decorator(*args, **kwargs):
-            # tenant_dict = {"name": "Knowark"}
-            # self.session_coordinator.set_tenant(tenant_dict)
-            authorization = request.headers.get('Authorization', "")
-            token = str(authorization.replace('Bearer ', ''))
+        try:
+            user_dict = extract_user(request.headers)
+            session_coordinator.set_user(user_dict)
 
-            if not token:
-                token = str(request.args.get('access_token'))
+            tenant_id = request.headers['TenantId']
+            tenant_dict = tenant_supplier.get_tenant(tenant_id)
+            session_coordinator.set_tenant(tenant_dict)
+        except Exception as e:
+            raise web.HTTPUnauthorized(
+                body=json.dumps({
+                    "errors": [
+                        {"message": f"{e.__class__.__name__}: {str(e)}"}
+                    ]
+                }))
 
-            try:
-                token_payload = self.jwt_supplier.decode(
-                    token, verify=False)
-                tenant_dict = self.tenant_supplier.get_tenant(
-                    token_payload['tid'])
+        return await handler(request)
 
-                token_payload = self.jwt_supplier.decode(token, secret=None)
+    return middleware
 
-                self.session_coordinator.set_tenant(tenant_dict)
 
-                user_dict = UserSchema().load(token_payload)
+def extract_user(headers: Dict[str, Any]) -> Dict[str, Any]:
+    user_id = headers['UserId']
+    email = headers.get('From', "@")
+    name = email.split('@')[0]
+    roles = headers.get('Roles', '').strip().split(',')
 
-                self.session_coordinator.set_user(user_dict)
-
-            except Exception as e:
-                raise AuthenticationError(
-                    "Couldn't authenticate the request.")
-
-            return method(*args, **kwargs)
-
-        return decorator
+    return {
+        'id': user_id,
+        'name': name,
+        'email': email,
+        'roles': roles
+    }
