@@ -9,7 +9,6 @@ test:
 	pytest
 
 COVFILE ?= .coverage
-PWD = $(shell pwd)
 PROJECT = instark
 
 coverage-application:
