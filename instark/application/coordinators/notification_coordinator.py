@@ -23,11 +23,13 @@ class NotificationCoordinator:
             message_dict['id'] = self.id_service.generate_id()
             message = Message(**message_dict)
         if message.kind.lower() == 'direct':
-            device = await self.device_repository.get(message.recipient_id)
+            device, *_ = await self.device_repository.search(
+                [('id', '=',  message.recipient_id)])
             response = self.delivery_service.send(
                 device.locator, str(message.title), message.content)
         else:
-            channel = await self.channel_repository.get(message.recipient_id)
+            channel, *_ = await self.channel_repository.search(
+                [('id', '=',  message.recipient_id)])
             response = self.delivery_service.broadcast(
                 channel.code, str(message.title), message.content)
 

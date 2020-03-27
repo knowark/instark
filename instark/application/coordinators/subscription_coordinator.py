@@ -25,12 +25,15 @@ class SubscriptionCoordinator:
         await self.channel_repository.add(channel)
         return channel
 
-    async def subscribe(self, subscription_dict: SubscriptionDict) -> Subscription:
+    async def subscribe(self, subscription_dict: SubscriptionDict
+                        ) -> Subscription:
         if 'id' not in subscription_dict:
             subscription_dict['id'] = self.id_service.generate_id()
         device_channel = Subscription(**subscription_dict)
-        device = await self.device_repository.get(device_channel.device_id)
-        channel = await self.channel_repository.get(device_channel.channel_id)
+        device, *_ = await self.device_repository.search(
+            [('id', '=',  device_channel.device_id)])
+        channel, *_ = await self.channel_repository.search(
+            [('id', '=',  device_channel.device_id)])
         self.delivery_service.subscribe(channel.code, device.locator)
         await self.device_channel_repository.add(device_channel)
         return device_channel

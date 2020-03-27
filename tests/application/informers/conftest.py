@@ -5,10 +5,9 @@ from instark.application.repositories import (
     ChannelRepository, MemoryChannelRepository,
     MessageRepository, MemoryMessageRepository,
     SubscriptionRepository, MemorySubscriptionRepository)
-from instark.application.utilities.query_parser import QueryParser
-from instark.application.utilities.tenancy import (
-    Tenant, StandardTenantProvider)
-from instark.application.services.auth import auth_service, StandardAuthService
+from instark.application.utilities import (
+    QueryParser, Tenant, StandardTenantProvider,
+    User, StandardAuthProvider)
 from instark.application.informers.instark_informer import InstarkInformer
 from instark.application.informers.standard_instark_informer import (
     StandardInstarkInformer)
@@ -17,8 +16,15 @@ from instark.application.informers.standard_instark_informer import (
 @fixture
 def device_repository() -> DeviceRepository:
     parser = QueryParser()
-    tenant_service = StandardTenantProvider(Tenant(name="Default"))
-    device_repository = MemoryDeviceRepository(parser, tenant_service, auth_service)
+    tenant_provider = StandardTenantProvider()
+    tenant_provider.setup(Tenant(name="Default"))
+
+    auth_provider = StandardAuthProvider()
+    auth_provider.setup(User(id='001', name='johndoe'))
+
+    device_repository = MemoryDeviceRepository(
+        parser, tenant_provider, auth_provider)
+
     device_repository.load({
         'default': {
             '001': Device(**{'id': '001', 'name': 'DEV001', 'locator': '1'}),
@@ -31,8 +37,13 @@ def device_repository() -> DeviceRepository:
 @fixture
 def channel_repository():
     parser = QueryParser()
-    tenant_service = StandardTenantProvider(Tenant(name="Default"))
-    channel_repository = MemoryChannelRepository(parser, tenant_service, auth_service)
+    tenant_provider = StandardTenantProvider()
+    tenant_provider.setup(Tenant(name="Default"))
+    auth_provider = StandardAuthProvider()
+    auth_provider.setup(User(id='001', name='johndoe'))
+
+    channel_repository = MemoryChannelRepository(
+        parser, tenant_provider, auth_provider)
     channel_repository.load({
         'default': {
             '001': Channel(id='001', name='Channel 1', code='CH001'),
@@ -46,8 +57,12 @@ def channel_repository():
 @fixture
 def message_repository():
     parser = QueryParser()
-    tenant_service = StandardTenantProvider(Tenant(name="Default"))
-    message_repository = MemoryMessageRepository(parser, tenant_service, auth_service)
+    tenant_provider = StandardTenantProvider()
+    tenant_provider.setup(Tenant(name="Default"))
+    auth_provider = StandardAuthProvider()
+    auth_provider.setup(User(id='001', name='johndoe'))
+    message_repository = MemoryMessageRepository(
+        parser, tenant_provider, auth_provider)
     message_repository.load({
         'default': {
             '001': Message(id='001', recipient_id='001', kind='direct',
@@ -60,9 +75,12 @@ def message_repository():
 @fixture
 def device_channel_repository():
     parser = QueryParser()
-    tenant_service = StandardTenantProvider(Tenant(name="Default"))
+    tenant_provider = StandardTenantProvider()
+    tenant_provider.setup(Tenant(name="Default"))
+    auth_provider = StandardAuthProvider()
+    auth_provider.setup(User(id='001', name='johndoe'))
     device_channel_repository = MemorySubscriptionRepository(
-        parser, tenant_service, auth_service)
+        parser, tenant_provider, auth_provider)
     device_channel_repository.load({
         'default': {
             '001': Subscription(**{'id': '001', 'device_id': '001',

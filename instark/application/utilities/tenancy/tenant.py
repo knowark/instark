@@ -1,18 +1,18 @@
 import time
 import unicodedata
+from typing import Mapping
+from ..exceptions import TenantLocationError
 
 
 class Tenant:
     def __init__(self, **attributes):
         now = int(time.time())
         self.id = attributes.get('id', '')
-        self.created_at = now
-        self.updated_at = now
         self.name = attributes['name']
         self.email = attributes.get('email', '')
         self.active = attributes.get('active', True)
         self.slug = self._normalize_slug(attributes.get('slug', self.name))
-        self.location = attributes.get('location', self.slug)
+        self.zone = attributes.get('zone', '')
 
     @staticmethod
     def _normalize_slug(slug: str) -> str:
