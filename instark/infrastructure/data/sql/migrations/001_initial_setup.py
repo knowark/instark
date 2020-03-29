@@ -6,8 +6,8 @@ class Migration:
         self.connection = context['connection']
         self.schema = context['schema']
         self.owner = "instark"
-        self.tables = [] #["questionnaires", "questions", "options",
-        #               "assessments", "answers"]
+        self.tables = ["channels", "devices", "messages",
+                       "subscriptions"]
 
     def _create_table(self, table):
         return (

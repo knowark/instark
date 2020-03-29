@@ -1,8 +1,6 @@
 from typing import Tuple, List, Dict, Any
 from aiohttp import web
 from .format import parse_domain, parse_dict
-#from json import loads, decoder
-#from flask import Request
 
 
 def get_request_filter(request: web.Request) -> Tuple:
@@ -11,12 +9,6 @@ def get_request_filter(request: web.Request) -> Tuple:
     offset = int(request.query.get('offset') or 0)
 
     domain = parse_domain(filter)
-
-    """if filter:
-        try:
-            domain = loads(filter)
-        except decoder.JSONDecodeError:
-            pass  """
 
     return domain, limit, offset
 

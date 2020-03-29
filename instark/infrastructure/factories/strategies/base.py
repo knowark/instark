@@ -6,8 +6,8 @@ base = {
     "TenantProvider": {
         "method": "standard_tenant_provider"
     },
-    "AuthService": {
-        "method": "standard_auth_service"
+    "AuthProvider": {
+        "method": "standard_auth_provider"
     },
     "TransactionManager": {
         "method": "memory_transaction_manager"

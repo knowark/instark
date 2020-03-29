@@ -4,10 +4,8 @@ import rapidjson as json
 from asyncmock import AsyncMock
 from argparse import ArgumentParser, Namespace
 from pytest import raises
-#from unittest.mock import Mock, call
 from instark.infrastructure.cli import Cli
 from instark.infrastructure.cli import cli as cli_module
-#from io import StringIO
 
 
 def test_cli_instantiation(cli):
@@ -76,31 +74,5 @@ async def test_cli_migrate(cli, monkeypatch):
     await cli.migrate(namespace)
 
     assert called
-    
-    """namespace.name = "custom"
-    cli.provision(namespace)
-    tenants = cli.resolver["TenantSupplier"].search_tenants("")
 
-    assert len(tenants) == 2
-    assert tenants[0]["name"] == "custom"
-
-    print("TENANTS::::", tenants)"""
-
-"""async def test_cli_migrate(cli, monkeypatch):
-    called = False
-    namespace = Namespace()
-    namespace.tenant = 'Default'
-    namespace.version = ""
-
-    def mock_sql_migrate_function(
-            database_uri, migrations_path, schema, target_version):
-        nonlocal called
-        called = True
-
-    monkeypatch.setattr(
-        cli_module, 'sql_migrate', mock_sql_migrate_function)
-
-    await cli.migrate(namespace)
-
-    assert called"""
 

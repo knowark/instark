@@ -3,6 +3,7 @@ from tenark.models import Tenant
 from tenark.resolver import resolve_managers
 from .tenant_supplier import TenantSupplier
 
+
 class MemoryTenantSupplier(TenantSupplier):
 
     def __init__(self) -> None:
@@ -16,6 +17,3 @@ class MemoryTenantSupplier(TenantSupplier):
 
     def resolve_tenant(self, name: str) -> Dict[str, Any]:
         return self.provider.resolve_tenant(name)
-
-    #def search_tenants(self, domain):
-       # return self.provider.search_tenants(domain)

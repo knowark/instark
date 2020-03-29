@@ -17,8 +17,10 @@ def test_schema_tenant_supplier_instantiation(monkeypatch):
     monkeypatch.setattr(
         schema_tenant_supplier,  'resolve_managers', mock_resolve_managers)
     catalog_dsn = "postgresql://instark:instark@localhost/postgres"
+    #catalog_dsn = ""
     zones = {
         'default': "postgresql://instark:instark@localhost/postgres"
+        #'default': ""
     }
 
     tenant_supplier = SchemaTenantSupplier(catalog_dsn, zones)

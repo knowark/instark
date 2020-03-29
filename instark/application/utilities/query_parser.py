@@ -1,4 +1,5 @@
-from typing import List, Union, Callable, Tuple
+from typing import List, Union, Callable, Sequence
+from fnmatch import fnmatchcase
 from .types import TermTuple
 
 
@@ -19,6 +20,13 @@ class QueryParser:
                 lambda obj: getattr(obj, field) >= value),
             'in': lambda field, value: (
                 lambda obj: getattr(obj, field) in value),
+            'like': lambda field, value: (
+                lambda obj: self._parse_like(getattr(obj, field), value)),
+            'ilike': lambda field, value: (
+                lambda obj: self._parse_like(
+                    getattr(obj, field), value, True)),
+            'contains': lambda field, value: (
+                lambda obj: value in getattr(obj, field)),
         }
 
         self.binary_dict = {
@@ -35,7 +43,7 @@ class QueryParser:
 
         self.default_join_operator = '&'
 
-    def parse(self, domain: List[Union[str, TermTuple]]) -> Callable:
+    def parse(self, domain: Sequence[Union[str, TermTuple]]) -> Callable:
         if not domain:
             return lambda obj: True
         stack = []  # type: List[Callable]
@@ -71,8 +79,16 @@ class QueryParser:
 
     def _parse_term(self, term_tuple: TermTuple) -> Callable:
         field, operator, value = term_tuple
-        validate = operator in self.comparison_dict
-        operator = operator if validate else '='
-        function = self.comparison_dict[operator]
+        function = self.comparison_dict.get(operator)
         result = function(field, value)
         return result
+
+    @staticmethod
+    def _parse_like(value: str, pattern: str, insensitive=False) -> bool:
+        if not isinstance(value, str):
+            return False
+        pattern = pattern.replace('%', '*').replace('_', '?')
+        if insensitive:
+            pattern = pattern.lower()
+            value = value.lower()
+        return fnmatchcase(value, pattern)

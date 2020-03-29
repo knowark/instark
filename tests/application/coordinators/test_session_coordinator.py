@@ -1,16 +1,15 @@
-import jwt
 from typing import Dict, cast
 from pytest import fixture
 from instark.application.utilities import (
     TenantProvider, StandardTenantProvider, Tenant)
-from instark.application.services import (
-    AuthService, StandardAuthService)
+from instark.application.utilities import (
+    AuthProvider, StandardAuthProvider)
 from instark.application.coordinators import SessionCoordinator
 
 
 @fixture
-def auth_service() -> AuthService:
-    return StandardAuthService()
+def auth_provider() -> AuthProvider:
+    return StandardAuthProvider()
 
 
 @fixture
@@ -21,8 +20,8 @@ def tenant_provider() -> TenantProvider:
 @fixture
 def session_coordinator(
         tenant_provider: TenantProvider,
-        auth_service: StandardAuthService) -> SessionCoordinator:
-    return SessionCoordinator(tenant_provider, auth_service)
+        auth_provider: StandardAuthProvider) -> SessionCoordinator:
+    return SessionCoordinator(tenant_provider, auth_provider)
 
 
 def test_session_coordinator_creation(
@@ -54,4 +53,4 @@ def test_session_coordinator_set_user(
 
     user = {'name': 'jdacevedo'}
     session_coordinator.set_user(user)
-    assert session_coordinator.auth_service.user.name == 'jdacevedo'
+    assert session_coordinator.auth_provider.user.name == 'jdacevedo'

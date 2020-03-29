@@ -37,8 +37,9 @@ def create_spec() -> APISpec:
         info=dict(
             description="Instant messaging and notifications server.",
             contact=dict(
-                name="Nubark",
-                url="https://www.nubark.com"
+                name="Instark",
+                #url="https://www.nubark.com"
+                url="https://www.knowark.com"
             )))
     
     _register_schemas(spec)

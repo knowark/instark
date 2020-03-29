@@ -1,7 +1,7 @@
 from pathlib import Path
 from rapidjson import load
 from typing import Optional
-from .config import Config, DevelopmentConfig, ProductionConfig, TrialConfig 
+from .config import Config, DevelopmentConfig, ProductionConfig
 
 
 def build_config(config_path: str, mode: str = "") -> Config:

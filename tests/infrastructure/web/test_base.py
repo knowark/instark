@@ -1,6 +1,6 @@
 from aiohttp import web
 from injectark import Injectark
-from instark.infrastructure.configuration import build_config
+from instark.infrastructure.config import build_config
 from instark.infrastructure.factories import build_strategy, build_factory
 from instark.infrastructure.web import create_app, run_app
 from instark.infrastructure.web import base as base_module

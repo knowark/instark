@@ -1,7 +1,7 @@
 import inspect
 from pytest import fixture
 from injectark import Injectark
-from instark.infrastructure.configuration import build_config
+from instark.infrastructure.config import build_config
 from instark.infrastructure.factories import build_strategy, build_factory
 from instark.infrastructure.factories import sql_factory
 

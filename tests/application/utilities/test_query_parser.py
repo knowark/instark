@@ -1,7 +1,8 @@
 from pytest import fixture
-from typing import List
 from unittest.mock import Mock
-from instark.application.utilities.query_parser import QueryParser
+from fnmatch import fnmatchcase
+from instark.application.utilities import (
+    QueryParser)
 
 
 @fixture
@@ -9,11 +10,11 @@ def parser() -> QueryParser:
     return QueryParser()
 
 
-def test_expression_parser_object_creation(parser):
+def test_query_parser_object_creation(parser):
     assert isinstance(parser, QueryParser)
 
 
-def test_expression_parser_parse_tuple(parser):
+def test_query_parser_parse_tuple(parser):
     filter_tuple_list = [
         (('field', '=', 9), lambda obj: obj.field == 9, Mock(field=9)),
         (('field', '!=', 9), lambda obj: obj.field != 9, Mock(field=8)),
@@ -37,7 +38,7 @@ def test_expression_parser_parse_tuple(parser):
         assert function(mock_object) == expected_function(mock_object)
 
 
-def test_expression_parser_parse_single_term(parser):
+def test_query_parser_parse_single_term(parser):
     domain = [('field', '=', 7)]
 
     def expected(obj):
@@ -56,7 +57,7 @@ def test_expression_parser_parse_single_term(parser):
     assert function(mock_object) is False
 
 
-def test_expression_parser_default_join(parser):
+def test_query_parser_default_join(parser):
     stack = [lambda obj: obj.field2 != 8, lambda obj: obj.field == 7]
 
     def expected(obj):
@@ -76,7 +77,7 @@ def test_expression_parser_default_join(parser):
     assert result_stack[0](mock_object) is False
 
 
-def test_expression_parser_parse_multiple_terms(parser):
+def test_query_parser_parse_multiple_terms(parser):
     test_domains = [
         ([('field', '=', 7), ('field2', '!=', 8)],
             lambda obj: (obj.field2 != 8 and obj.field == 7),
@@ -106,8 +107,8 @@ def test_expression_parser_parse_multiple_terms(parser):
         assert result(obj) == expected(obj)
 
 
-def test_expression_parser_with_empty_list(parser):
-    domain: List = []
+def test_query_parser_with_empty_list(parser):
+    domain = []
     result = parser.parse(domain)
     mock_object = Mock()
     mock_object.field = 7
@@ -128,3 +129,53 @@ def test_string_parser_with_lists_of_lists(parser):
 
     assert result(mock_object) is True
     assert result(mock_object) == expected(mock_object)
+
+
+def test_query_parser_parse_like(parser):
+    filter_tuple_list = [
+        (('field', 'like', "Hello"),
+         lambda obj: fnmatchcase(obj.field, "Hello"),
+         Mock(field="Hello")),
+        (('field', 'like', "Hello%"),
+         lambda obj: fnmatchcase(obj.field, "Hello*"),
+         Mock(field="Hello World")),
+        (('field', 'like', "%World"),
+         lambda obj: fnmatchcase(obj.field, "*World"),
+         Mock(field="Hello World")),
+        (('field', 'like', "Hello_"),
+         lambda obj: fnmatchcase(obj.field, "Hello?"),
+         Mock(field="HelloX")),
+        (('field', 'ilike', "%World"),
+         lambda obj: fnmatchcase(obj.field, "*world"),
+         Mock(field="hello world")),
+        (('field', 'ilike', "%eLLo%"),
+         lambda obj: fnmatchcase(obj.field, "*ello*"),
+         Mock(field="hello world")),
+        (('field', 'like', "Hello%"), lambda obj: False, Mock(field=9)),
+    ]
+
+    for test_tuple in filter_tuple_list:
+        filter_tuple = test_tuple[0]
+        expected_function = test_tuple[1]
+        mock_object = test_tuple[2]
+
+        function = parser._parse_term(filter_tuple)
+
+        assert callable(function) is True
+        assert function(mock_object) == expected_function(mock_object)
+
+
+def test_query_parser_parse_contains(parser):
+    filter_tuple_list = [
+        (('field', 'contains', "333"), lambda obj: '333' in obj.field,
+         Mock(field=['1', '22', '333']))]
+
+    for test_tuple in filter_tuple_list:
+        filter_tuple = test_tuple[0]
+        expected_function = test_tuple[1]
+        mock_object = test_tuple[2]
+
+        function = parser._parse_term(filter_tuple)
+
+        assert callable(function) is True
+        assert function(mock_object) == expected_function(mock_object)

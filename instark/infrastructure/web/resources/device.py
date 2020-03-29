@@ -5,11 +5,12 @@ from ..schemas import DeviceSchema
 from ..helpers import get_request_filter
 
 
-class DeviceResource():
+class DeviceResource:
 
     def __init__(self, resolver: Injectark) -> None:
         self.resolver = resolver
-        self.instark_informer = resolver['InstarkInformer']
+        self.registration_coordinator = self.resolver['RegistrationCoordinator']
+        self.instark_informer = self.resolver['InstarkInformer']
 
     async def head(self, request) -> int:
         """
@@ -49,7 +50,7 @@ class DeviceResource():
 
         devices = DeviceSchema().dump(
             await self.instark_informer.search(
-                'device',domain, limit=limit,
+                'device', domain, limit=limit,
                 offset=offset), many=True)
 
         #return jsonify(devices)
@@ -81,6 +82,6 @@ class DeviceResource():
         device = await self.registration_coordinator.register_device(data)
 
         #return json_device, 201
-        return web.Response(status=200)
+        return web.Response(status=201)
     
   

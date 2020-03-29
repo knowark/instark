@@ -5,8 +5,8 @@ from asyncpg import connect
 from filtrark import SqlParser, SafeEval
 from instark.application.models import Entity
 from instark.application.utilities import (
-    QueryParser, EntityNotFoundError, StandardTenantProvider, Tenant)
-from instark.application.services import StandardAuthService , User
+    QueryParser, EntityNotFoundError, StandardTenantProvider, Tenant,
+    StandardAuthProvider , User)
 from instark.application.repositories import Repository
 from instark.infrastructure.data import SqlRepository
 
@@ -27,7 +27,7 @@ def sql_repository(connection_manager, dummies_table) -> SqlRepository:
     parser = SqlParser(SafeEval())
     tenant_provider = StandardTenantProvider()
     tenant_provider.setup(Tenant(name="Origin"))
-    auth_provider = StandardAuthService()
+    auth_provider = StandardAuthProvider()
     auth_provider.setup(User(id='001', name='johndoe'))
 
     sql_repository: SqlRepository = SqlRepository(

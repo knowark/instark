@@ -11,6 +11,10 @@ from instark.application.utilities import (
 
 
 @fixture
+def parser() -> QueryParser:
+    return QueryParser()
+    
+@fixture
 def id_service():
     return StandardIdService()
 
@@ -42,7 +46,7 @@ def channel_repository(tenant_provider, auth_provider):
 
 
 @fixture
-def device_channel_repository(tenant_provider, auth_provider):
+def subscription_repository(tenant_provider, auth_provider):
     return MemorySubscriptionRepository(
         QueryParser(), tenant_provider, auth_provider)
 

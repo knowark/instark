@@ -1,13 +1,13 @@
 from typing import List, Dict, Any
 from .base import base
-from .trial import trial
+from .check import check
 from .sql import sql
 
 
 STRATEGIES = {
     'base': base,
-    'sql': sql,
-    'trial': trial
+    'check': check,
+    'sql': sql
 }
 
 

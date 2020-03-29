@@ -1,9 +1,6 @@
 from pytest import raises
-#from flask import Flask, request
 from rapidjson import loads, dumps
 from aiohttp import web
-#from instark.infrastructure.core.common.exceptions import AuthenticationError
-#from instark.infrastructure.configuration import ProductionConfig
 
 async def test_root(app) -> None:
     response = await app.get('/')
@@ -22,29 +19,6 @@ async def test_root_api(app) -> None:
     assert 'openapi' in api
     assert api['info']['title'] == 'Instark'
 
-"""def test_production_config_retrieve() -> None:
-    assert ProductionConfig()["mode"] == "PROD"
-
-
-def test_root_resource(app: Flask, headers: dict) -> None:
-    response = app.get('/', headers=headers)
-    data = str(response.data, 'utf-8')
-    assert data is not None
-
-
-def test_root_resource_request_none(app: Flask, headers: dict) -> None:
-    response = app.get('/?api', headers=headers)
-    data = str(response.data, 'utf-8')
-    assert data is not None
-
-
-def test_invalid_headers(app: Flask) -> None:
-    with raises(AuthenticationError):
-        response = app.get('/messages')
-        data = loads(str(response.data, 'utf-8'))
-        assert data["error"] is not None
-
-"""
 # Channels
 
 async def test_channels_head(app, headers) -> None:
@@ -63,7 +37,8 @@ async def test_channels_get(app, headers) -> None:
     data_dict = loads(content)
 
     assert len(data_dict) == 1
-    assert data_dict[0]['id'] == 'ABC'
+    #assert data_dict[0]['id'] == 'ABC'
+    assert data_dict[0]['id'] == '001'
 
 
 async def test_channels_post(app, headers) -> None:
@@ -90,7 +65,8 @@ async def test_devices_get(app, headers) -> None:
     data_dict = loads(content)
 
     assert len(data_dict) == 1
-    assert data_dict[0]['id'] == 'ABC'
+    #assert data_dict[0]['id'] == 'ABC'
+    assert data_dict[0]['id'] == '001'
 
 
 async def test_devices_put(app, headers) -> None:
@@ -117,7 +93,8 @@ async def test_messages_get(app, headers) -> None:
     data_dict = loads(content)
 
     assert len(data_dict) == 1
-    assert data_dict[0]['id'] == 'ABC'
+    #assert data_dict[0]['id'] == 'ABC'
+    assert data_dict[0]['id'] == '001'
 
 
 async def test_messages_put(app, headers) -> None:
@@ -151,7 +128,8 @@ async def test_subscriptions_get(app, headers) -> None:
     data_dict = loads(content)
 
     assert len(data_dict) == 1
-    assert data_dict[0]['id'] == 'ABC'
+    #assert data_dict[0]['id'] == 'ABC'
+    assert data_dict[0]['id'] == '001'
 
 
 async def test_subscriptions_post(app, headers) -> None:

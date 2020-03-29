@@ -1,7 +1,5 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Any
-#from tenark.resolver import (
-#   resolve_cataloguer, resolve_provider, resolve_arranger)
 
 
 class TenantSupplier(ABC):
@@ -17,10 +15,5 @@ class TenantSupplier(ABC):
     @abstractmethod
     def resolve_tenant(self, name: str) -> Dict[str, Any]:
         """Resolve tenant method to be implemented."""
-
-    #@abstractmethod
-    #def search_tenants(self, domain):
-    #    """Search tenant method to be implemented."""
-
 
 

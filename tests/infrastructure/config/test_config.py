@@ -1,9 +1,8 @@
 import os
 import rapidjson as json
 from pytest import raises, fixture
-from instark.infrastructure.configuration import (
-    TrialConfig, DevelopmentConfig, ProductionConfig, load_config,
-    build_config)
+from instark.infrastructure.config import (
+    DevelopmentConfig, ProductionConfig, load_config, build_config)
 
 
 @fixture
@@ -20,11 +19,6 @@ def config_data(tmp_path):
     config_file.write_text(json.dumps(config_dict))
 
     return config_file, config_dict
-
-
-def test_trial_config():
-    config = TrialConfig()
-    assert config['mode'] == 'TEST'
 
 
 def test_development_config():
@@ -50,7 +44,7 @@ def test_configuration_build_config_default():
     path = '/tmp/config.json'
     mode = 'DEV'
 
-    config = build_config(path, mode)
+    config = build_config(mode, path)
 
     assert isinstance(config, DevelopmentConfig)
 

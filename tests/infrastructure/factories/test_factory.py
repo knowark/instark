@@ -1,10 +1,10 @@
-from instark.infrastructure.configuration import (
-    TrialConfig, Config)
+from instark.infrastructure.config import (
+    build_config, Config)
 from instark.infrastructure.factories import (
     build_factory, Factory)
 
 def test_build_factory():
-    config = TrialConfig('DEV')
+    config = CheckConfig('DEV')
 
     factory = build_factory(config)
 
@@ -21,7 +21,7 @@ def test_factory_methods() -> None:
 def test_build_factory_multiple_factories() -> None:
     methods = Factory.__abstractmethods__  # type: ignore
 
-    factories = ['MemoryFactory', 'trialFactory']
+    factories = ['MemoryFactory', 'checkFactory']
 
     class MockConfig(Config):
         def __init__(self, name):

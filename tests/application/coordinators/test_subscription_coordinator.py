@@ -10,11 +10,11 @@ from instark.application.utilities import (
 
 @fixture
 def subscription_coordinator(id_service, channel_repository,
-                             device_repository, device_channel_repository,
+                             device_repository, subscription_repository,
                              delivery_service):
     subscription_coordinator = SubscriptionCoordinator(
         id_service, channel_repository, device_repository,
-        device_channel_repository, delivery_service)
+        subscription_repository, delivery_service)
     subscription_coordinator.channel_repository.load({
         'default': {
             '001': Channel(id='001', name='Surveillance', code='surveillance')
@@ -45,7 +45,7 @@ async def test_channel_coordinator_create_channel(subscription_coordinator):
 async def test_subscription_coordinator_subscribe(subscription_coordinator):
     subscription_dict = {'device_id': '001', 'channel_id': '001'}
     await subscription_coordinator.subscribe(subscription_dict)
-    assert len(subscription_coordinator.device_channel_repository.data) == 1
+    assert len(subscription_coordinator.subscription_repository.data) == 1
 
 
 # def test_subscription_coordinator_subscribe_delivery_service(

@@ -1,14 +1,16 @@
-from ..configuration import Config
+from ..config import Config
 from .factory import Factory
 from ...application.utilities import (Tenant,
-    QueryParser, TenantProvider, StandardTenantProvider)
+    QueryParser, TenantProvider, StandardTenantProvider,
+    AuthProvider, StandardAuthProvider, 
+    TransactionManager, MemoryTransactionManager)
 from ...application.repositories import (
     DeviceRepository, MemoryDeviceRepository,
     ChannelRepository, MemoryChannelRepository,
     SubscriptionRepository, MemorySubscriptionRepository,
     MessageRepository, MemoryMessageRepository)
 from ...application.services import (
-    AuthService, StandardAuthService, StandardIdService, MemoryDeliveryService,
+    StandardIdService, MemoryDeliveryService,
     DeliveryService, IdService)
 from ...application.coordinators import (
     RegistrationCoordinator, SubscriptionCoordinator, NotificationCoordinator,
@@ -22,7 +24,7 @@ class MemoryFactory(Factory):
     def __init__(self, config: Config) -> None:
         self.config = config
 
-     # Tenancy
+     # Providers
 
     def query_parser(self) -> QueryParser:
         return QueryParser()
@@ -30,34 +32,45 @@ class MemoryFactory(Factory):
     def standard_tenant_provider(self) -> StandardTenantProvider:
         return StandardTenantProvider()
 
-    def standard_auth_service(self) -> StandardAuthService:
-        return StandardAuthService()
+    def standard_auth_provider(self) -> StandardAuthProvider:
+        return StandardAuthProvider()
 
-    def memory_tenant_supplier(self) -> MemoryTenantSupplier:
-        return MemoryTenantSupplier()
+    def memory_transaction_manager(self) -> MemoryTransactionManager:
+        return MemoryTransactionManager()
 
     # Repositories
 
     def memory_device_repository(
-        self, query_parser: QueryParser, tenant_provider: TenantProvider
+        self, query_parser: QueryParser, 
+        tenant_provider: TenantProvider,
+        auth_provider: AuthProvider
     ) -> MemoryDeviceRepository:
-        return MemoryDeviceRepository(query_parser, tenant_provider)
+        return MemoryDeviceRepository(
+            query_parser, tenant_provider, auth_provider)
 
     def memory_channel_repository(
-        self, query_parser: QueryParser, tenant_provider: TenantProvider
+        self, query_parser: QueryParser, 
+        tenant_provider: TenantProvider,
+        auth_provider: AuthProvider
     ) -> MemoryChannelRepository:
-        return MemoryChannelRepository(query_parser, tenant_provider)
+        return MemoryChannelRepository(
+            query_parser, tenant_provider, auth_provider )
 
     def memory_subscription_repository(
-        self, query_parser: QueryParser, tenant_provider: TenantProvider
+        self, query_parser: QueryParser, 
+        tenant_provider: TenantProvider,
+        auth_provider: AuthProvider
     ) -> MemorySubscriptionRepository:
-        return MemorySubscriptionRepository(query_parser, tenant_provider)
+        return MemorySubscriptionRepository(
+            query_parser, tenant_provider, auth_provider)
 
     def memory_message_repository(
         self, query_parser: QueryParser,
-        tenant_provider: TenantProvider
+        tenant_provider: TenantProvider,
+        auth_provider: AuthProvider
     ) -> MemoryMessageRepository:
-        return MemoryMessageRepository(query_parser, tenant_provider)
+        return MemoryMessageRepository(
+            query_parser, tenant_provider, auth_provider)
 
     # Services
 
@@ -67,45 +80,55 @@ class MemoryFactory(Factory):
     def standard_id_service(self) -> StandardIdService:
         return StandardIdService()
 
-    def memory_auth_service(self) -> StandardAuthService:
+    # Provider
+
+    def memory_auth_provider(self) -> StandardAuthProvider:
         dominion = self.config['authorization']['dominion']
-        return StandardAuthService(dominion)
+        return StandardAuthProvider(dominion)
 
     # Coordinators
 
     def registration_coordinator(
         self, id_service: IdService,
-        device_repository: DeviceRepository
+        device_repository: DeviceRepository,
+        #transaction_manager: TransactionManager
     ) -> RegistrationCoordinator:
-        return RegistrationCoordinator(id_service, device_repository)
+        #return TransactionManager(RegistrationCoordinator)(
+        return RegistrationCoordinator(
+            id_service, device_repository)
 
     def subscription_coordinator(
         self, id_service: IdService,
         channel_repository: ChannelRepository,
         device_repository: DeviceRepository,
-        device_channel_repository: SubscriptionRepository,
-        delivery_service: DeliveryService
+        subscription_repository: SubscriptionRepository,
+        delivery_service: DeliveryService,
+        #transaction_manager: TransactionManager
     ) -> SubscriptionCoordinator:
-        return SubscriptionCoordinator(id_service, channel_repository,
-                                       device_repository,
-                                       device_channel_repository,
-                                       delivery_service)
+        #return TransactionManager(SubscriptionCoordinator)(
+        return SubscriptionCoordinator(
+            id_service, channel_repository,
+            device_repository, subscription_repository,
+            delivery_service)
 
     def notification_coordinator(
         self, id_service: IdService,
         channel_repository: ChannelRepository,
         device_repository: DeviceRepository,
         message_repository: MessageRepository,
-        delivery_service: DeliveryService
+        delivery_service: DeliveryService,
+        #transaction_manager: TransactionManager
     ) -> NotificationCoordinator:
-        return NotificationCoordinator(id_service, channel_repository,
-                                       device_repository, message_repository,
-                                       delivery_service)
+        #return TransactionManager(NotificationCoordinator)(
+        return NotificationCoordinator(
+            id_service, channel_repository,
+            device_repository, message_repository, delivery_service)
 
     def session_coordinator(
-        self, tenant_provider: TenantProvider, auth_service: AuthService
+        self, tenant_provider: TenantProvider, 
+        auth_provider: AuthProvider
     ) -> SessionCoordinator:
-        return SessionCoordinator(tenant_provider, auth_service)
+        return SessionCoordinator(tenant_provider, auth_provider)
 
     # Informers
 
@@ -113,15 +136,20 @@ class MemoryFactory(Factory):
         self, device_repository: DeviceRepository,
         channel_repository: ChannelRepository,
         message_repository: MessageRepository,
-        device_channel_repository: SubscriptionRepository
+        subscription_repository: SubscriptionRepository,
+        transaction_manager: TransactionManager
     ) -> StandardInstarkInformer:
-        return StandardInstarkInformer(device_repository, channel_repository,
-                                       message_repository,
-                                       device_channel_repository)
+        return transaction_manager(StandardInstarkInformer)(
+            device_repository, channel_repository,
+            message_repository, subscription_repository)
 
+
+    #Suppliers
 
     def memory_tenant_supplier(self) -> MemoryTenantSupplier:
         return MemoryTenantSupplier()
 
     def memory_setup_supplier(self) -> MemorySetupSupplier:
         return MemorySetupSupplier()
+
+     

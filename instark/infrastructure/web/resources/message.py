@@ -49,7 +49,7 @@ class MessageResource:
 
         messages = MessageSchema().dump(
             await self.instark_informer.search(
-              'message',domain,limit=limit,
+              'message', domain,limit=limit,
                 offset=offset), many=True)
 
         #return jsonify(messages)

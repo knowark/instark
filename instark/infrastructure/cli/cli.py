@@ -6,22 +6,22 @@ from argparse import ArgumentParser, Namespace
 from injectark import Injectark
 from migrark import sql_migrate
 from typing import List
-from ..configuration import Config
+from ..config import Config
 from ..web import create_app, run_app #ServerApplication
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 
 class Cli:
-    def __init__(self, config: Config, resolver: Injectark) -> None:
+    def __init__(self, config: Config, injector: Injectark) -> None:
         self.config = config
-        self.resolver = resolver
-        #self.registry = resolver
+        self.injector = injector
+        #self.registry = injector
         self.parser = ArgumentParser('Instark')
 
     async def run(self, argv: List[str]):
         args = await self.parse(argv)
-        await args.func(argv)
+        await args.func(args)
 
     async def parse(self, argv: List[str]) -> Namespace:
         subparsers = self.parser.add_subparsers()
@@ -37,10 +37,6 @@ class Cli:
             'serve', help='Start HTTP server.')
         serve_parser.add_argument('-p', '--port')
         serve_parser.set_defaults(func=self.serve)
-
-        if len(argv) == 0:
-            self.parser.print_help()
-            self.parser.exit()
         
         # Migrate
         migrate_parser = subparsers.add_parser(
@@ -60,22 +56,19 @@ class Cli:
         return self.parser.parse_args(argv)
 
     async def serve(self, args: Namespace) -> None:
-        logger.info('SERVE')#print('...SERVE:::', args)
+        logger.info('SERVE')
         port = args.port or self.config['port']
-        app = create_app(self.config, self.resolver)
-        #gunicorn_config = self.config['gunicorn']
+        app = create_app(self.config, self.injector)
         await run_app(app,port)
-        #ServerApplication(app, gunicorn_config).run()
         logger.info('END SERVE')
 
     async def provision(self, args: Namespace) -> None:
-        logger.info('PROVISION')#print('...PROVISION::::')
-        tenant_supplier = self.resolver['TenantSupplier']
-        #tenant_dict = {'name': args.name}  # test 1
-        tenant_dict = json.loads(args.data)  # test 2
+        logger.info('PROVISION')
+        tenant_supplier = self.injector['TenantSupplier']
+        tenant_dict = json.loads(args.data)
         logger.info("Creating tenant:", tenant_dict)
         tenant_supplier.create_tenant(tenant_dict)
-        logger.info('END PROVISION')#print('...END PROVISION::::')
+        logger.info('END PROVISION')
 
     async def migrate(self, args: Namespace) -> None:
         logger.info(f'MIGRATE: {vars(args)}')

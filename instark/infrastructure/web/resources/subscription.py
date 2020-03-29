@@ -9,6 +9,7 @@ class SubscriptionResource:
 
     def __init__(self, resolver: Injectark) -> None:
         self.resolver = resolver
+        self.subscription_coordinator = self.resolver['SubscriptionCoordinator']
         self.instark_informer = self.resolver['InstarkInformer']
 
     async def head(self, request) -> int:
@@ -49,7 +50,7 @@ class SubscriptionResource:
 
         subscriptions = SubscriptionSchema().dump(
             await self.instark_informer.search(
-              'subscription',domain, limit=limit,
+              'subscription', domain, limit=limit,
                 offset=offset), many=True)
 
         #return jsonify(subscriptions)
