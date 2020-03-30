@@ -73,11 +73,15 @@ async def test_devices_get(app, headers) -> None:
 
 
 async def test_devices_put(app, headers) -> None:
-    device_data = dumps([ {'id': '1', 'name': 'DEV1', 'locator': 'a1b2c3d4'} ])
+    device_data = dumps([{
+        'id': '1', 
+        'device_name': 'DEV1', 
+        'device_locator': 'a1b2c3d4'
+    }])
     response = await app.put('/devices',
                              data=device_data, headers=headers)
     content = await response.text()
-    assert response.status == 200
+    assert response.status == 201
 
 
 # Messages
@@ -102,17 +106,26 @@ async def test_messages_get(app, headers) -> None:
 
 async def test_messages_put(app, headers) -> None:
 
-    device_data = dumps([ {'id': '1', 'name': 'DEV1', 'locator': 'a1b2c3d4'} ])
+    device_data = dumps([ {
+        'id': '1', 
+        'device_name': 'DEV1', 
+        'device_locator': 'a1b2c3d4'
+    } ])
     response = await app.put('/devices',
                              data=device_data, headers=headers)
 
-    message_data = dumps([ {'id': '1', 'recipientId': '1', 'kind': 'Direct',
-               'content': 'Hello World', 'title': 'Message Direct of admin'} ])
+    message_data = dumps([ {
+        'id': '1', 
+        'recipientId': '1', 
+        'kind': 'Direct',
+        'content': 'Hello World', 
+        'title': 'Message Direct of admin'
+    } ])
     response = await app.put('/messages',
                              data=message_data, headers=headers)
 
     content = await response.text()
-    assert response.status == 200
+    assert response.status == 201
 
 # Subscriptions
 async def test_subscriptions_head(app, headers) -> None:
@@ -135,15 +148,27 @@ async def test_subscriptions_get(app, headers) -> None:
 
 
 async def test_subscriptions_post(app, headers) -> None:
-    channel_data = dumps([{"id": "1", "name": "Channel 1", "code": "CH1"}])
+    channel_data = dumps([ {
+        "id": "1", 
+        "channel_name": "Channel 1", 
+        "channel_code": "CH1"
+    }])
     response = await app.post('/channels',
                              data=channel_data, headers=headers)
 
-    device_data = dumps([ {'id': '1', 'name': 'DEV1', 'locator': 'a1b2c3d4'} ])
+    device_data = dumps([ {
+        'id': '1', 
+        'device_name': 'DEV1', 
+        'device_locator': 'a1b2c3d4'} 
+    ])
     response = await app.put('/devices',
                              data=device_data, headers=headers)
                                                       
-    subscription_data = dumps([ {'id': '1', 'channelId': '1', 'deviceId': '1'} ])
+    subscription_data = dumps([ {
+        'id': '1', 
+        'channelId': '1', 
+        'deviceId': '1'
+    } ])
     response = await app.post('/subscriptions',
                              data=subscription_data, headers=headers)
     content = await response.text()

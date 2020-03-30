@@ -1,6 +1,6 @@
 import time
 import datetime
-from typing import Dict, Any
+from typing import Dict, Union, Any
 from ..utilities import TenantProvider, Tenant, AuthProvider, User
 
 
@@ -17,7 +17,7 @@ class SessionCoordinator:
     def get_tenant(self) -> Dict[str, Any]:
         current = self.tenant_provider.tenant
         return vars(current)
-    
+
     def set_user(self, user_dict: Dict[str, Any]) -> None:
         user = User(**user_dict)
         self.auth_provider.setup(user)

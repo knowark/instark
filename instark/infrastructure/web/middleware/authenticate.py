@@ -22,6 +22,7 @@ def authenticate_middleware_factory(injector: Injectark) -> Callable:
             tenant_id = request.headers['TenantId']
             tenant_dict = tenant_supplier.get_tenant(tenant_id)
             session_coordinator.set_tenant(tenant_dict)
+        
         except Exception as e:
             raise web.HTTPUnauthorized(
                 body=json.dumps({
@@ -29,7 +30,7 @@ def authenticate_middleware_factory(injector: Injectark) -> Callable:
                         {"message": f"{e.__class__.__name__}: {str(e)}"}
                     ]
                 }))
-
+        
         return await handler(request)
 
     return middleware

@@ -50,9 +50,6 @@ base = {
         "method": "memory_setup_supplier"
     },
     # --- SERVICES ---
-    "IdService": {
-        "method": "standard_id_service"
-    },
     "DeliveryService": {
         "method": "memory_delivery_service"
     },

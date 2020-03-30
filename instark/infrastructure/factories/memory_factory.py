@@ -9,9 +9,8 @@ from ...application.repositories import (
     ChannelRepository, MemoryChannelRepository,
     SubscriptionRepository, MemorySubscriptionRepository,
     MessageRepository, MemoryMessageRepository)
-from ...application.services import (
-    StandardIdService, MemoryDeliveryService,
-    DeliveryService, IdService)
+from ...application.services import (MemoryDeliveryService,
+    DeliveryService)
 from ...application.coordinators import (
     RegistrationCoordinator, SubscriptionCoordinator, NotificationCoordinator,
     SessionCoordinator)
@@ -77,42 +76,36 @@ class MemoryFactory(Factory):
     def memory_delivery_service(self) -> MemoryDeliveryService:
         return MemoryDeliveryService('Fake Response')
 
-    def standard_id_service(self) -> StandardIdService:
-        return StandardIdService()
-
     # Coordinators
 
     def registration_coordinator(
-        self, id_service: IdService,
-        device_repository: DeviceRepository,
+        self, device_repository: DeviceRepository,
         transaction_manager: TransactionManager
     ) -> RegistrationCoordinator:
         return transaction_manager(RegistrationCoordinator)(
-            id_service, device_repository)
+            device_repository)
 
     def subscription_coordinator(
-        self, id_service: IdService,
-        channel_repository: ChannelRepository,
+        self, channel_repository: ChannelRepository,
         device_repository: DeviceRepository,
         subscription_repository: SubscriptionRepository,
         delivery_service: DeliveryService,
         transaction_manager: TransactionManager
     ) -> SubscriptionCoordinator:
         return transaction_manager(SubscriptionCoordinator)(
-            id_service, channel_repository,
+            channel_repository,
             device_repository, subscription_repository,
             delivery_service)
 
     def notification_coordinator(
-        self, id_service: IdService,
-        channel_repository: ChannelRepository,
+        self, channel_repository: ChannelRepository,
         device_repository: DeviceRepository,
         message_repository: MessageRepository,
         delivery_service: DeliveryService,
         transaction_manager: TransactionManager
     ) -> NotificationCoordinator:
         return transaction_manager(NotificationCoordinator)(
-            id_service, channel_repository,
+            channel_repository,
             device_repository, message_repository, delivery_service)
 
     def session_coordinator(

@@ -37,9 +37,9 @@ class ChannelResource:
     #def post(self) -> Tuple[str, int]:
     async def post(self, request: web.Request):
 
-      data = ChannelSchema(many=True).loads( await request.text())
+      channel_records = ChannelSchema(many=True).loads( await request.text())
 
-      result = await self.subscription_coordinator.create_channel(data)
+      result = await self.subscription_coordinator.create_channel(channel_records)
 
       #return json_channel, 201
       return web.Response(status=200)

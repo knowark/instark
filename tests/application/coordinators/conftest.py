@@ -3,8 +3,7 @@ from instark.application.repositories import (
     MemoryDeviceRepository, MemoryChannelRepository,
     MemorySubscriptionRepository, MemoryMessageRepository)
 from instark.application.utilities.query_parser import QueryParser
-from instark.application.services import (
-    StandardIdService, MemoryDeliveryService)
+from instark.application.services import MemoryDeliveryService
 from instark.application.utilities import (
     StandardTenantProvider, Tenant,
     StandardAuthProvider, User)
@@ -13,10 +12,6 @@ from instark.application.utilities import (
 @fixture
 def parser() -> QueryParser:
     return QueryParser()
-    
-@fixture
-def id_service():
-    return StandardIdService()
 
 
 @fixture

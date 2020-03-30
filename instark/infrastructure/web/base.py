@@ -9,12 +9,12 @@ from .generators import setup_generators
 from .middleware import middlewares
 
 
-def create_app(config, resolver: Injectark) -> web.Application:
-    app = web.Application(middlewares=middlewares(resolver))
+def create_app(config, injector: Injectark) -> web.Application:
+    app = web.Application(middlewares=middlewares(injector))
     templates = str(Path(__file__).parent / 'templates')
     setup(app, loader=FileSystemLoader(templates))
     setup_generators(app)
-    create_api(app, resolver)
+    create_api(app, injector)
     enable_cors(app)
 
     return app

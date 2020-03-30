@@ -15,5 +15,3 @@ class TenantSupplier(ABC):
     @abstractmethod
     def resolve_tenant(self, name: str) -> Dict[str, Any]:
         """Resolve tenant method to be implemented."""
-
-

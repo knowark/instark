@@ -9,11 +9,11 @@ from instark.application.utilities import (
 
 
 @fixture
-def subscription_coordinator(id_service, channel_repository,
+def subscription_coordinator(channel_repository,
                              device_repository, subscription_repository,
                              delivery_service):
     subscription_coordinator = SubscriptionCoordinator(
-        id_service, channel_repository, device_repository,
+        channel_repository, device_repository,
         subscription_repository, delivery_service)
     subscription_coordinator.channel_repository.load({
         'default': {
@@ -33,8 +33,11 @@ def test_subscription_coordinator_instantiation(subscription_coordinator):
 
 
 async def test_channel_coordinator_create_channel(subscription_coordinator):
-    channel_dict = {'name': 'Channel 2', 'code': 'CH002'}
-    await subscription_coordinator.create_channel(channel_dict)
+    channel_dicts: RecordList = [{
+        'name': 'Channel 2', 
+        'code': 'CH002'
+    }]
+    await subscription_coordinator.create_channel(channel_dicts)
 
 # def test_get_channels(subscription_coordinator):
 #     channel_dict = {'id': '001', 'name': 'Channel 1', 'code': 'CH001'}
@@ -43,8 +46,11 @@ async def test_channel_coordinator_create_channel(subscription_coordinator):
 
 
 async def test_subscription_coordinator_subscribe(subscription_coordinator):
-    subscription_dict = {'device_id': '001', 'channel_id': '001'}
-    await subscription_coordinator.subscribe(subscription_dict)
+    subscription_dicts: RecordList = [{
+        'device_id': '001', 
+        'channel_id': '001'
+    }]
+    await subscription_coordinator.subscribe(subscription_dicts)
     assert len(subscription_coordinator.subscription_repository.data) == 1
 
 
