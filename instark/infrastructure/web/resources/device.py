@@ -79,7 +79,7 @@ class DeviceResource:
         data = DeviceSchema(
             many=True).loads(await request.text())
        
-        device = await self.registration_coordinator.register_device(data)
+        result = await self.registration_coordinator.register_device(data)
 
         #return json_device, 201
         return web.Response(status=201)

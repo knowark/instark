@@ -36,7 +36,7 @@ class ProductionConfig(Config):
         self['mode'] = "PROD"
         self["factory"] = "SqlFactory"
         self['strategies'].extend(['sql'])
-        """self["tenancy"] = {
+        self["tenancy"] = {
             "dsn": (
                 "postgresql://instark:instark"
                 "@localhost/instark")
@@ -46,6 +46,6 @@ class ProductionConfig(Config):
                 "dsn": ("postgresql://instark:instark"
                         "@localhost/instark")
             }
-        }"""
+        }
 
 

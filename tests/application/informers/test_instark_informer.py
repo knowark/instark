@@ -44,25 +44,6 @@ def device_repository(
     })
     return device_repository
 
-#@fixture
-#def device_repository() -> DeviceRepository:
-#    parser = QueryParser()
-#    tenant_provider = StandardTenantProvider()
-#    tenant_provider.setup(Tenant(name="Default"))
-#
-#    auth_provider = StandardAuthProvider()
-#    auth_provider.setup(User(id='001', name='johndoe'))
-#
-#    device_repository = MemoryDeviceRepository(
-#        parser, tenant_provider, auth_provider)
-#
-#    device_repository.load({
-#        'default': {
-#            '001': Device(**{'id': '001', 'name': 'DEV001', 'locator': '1'}),
-#            '002': Device(**{'id': '002', 'name': 'DEV002', 'locator': '2'})
-#        }
-#    })
-#    return device_repository
 
 @fixture
 def channel_repository(
@@ -79,24 +60,6 @@ def channel_repository(
     })
     return channel_repository
 
-#@fixture
-#def channel_repository():
-#    parser = QueryParser()
-#    tenant_provider = StandardTenantProvider()
-#    tenant_provider.setup(Tenant(name="Default"))
-#    auth_provider = StandardAuthProvider()
-#    auth_provider.setup(User(id='001', name='johndoe'))
-#
-#    channel_repository = MemoryChannelRepository(
-#        parser, tenant_provider, auth_provider)
-#    channel_repository.load({
-#        'default': {
-#            '001': Channel(id='001', name='Channel 1', code='CH001'),
-#            '002': Channel(id='002', name='Channel 2', code='CH002'),
-#            '003': Channel(id='003', name='Channel 3', code='CH003')
-#        }
-#    })
-#    return channel_repository
 
 @fixture
 def message_repository(
@@ -107,26 +70,10 @@ def message_repository(
         'default': {
            '001': Message(id='001', recipient_id='001', kind='direct',
                          content='Super!', title='Hello')
-    }   
+        }   
     })
     return message_repository
 
-#@fixture
-#def message_repository():
-#    parser = QueryParser()
-#    tenant_provider = StandardTenantProvider()
-#    tenant_provider.setup(Tenant(name="Default"))
-#    auth_provider = StandardAuthProvider()
-#    auth_provider.setup(User(id='001', name='johndoe'))
-#    message_repository = MemoryMessageRepository(
-#        parser, tenant_provider, auth_provider)
-#    message_repository.load({
-#        'default': {
-#            '001': Message(id='001', recipient_id='001', kind='direct',
-#                           content='Super!', title='Hello')
-#        }
-#    })
-#    return message_repository
 
 @fixture
 def subscription_repository(
@@ -143,25 +90,6 @@ def subscription_repository(
     })
     return subscription_repository
 
-#@fixture
-#def device_channel_repository():
-#    parser = QueryParser()
-#    tenant_provider = StandardTenantProvider()
-#    tenant_provider.setup(Tenant(name="Default"))
-#    auth_provider = StandardAuthProvider()
-#    auth_provider.setup(User(id='001', name='johndoe'))
-#    device_channel_repository = MemorySubscriptionRepository(
-#        parser, tenant_provider, auth_provider)
-#    device_channel_repository.load({
-#        'default': {
-#            '001': Subscription(**{'id': '001', 'device_id': '001',
-#                                   'channel_id': '001'}),
-#            '002': Subscription(**{'id': '001', 'device_id': '002',
-#                                   'channel_id': '001'})
-#        }
-#    })
-#    return device_channel_repository
-
 
 @fixture
 def instark_informer(device_repository: DeviceRepository, 
@@ -174,12 +102,6 @@ def instark_informer(device_repository: DeviceRepository,
         channel_repository,
         message_repository, 
         subscription_repository)
-
-
-"""async def test_instark_informer_instantiation(
-    instark_informer: InstarkInformer) -> None:
-    questionnaires = await questionark_informer.search('questionnaire', domain)
-    assert len(questionnaires) == 4"""
 
 
 async def test_instark_informer_search_devices(
@@ -209,25 +131,11 @@ async def test_instark_informer_search_messages(
     messages = await instark_informer.search('message', domain)
     assert len(messages) == 1
 
-"""async def test_instark_informer_instantiation(instark_informer):
-    assert isinstance(instark_informer, InstarkInformer)
+
+async def test_instark_informer_count_messages(
+            instark_informer: InstarkInformer) -> None:
+    messages_count = await instark_informer.count('message')
+    assert messages_count == 1
 
 
-async def test_instark_informer_search_devices(instark_informer):
-    result = await instark_informer.search_devices([])
-    assert len(result) == 2
 
-
-async def test_instark_informer_search_channels(instark_informer):
-    result = await instark_informer.search_channels([])
-    assert len(result) == 3
-
-
-async def test_instark_informer_search_device_channels(instark_informer):
-    result = await instark_informer.search_device_channels([])
-    assert len(result) == 2
-
-
-async def test_instark_informer_search_messages(instark_informer):
-    result = await instark_informer.search_messages([])
-    assert len(result) == 1   """

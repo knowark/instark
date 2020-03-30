@@ -9,9 +9,6 @@ sql = {
     "TransactionManager": {
         "method": "sql_transaction_manager",
     },
-    "InstarkRepository": {
-        "method": "sql_instark_repository"
-    },
     "ChannelRepository": {
         "method": "sql_channel_repository"
     },

@@ -73,6 +73,6 @@ async def test_cli_migrate(cli, monkeypatch):
 
     await cli.migrate(namespace)
 
-    assert called
+    assert called 
 
 

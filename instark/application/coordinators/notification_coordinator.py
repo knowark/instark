@@ -3,6 +3,7 @@ from ..models import Channel, Message
 from ..repositories import (
     ChannelRepository, DeviceRepository, MessageRepository)
 from ..services import IdService, DeliveryService
+from ..utilities import DataValidationError, RecordList
 
 
 class NotificationCoordinator:
@@ -18,7 +19,8 @@ class NotificationCoordinator:
         self.message_repository = message_repository
         self.delivery_service = delivery_service
 
-    async def send_message(self, message_dict: Dict[str, str]) -> Message:
+    #async def send_message(self, message_dict: Dict[str, str]) -> Message:
+    async def send_message(self, message_dict: RecordList) -> Message:
         if 'id' not in message_dict:
             message_dict['id'] = self.id_service.generate_id()
             message = Message(**message_dict)

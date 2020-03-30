@@ -75,12 +75,12 @@ class SubscriptionResource:
             description: "Subscription created"
         """
 
-        #data = SubscriptionSchema().loads(request.data or '{}')
+        data = SubscriptionSchema(many=True).loads(await request.text())
 
-        subscription = self.subscription_coordinator.subscribe(data)
+        subscription = await self.subscription_coordinator.subscribe(data)
 
         #return json_subscription, 201
-        return web.Response(status=201)
+        return web.Response(status=200)
   
     
       

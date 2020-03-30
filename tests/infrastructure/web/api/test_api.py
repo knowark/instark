@@ -25,7 +25,7 @@ async def test_channels_head(app, headers) -> None:
     response = await app.head('/channels', headers=headers)
     count = response.headers.get('Total-Count')
 
-    assert int(count) == 1
+    assert int(count) == 3
 
 
 async def test_channels_get(app, headers) -> None:
@@ -36,24 +36,28 @@ async def test_channels_get(app, headers) -> None:
 
     data_dict = loads(content)
 
-    assert len(data_dict) == 1
-    #assert data_dict[0]['id'] == 'ABC'
+    assert len(data_dict) == 3
     assert data_dict[0]['id'] == '001'
 
 
 async def test_channels_post(app, headers) -> None:
-    channel_data = dumps([{"id": "1", "name": "Channel 1", "code": "CH1"}])
+    channel_data = dumps([{
+        "id": "1", 
+        "channel_name": "General Notifications", 
+        "channel_code": "CH001"
+    }])
     response = await app.post('/channels',
                              data=channel_data, headers=headers)
     content = await response.text()
     assert response.status == 200
+
 
 # Devices
 async def test_devices_head(app, headers) -> None:
     response = await app.head('/devices', headers=headers)
     count = response.headers.get('Total-Count')
 
-    assert int(count) == 1
+    assert int(count) == 2
 
 
 async def test_devices_get(app, headers) -> None:
@@ -64,8 +68,7 @@ async def test_devices_get(app, headers) -> None:
 
     data_dict = loads(content)
 
-    assert len(data_dict) == 1
-    #assert data_dict[0]['id'] == 'ABC'
+    assert len(data_dict) == 2
     assert data_dict[0]['id'] == '001'
 
 
@@ -75,6 +78,7 @@ async def test_devices_put(app, headers) -> None:
                              data=device_data, headers=headers)
     content = await response.text()
     assert response.status == 200
+
 
 # Messages
 async def test_messages_head(app, headers) -> None:
@@ -93,7 +97,6 @@ async def test_messages_get(app, headers) -> None:
     data_dict = loads(content)
 
     assert len(data_dict) == 1
-    #assert data_dict[0]['id'] == 'ABC'
     assert data_dict[0]['id'] == '001'
 
 
@@ -116,7 +119,7 @@ async def test_subscriptions_head(app, headers) -> None:
     response = await app.head('/subscriptions', headers=headers)
     count = response.headers.get('Total-Count')
 
-    assert int(count) == 1
+    assert int(count) == 2
 
 
 async def test_subscriptions_get(app, headers) -> None:
@@ -127,8 +130,7 @@ async def test_subscriptions_get(app, headers) -> None:
 
     data_dict = loads(content)
 
-    assert len(data_dict) == 1
-    #assert data_dict[0]['id'] == 'ABC'
+    assert len(data_dict) == 2
     assert data_dict[0]['id'] == '001'
 
 
@@ -143,36 +145,15 @@ async def test_subscriptions_post(app, headers) -> None:
                                                       
     subscription_data = dumps([ {'id': '1', 'channelId': '1', 'deviceId': '1'} ])
     response = await app.post('/subscriptions',
-                             data=csubscription_data, headers=headers)
+                             data=subscription_data, headers=headers)
     content = await response.text()
     assert response.status == 200
+
 """
 # Channels
 
-def test_all_channels_get_action(app: Flask, headers: dict) -> None:
-    response = app.get('/channels', headers=headers)
-    data = str(response.data, 'utf-8')
-    data = loads(data)
-
-    assert len(data) == 0
-
-
-def test_channel_post_action(app: Flask, headers: dict) -> None:
-    channel = {"id": "1", "name": "Channel 1", "code": "CH1"}
-    response = app.post('/channels', headers=headers, data=dumps(channel),
-                        content_type='application/json')
-    assert response
-    assert response.status == '201 CREATED'
 
 # Devices
-
-
-def test_all_devices_get_action(app: Flask, headers: dict) -> None:
-    response = app.get('/devices', headers=headers)
-    data = str(response.data, 'utf-8')
-    data = loads(data)
-
-    assert len(data) == 0
 
 
 def test_device_post_action(app: Flask, headers: dict) -> None:
@@ -183,14 +164,6 @@ def test_device_post_action(app: Flask, headers: dict) -> None:
     assert response.status == '201 CREATED'
 
 # Messages
-
-
-def test_all_messages_get_action(app: Flask, headers: dict) -> None:
-    response = app.get('/messages', headers=headers)
-    data = str(response.data, 'utf-8')
-    data = loads(data)
-
-    assert len(data) == 0
 
 
 def test_message_post_action(app: Flask, headers: dict) -> None:
@@ -205,15 +178,6 @@ def test_message_post_action(app: Flask, headers: dict) -> None:
     assert response.status == '201 CREATED'
 
 # Subscriptions
-
-
-def test_all_subscriptions_get_action(app: Flask, headers: dict) -> None:
-    response = app.get('/subscriptions', headers=headers)
-    data = str(response.data, 'utf-8')
-    data = loads(data)
-
-    assert len(data) == 0
-
 
 def test_subscription_post_action(app: Flask, headers: dict) -> None:
     channel = {"id": "1", "name": "Channel 1", "code": "CH1"}

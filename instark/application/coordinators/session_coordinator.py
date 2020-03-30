@@ -15,8 +15,8 @@ class SessionCoordinator:
         self.tenant_provider.setup(tenant)
 
     def get_tenant(self) -> Dict[str, Any]:
-        tenant = self.tenant_provider.tenant
-        return vars(tenant)
+        current = self.tenant_provider.tenant
+        return vars(current)
     
     def set_user(self, user_dict: Dict[str, Any]) -> None:
         user = User(**user_dict)

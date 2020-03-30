@@ -3,8 +3,7 @@ from ...application.utilities import (
     User, Tenant, QueryParser,
     TenantProvider, StandardTenantProvider,
     AuthProvider, StandardAuthProvider)
-from ...application.models import (
-    channel, device, message, subscription)  
+from ...application.models import Device, Channel, Message, Subscription
 from ...application.repositories import (
     MemoryChannelRepository, MemoryDeviceRepository,
     MemorySubscriptionRepository, MemoryMessageRepository)
@@ -38,11 +37,11 @@ class CheckFactory(MemoryFactory):
         channel_repository = MemoryChannelRepository(
             query_parser, tenant_provider, auth_provider)
         channel_repository.load({
-            "default": {
-                '001': channel(
-                    **{'id': '001', 'name': 'Channel 1', 'code': 'CH001'}),
-                '002': channel(
-                    **{'id': '002', 'name': 'Channel 2', 'code': 'CH002'}),
+            'default': {
+                '001': Channel(id='001', name='Channel 1', code='CH001'),
+                '002': Channel(id='002', name='Channel 2', code='CH002'),
+                '003': Channel(id='003', name='Channel 3', code='CH003')
+
             }
         })
         return channel_repository
@@ -55,13 +54,9 @@ class CheckFactory(MemoryFactory):
         device_repository = MemoryDeviceRepository(
             query_parser, tenant_provider, auth_provider)
         device_repository.load({
-            "default": {
-                '001': device(
-                    **{'id': '001', 'name': 'DEV001',
-                       'locator': '1'}),
-                '002': device(
-                    **{'id': '002', 'name': 'DEV002',
-                       'locator': '2'}),
+            'default': {
+                '001': Device(**{'id': '001', 'name': 'DEV001', 'locator': '1'}),
+                '002': Device(**{'id': '002', 'name': 'DEV002', 'locator': '2'})
             }
         })
         return device_repository
@@ -74,16 +69,10 @@ class CheckFactory(MemoryFactory):
         message_repository = MemoryMessageRepository(
             query_parser, tenant_provider, auth_provider)
         message_repository.load({
-            "default": {
-                '001': message(
-                    **{'id': '001', 'recipient_id': '001',
-                       'kind': 'direct', 'content': 'Super', 
-                       'title': 'Hello'}),
-                '002': message(
-                    **{'id': '002', 'recipient_id': '002',
-                       'kind': 'direct', 'content': 'bad', 
-                       'title': 'bye'}),
-            }
+            'default': {
+            '001': Message(id='001', recipient_id='001', kind='direct',
+                            content='Super!', title='Hello')
+            }   
         })
         return message_repository
 
@@ -95,14 +84,12 @@ class CheckFactory(MemoryFactory):
         subscription_repository = MemorySubscriptionRepository(
             query_parser, tenant_provider, auth_provider)
         subscription_repository.load({
-            "default": {
-                '001': subscription(
-                    **{'id': '001', 'device_id': '001',
-                       'channel_id': '001'}),
-                '002': subscription(
-                    **{'id': '002', 'device_id': '002',
-                       'channel_id': '001'}),
-            }
+            'default': {
+                '001': Subscription(**{'id': '001', 'device_id': '001',
+                                    'channel_id': '001'}),
+                '002': Subscription(**{'id': '001', 'device_id': '002',
+                                    'channel_id': '001'})
+            } 
         })
         return subscription_repository
 

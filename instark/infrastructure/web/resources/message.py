@@ -82,7 +82,7 @@ class MessageResource:
         message = await self.notification_coordinator.send_message(data)
 
        # return json_message, 201
-        return web.Response(status=200)
+        return web.Response(status=201)
 
     
     

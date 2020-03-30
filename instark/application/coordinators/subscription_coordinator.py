@@ -3,10 +3,10 @@ from ..models import Channel, Subscription
 from ..repositories import (
     ChannelRepository, DeviceRepository, SubscriptionRepository)
 from ..services import IdService, DeliveryService
+from ..utilities import DataValidationError, RecordList
 
 
 class SubscriptionCoordinator:
-
     def __init__(self, id_service: IdService,
                  channel_repository: ChannelRepository,
                  device_repository: DeviceRepository,
@@ -18,9 +18,10 @@ class SubscriptionCoordinator:
         self.subscription_repository = subscription_repository
         self.delivery_service = delivery_service
 
-    async def create_channel(self, channel_dict: Dict[str, str]) -> Channel:
+    #async def create_channel(self, channel_dict: Dict[str, str]) -> Channel:
+    async def create_channel(self, channel_dict: RecordList) -> None:
         if 'id' not in channel_dict:
-            channel_dict['id'] = self.id_service.generate_id()
+           channel_dict['id'] = self.id_service.generate_id()
         channel = Channel(**channel_dict)
         await self.channel_repository.add(channel)
         return channel

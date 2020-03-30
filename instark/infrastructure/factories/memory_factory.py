@@ -80,21 +80,14 @@ class MemoryFactory(Factory):
     def standard_id_service(self) -> StandardIdService:
         return StandardIdService()
 
-    # Provider
-
-    def memory_auth_provider(self) -> StandardAuthProvider:
-        dominion = self.config['authorization']['dominion']
-        return StandardAuthProvider(dominion)
-
     # Coordinators
 
     def registration_coordinator(
         self, id_service: IdService,
         device_repository: DeviceRepository,
-        #transaction_manager: TransactionManager
+        transaction_manager: TransactionManager
     ) -> RegistrationCoordinator:
-        #return TransactionManager(RegistrationCoordinator)(
-        return RegistrationCoordinator(
+        return transaction_manager(RegistrationCoordinator)(
             id_service, device_repository)
 
     def subscription_coordinator(
@@ -103,10 +96,9 @@ class MemoryFactory(Factory):
         device_repository: DeviceRepository,
         subscription_repository: SubscriptionRepository,
         delivery_service: DeliveryService,
-        #transaction_manager: TransactionManager
+        transaction_manager: TransactionManager
     ) -> SubscriptionCoordinator:
-        #return TransactionManager(SubscriptionCoordinator)(
-        return SubscriptionCoordinator(
+        return transaction_manager(SubscriptionCoordinator)(
             id_service, channel_repository,
             device_repository, subscription_repository,
             delivery_service)
@@ -117,10 +109,9 @@ class MemoryFactory(Factory):
         device_repository: DeviceRepository,
         message_repository: MessageRepository,
         delivery_service: DeliveryService,
-        #transaction_manager: TransactionManager
+        transaction_manager: TransactionManager
     ) -> NotificationCoordinator:
-        #return TransactionManager(NotificationCoordinator)(
-        return NotificationCoordinator(
+        return transaction_manager(NotificationCoordinator)(
             id_service, channel_repository,
             device_repository, message_repository, delivery_service)
 

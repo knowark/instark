@@ -16,11 +16,11 @@ class InstarkInformer(ABC):
                      offset: int = 0) -> RecordList:
         """Returns a list of <<model>> dictionaries matching the domain"""
 
-    #@abstractmethod
-    #async def count(self,
-    #                model: str,
-    #                domain: QueryDomain = None) -> int:
-    #    """Returns a the <<model>> records count"""
+    @abstractmethod
+    async def count(self,
+                    model: str,
+                    domain: QueryDomain = None) -> int:
+       """Returns a the <<model>> records count"""
 
 
 class StandardInstarkInformer(InstarkInformer):
@@ -44,11 +44,11 @@ class StandardInstarkInformer(InstarkInformer):
             await repository.search(
                 domain or [], limit=limit, offset=offset)]
 
-    """async def count(self,
+    async def count(self,
                 model: str,
                 domain: QueryDomain = None) -> int:
         repository = getattr(self, f'{model}_repository')
-        return await repository.count(domain or [])"""
+        return await repository.count(domain or [])
 
   
     #@abstractmethod

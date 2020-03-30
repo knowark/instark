@@ -93,14 +93,14 @@ def transaction_manager(connection_manager, tenant_provider):
 def sample_repository(connection_manager, tenant_provider, samples_table
                       ) -> SqlRepository:
     parser = SqlParser(SafeEval())
-    auth_service = StandardAuthProvider()
-    auth_service.setup(User(id='001', name='johndoe'))
+    auth_provider = StandardAuthProvider()
+    auth_provider.setup(User(id='001', name='johndoe'))
 
     sql_repository: SqlRepository = SqlRepository(
         table=samples_table,
         constructor=SampleEntity,
         tenant_provider=tenant_provider,
-        auth_service=auth_service,
+        auth_provider=auth_provider,
         connection_manager=connection_manager,
         parser=parser)
 

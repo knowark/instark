@@ -7,7 +7,7 @@ from .resources import(
 from .spec import create_spec
 
 
-def create_api(app: web.Application, resolver: Injectark) -> None:
+def create_api(app: web.Application, injector: Injectark) -> None:
     # Restful API
     spec = create_spec()
 
@@ -15,22 +15,22 @@ def create_api(app: web.Application, resolver: Injectark) -> None:
     bind_routes(app, '/', RootResource(spec))
 
     # Channel Resource
-    bind_routes(app, '/channels', ChannelResource(resolver))
+    bind_routes(app, '/channels', ChannelResource(injector))
     spec.path(path="/channels", operations={
     'head': {}, 'get': {}, 'post': {}},resource=ChannelResource)
 
     # Device Resource
-    bind_routes(app, '/devices', DeviceResource(resolver))
+    bind_routes(app, '/devices', DeviceResource(injector))
     spec.path(path="/devices", operations={
     'head': {}, 'get': {}, 'put': {}},resource=DeviceResource)
 
     # Message Resource
-    bind_routes(app, '/messages', MessageResource(resolver))
+    bind_routes(app, '/messages', MessageResource(injector))
     spec.path(path="/messages", operations={
     'head': {}, 'get': {}, 'put': {}}, resource=MessageResource)
 
     # Subscription Resource
-    bind_routes(app, '/subscriptions', SubscriptionResource(resolver))
+    bind_routes(app, '/subscriptions', SubscriptionResource(injector))
     spec.path(path="/subscriptions", operations={
     'head': {}, 'get': {}, 'post': {}},resource=SubscriptionResource)
 
@@ -51,23 +51,23 @@ def bind_routes(app: web.Application, path: str, resource: Any):
     """# Message Resource
     spec.path(path="/messages", resource=MessageResource)
     message_view = authenticate(MessageResource.as_view(
-        'messages', resolver=resolver))
+        'messages', injector=injector))
     app.add_url_rule("/messages", view_func=message_view)
 
     # Channel Resource
     spec.path(path="/channels", resource=ChannelResource)
     channel_view = authenticate(ChannelResource.as_view(
-        'channels', resolver=resolver))
+        'channels', injector=injector))
     app.add_url_rule("/channels", view_func=channel_view)
 
     # Device Resource
     spec.path(path="/devices", resource=DeviceResource)
     device_view = authenticate(DeviceResource.as_view(
-        'devices', resolver=resolver))
+        'devices', injector=injector))
     app.add_url_rule("/devices", view_func=device_view)
 
     # Subscription Resource
     spec.path(path="/subscriptions", resource=SubscriptionResource)
     subscription_view = authenticate(SubscriptionResource.as_view(
-        'subscriptions', resolver=resolver))
+        'subscriptions', injector=injector))
     app.add_url_rule("/subscriptions", view_func=subscription_view)"""

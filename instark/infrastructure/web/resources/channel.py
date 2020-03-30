@@ -7,10 +7,10 @@ from ..helpers import get_request_filter
 
 class ChannelResource:
 
-    def __init__(self, resolver: Injectark) -> None:
-      self.resolver = resolver
-      self.subscription_coordinator = self.resolver['SubscriptionCoordinator']
-      self.instark_informer = self.resolver['InstarkInformer']
+    def __init__(self, injector: Injectark) -> None:
+      self.injector = injector
+      self.subscription_coordinator = self.injector['SubscriptionCoordinator']
+      self.instark_informer = self.injector['InstarkInformer']
 
     async def head(self, request) -> int:
       domain, _, _ = get_request_filter(request)
@@ -37,9 +37,9 @@ class ChannelResource:
     #def post(self) -> Tuple[str, int]:
     async def post(self, request: web.Request):
 
-      data = ChannelSchema().loads( await request.data)
+      data = ChannelSchema(many=True).loads( await request.text())
 
-      channel = await self.subscription_coordinator.create_channel(data)
+      result = await self.subscription_coordinator.create_channel(data)
 
       #return json_channel, 201
-      return web.Response(status=201)
+      return web.Response(status=200)

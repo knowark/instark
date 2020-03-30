@@ -4,7 +4,7 @@ from instark.infrastructure.factories import (
     build_factory, Factory)
 
 def test_build_factory():
-    config = CheckConfig('DEV')
+    config = build_config('DEV')
 
     factory = build_factory(config)
 
@@ -21,7 +21,7 @@ def test_factory_methods() -> None:
 def test_build_factory_multiple_factories() -> None:
     methods = Factory.__abstractmethods__  # type: ignore
 
-    factories = ['MemoryFactory', 'checkFactory']
+    factories = ['MemoryFactory', 'CheckFactory']
 
     class MockConfig(Config):
         def __init__(self, name):
