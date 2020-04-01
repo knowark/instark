@@ -4,6 +4,7 @@ from typing import Dict, Any
 from abc import ABC, abstractmethod
 from pathlib import Path
 
+
 class Config(defaultdict, ABC):
     @abstractmethod
     def __init__(self):
@@ -29,7 +30,6 @@ class DevelopmentConfig(Config):
         self['strategies'].extend(['check'])
 
 
-
 class ProductionConfig(Config):
     def __init__(self):
         super().__init__()
@@ -47,5 +47,4 @@ class ProductionConfig(Config):
                         "@localhost/instark")
             }
         }
-
 

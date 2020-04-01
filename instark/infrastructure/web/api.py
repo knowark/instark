@@ -24,26 +24,26 @@ def create_api(app: web.Application, injector: Injectark) -> None:
     bind_routes(app, '/devices', DeviceResource(injector))
     spec.path(path="/devices", operations={
         'head': {}, 'get': {}, 'put': {}, 'delete': {}},
-        resource = DeviceResource)
+        resource=DeviceResource)
 
     # Message Resource
     bind_routes(app, '/messages', MessageResource(injector))
-    spec.path(path = "/messages", operations = {
+    spec.path(path="/messages", operations={
         'head': {}, 'get': {}, 'put': {}, 'delete': {}},
-        resource = MessageResource)
+        resource=MessageResource)
 
     # Subscription Resource
     bind_routes(app, '/subscriptions', SubscriptionResource(injector))
-    spec.path(path = "/subscriptions", operations = {
+    spec.path(path="/subscriptions", operations={
         'head': {}, 'get': {}, 'put': {}, 'delete': {}},
-        resource = SubscriptionResource)
+        resource=SubscriptionResource)
 
 
 def bind_routes(app: web.Application, path: str, resource: Any):
-    general_methods=['head', 'get', 'put', 'delete', 'post', 'patch']
-    identified_methods=['get', 'delete']
+    general_methods = ['head', 'get', 'put', 'delete', 'post', 'patch']
+    identified_methods = ['get', 'delete']
     for method in general_methods + identified_methods:
-        handler=getattr(resource, method, None)
+        handler = getattr(resource, method, None)
         if not handler:
             continue
         if method in identified_methods:

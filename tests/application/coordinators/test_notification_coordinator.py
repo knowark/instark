@@ -76,7 +76,8 @@ async def test_notification_coordinator_send_channel_message(
 
     await notification_coordinator.send_message(message_records)
 
-    assert len(await notification_coordinator.message_repository.search([])) == 1
+    assert len(
+        await notification_coordinator.message_repository.search([])) == 1
 
     for message in await notification_coordinator.message_repository.search([]):
         assert message.recipient_id == '1'

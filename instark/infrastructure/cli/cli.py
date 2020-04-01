@@ -12,6 +12,7 @@ from ..web import create_app, run_app
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 
+
 class Cli:
     def __init__(self, config: Config, injector: Injectark) -> None:
         self.config = config
@@ -36,7 +37,7 @@ class Cli:
             'serve', help='Start HTTP server.')
         serve_parser.add_argument('-p', '--port')
         serve_parser.set_defaults(func=self.serve)
-        
+
         # Migrate
         migrate_parser = subparsers.add_parser(
             'migrate', help='Upgrade tenant schema version.')
@@ -58,7 +59,7 @@ class Cli:
         logger.info('SERVE')
         port = args.port or self.config['port']
         app = create_app(self.config, self.injector)
-        await run_app(app,port)
+        await run_app(app, port)
         logger.info('END SERVE')
 
     async def provision(self, args: Namespace) -> None:
@@ -81,5 +82,3 @@ class Cli:
         sql_migrate(database_uri, migrations_path, schema=tenant['slug'],
                     target_version=args.version)
         logger.info('END MIGRATE')
-
-    

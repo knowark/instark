@@ -80,6 +80,6 @@ async def test_subscription_coordinator_delete_subscription(
     subscriptions_data = getattr(
         subscription_coordinator.subscription_repository, 'data')
     assert len(subscriptions_data['default']) == 1
-    print("subscription data:   ",subscriptions_data)
+    print("subscription data:   ", subscriptions_data)
     await subscription_coordinator.delete_subscribe([subscription_id])
-    assert len(subscriptions_data['default']) == 0  
+    assert len(subscriptions_data['default']) == 0

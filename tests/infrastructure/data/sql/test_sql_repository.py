@@ -6,7 +6,7 @@ from filtrark import SqlParser, SafeEval
 from instark.application.models import Entity
 from instark.application.utilities import (
     QueryParser, EntityNotFoundError, StandardTenantProvider, Tenant,
-    StandardAuthProvider , User)
+    StandardAuthProvider, User)
 from instark.application.repositories import Repository
 from instark.infrastructure.data import SqlRepository
 

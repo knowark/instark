@@ -3,7 +3,7 @@ from .entity import EntitySchema
 
 
 class MessageSchema(EntitySchema):
-    #message_id = fields.Str(
+    # message_id = fields.Str(
     #    data_key='messageId', dump_only=True,
     #    example="01f32c10-6d09-4145-98c5-56d4bf7c1329")
     backend_id = fields.Str(

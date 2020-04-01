@@ -28,7 +28,7 @@ class ResourcePlugin(BasePlugin):
 
 
 def create_spec() -> APISpec:
-    
+
     spec = APISpec(
         title="Instark",
         version="1.3.0",
@@ -40,7 +40,7 @@ def create_spec() -> APISpec:
                 name="Instark",
                 url="https://www.knowark.com"
             )))
-    
+
     _register_schemas(spec)
 
     return spec

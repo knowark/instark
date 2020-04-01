@@ -55,8 +55,10 @@ class CheckFactory(MemoryFactory):
             query_parser, tenant_provider, auth_provider)
         device_repository.load({
             'default': {
-                '001': Device(**{'id': '001', 'name': 'DEV001', 'locator': '1'}),
-                '002': Device(**{'id': '002', 'name': 'DEV002', 'locator': '2'})
+                '001': Device(
+                    **{'id': '001', 'name': 'DEV001', 'locator': '1'}),
+                '002': Device(
+                    **{'id': '002', 'name': 'DEV002', 'locator': '2'})
             }
         })
         return device_repository
@@ -70,9 +72,9 @@ class CheckFactory(MemoryFactory):
             query_parser, tenant_provider, auth_provider)
         message_repository.load({
             'default': {
-            '001': Message(id='001', recipient_id='001', kind='direct',
-                            content='Super!', title='Hello')
-            }   
+                '001': Message(id='001', recipient_id='001', kind='direct',
+                               content='Super!', title='Hello')
+            }
         })
         return message_repository
 
@@ -86,10 +88,10 @@ class CheckFactory(MemoryFactory):
         subscription_repository.load({
             'default': {
                 '001': Subscription(**{'id': '001', 'device_id': '001',
-                                    'channel_id': '001'}),
+                                       'channel_id': '001'}),
                 '002': Subscription(**{'id': '001', 'device_id': '002',
-                                    'channel_id': '001'})
-            } 
+                                       'channel_id': '001'})
+            }
         })
         return subscription_repository
 
@@ -105,4 +107,3 @@ class CheckFactory(MemoryFactory):
                 }
             }})
         return tenant_supplier
-

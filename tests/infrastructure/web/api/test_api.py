@@ -1,7 +1,8 @@
 from pytest import raises
 from rapidjson import loads, dumps
 from aiohttp import web
-from instark.infrastructure.web.middleware import authenticate_middleware_factory
+from instark.infrastructure.web.middleware import (
+    authenticate_middleware_factory)
 
 
 async def test_root(app) -> None:
@@ -65,6 +66,19 @@ async def test_channels_delete(app, headers) -> None:
 
     assert len(data_dict) == 2
 
+
+async def test_channels_delete_body(app, headers) -> None:
+    ids = dumps(["001"])
+    response = await app.delete(
+        '/channels', data=ids, headers=headers)
+    content = await response.text()
+    assert response.status == 204
+
+    response = await app.get('/channels', headers=headers)
+    data_dict = loads(await response.text())
+
+    assert len(data_dict) == 2
+
 # Devices
 
 
@@ -101,6 +115,19 @@ async def test_devices_put(app, headers) -> None:
 
 async def test_devices_delete(app, headers) -> None:
     response = await app.delete('/devices/001', headers=headers)
+    content = await response.text()
+    assert response.status == 204
+
+    response = await app.get('/devices', headers=headers)
+    data_dict = loads(await response.text())
+
+    assert len(data_dict) == 1
+
+
+async def test_devices_delete_body(app, headers) -> None:
+    ids = dumps(["001"])
+    response = await app.delete(
+        '/devices', data=ids, headers=headers)
     content = await response.text()
     assert response.status == 204
 
@@ -157,6 +184,19 @@ async def test_messages_put(app, headers) -> None:
 
 async def test_messages_delete(app, headers) -> None:
     response = await app.delete('/messages/001', headers=headers)
+    content = await response.text()
+    assert response.status == 204
+
+    response = await app.get('/messages', headers=headers)
+    data_dict = loads(await response.text())
+
+    assert len(data_dict) == 0
+
+
+async def test_messages_delete_body(app, headers) -> None:
+    ids = dumps(["001"])
+    response = await app.delete(
+        '/messages', data=ids, headers=headers)
     content = await response.text()
     assert response.status == 204
 
@@ -225,6 +265,19 @@ async def test_subscriptions_delete(app, headers) -> None:
 
     assert len(data_dict) == 1
 
+
+async def test_subscriptions_delete_body(app, headers) -> None:
+    ids = dumps(["001"])
+    response = await app.delete(
+        '/subscriptions', data=ids, headers=headers)
+    content = await response.text()
+    assert response.status == 204
+
+    response = await app.get('/subscriptions', headers=headers)
+    data_dict = loads(await response.text())
+
+    assert len(data_dict) == 1
+
 # filter
 
 
@@ -239,6 +292,10 @@ async def test_get_request_filter(app, headers) -> None:
 # middleware
 
 
-async def test_middleware(app, headers) -> None:
-    with raises(Exception) as e:
-        raise web.HTTPUnauthorized
+async def test_channels_get_unauthorized(app) -> None:
+    response = await app.get('/channels')
+    content = await response.text()
+
+    assert response.status == 401
+    data_dict = loads(content)
+    assert 'errors' in data_dict

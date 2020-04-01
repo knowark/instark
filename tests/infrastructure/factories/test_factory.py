@@ -3,6 +3,7 @@ from instark.infrastructure.config import (
 from instark.infrastructure.factories import (
     build_factory, Factory)
 
+
 def test_build_factory():
     config = build_config('DEV')
 
@@ -31,7 +32,7 @@ def test_build_factory_multiple_factories() -> None:
         config = MockConfig(name)
         factory = build_factory(config)
         assert type(factory).__name__ == name
-        
+
 
 def test_factory_extract() -> None:
     class MockFactory(Factory):

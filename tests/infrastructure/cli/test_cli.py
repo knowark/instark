@@ -33,9 +33,10 @@ async def test_cli_parse_empty_argv(cli):
     with raises(SystemExit) as e:
         result = await cli.parse([])
 
+
 async def test_cli_serve(cli, monkeypatch):
     called = False
-    namespace = Namespace(port=8080) #check port server
+    namespace = Namespace(port=8080)  # check port server
 
     async def mock_run_app(app, port):
         nonlocal called
@@ -46,7 +47,8 @@ async def test_cli_serve(cli, monkeypatch):
 
     result = await cli.serve(namespace)
 
-    assert called #and create_app_called
+    assert called  # and create_app_called
+
 
 async def test_cli_provision(cli):
     namespace = Namespace(data=json.dumps({
@@ -56,6 +58,7 @@ async def test_cli_provision(cli):
     result = await cli.provision(namespace)
 
     assert result is None
+
 
 async def test_cli_migrate(cli, monkeypatch):
     called = False
@@ -73,6 +76,5 @@ async def test_cli_migrate(cli, monkeypatch):
 
     await cli.migrate(namespace)
 
-    assert called 
-
+    assert called
 

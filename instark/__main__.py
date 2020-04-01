@@ -21,7 +21,7 @@ async def main(args=None):  # pragma: no cover
     injector = Injectark(strategy=strategy, factory=factory)
     injector['SetupSupplier'].setup()
 
-    #.run(sys.argv[1:])
+    # .run(sys.argv[1:])
     await Cli(config, injector).run(args or [])
 
 

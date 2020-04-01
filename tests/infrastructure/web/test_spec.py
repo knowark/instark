@@ -3,6 +3,7 @@ from pytest import fixture
 from apispec import APISpec
 from instark.infrastructure.web.spec import create_spec, ResourcePlugin
 
+
 @fixture
 def spec():
     spec = create_spec()
@@ -60,4 +61,3 @@ def test_spec_resource_plugin_no_resource(spec, resource):
     result = plugin.path_helper('/resource')
 
     assert result is None
-

@@ -10,14 +10,12 @@ def parse_domain(filter: str) -> List[Any]:
     except JSONDecodeError:
         return domain
 
-    
     for item in domain:
         if isinstance(item, list) and len(item):
             word = camel_to_snake(item[0])
             item[0] = word
-    
 
-    return domain 
+    return domain
 
 
 def camel_to_snake(value: str) -> str:

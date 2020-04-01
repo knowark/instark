@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from filtrark import SqlParser, SafeEval
 from ...application.utilities import (QueryParser, TenantProvider,
-AuthProvider)
+                                      AuthProvider)
 from ..data import (
     ConnectionManager, DefaultConnectionManager, SqlTransactionManager,
     SqlChannelRepository, SqlDeviceRepository, SqlMessageRepository,
@@ -37,7 +37,7 @@ class SqlFactory(MemoryFactory):
             self, tenant_provider: TenantProvider,
             auth_provider: AuthProvider,
             connection_manager: ConnectionManager,
-            sql_parser: SqlParser) -> SqlChannelRepository:           
+            sql_parser: SqlParser) -> SqlChannelRepository:
         return SqlChannelRepository(
             tenant_provider, auth_provider, connection_manager, sql_parser)
 
@@ -64,7 +64,6 @@ class SqlFactory(MemoryFactory):
             sql_parser: SqlParser) -> SqlSubscriptionRepository:
         return SqlSubscriptionRepository(
             tenant_provider, auth_provider, connection_manager, sql_parser)
-
 
     def schema_tenant_supplier(self) -> SchemaTenantSupplier:
         catalog = self.config['tenancy']['dsn']

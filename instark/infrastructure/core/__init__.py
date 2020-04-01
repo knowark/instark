@@ -3,4 +3,3 @@ from .setup import (
 from .tenancy import (
     TenantSupplier, MemoryTenantSupplier, SchemaTenantSupplier)
 
-

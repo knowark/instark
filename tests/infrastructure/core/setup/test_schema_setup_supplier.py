@@ -26,7 +26,7 @@ def test_schema_setup_supplier_setup(monkeypatch):
     zones = {
         'default': {
             'dsn': "postgresql://instark:instark@localhost/postgres"
-            #'dsn': ""
+            # 'dsn': ""
         }
     }
 

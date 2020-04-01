@@ -20,7 +20,7 @@ def test_schema_tenant_supplier_instantiation(monkeypatch):
     #catalog_dsn = ""
     zones = {
         'default': "postgresql://instark:instark@localhost/postgres"
-        #'default': ""
+        # 'default': ""
     }
 
     tenant_supplier = SchemaTenantSupplier(catalog_dsn, zones)

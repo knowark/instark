@@ -12,7 +12,7 @@ STRATEGIES = {
 
 
 def build_strategy(strategies: List[str],
-                   custom_strategy: Dict[str, Any]={}) -> Dict[str, Any]:
+                   custom_strategy: Dict[str, Any] = {}) -> Dict[str, Any]:
     strategy: Dict[str, Any] = {}
     for name in strategies:
         strategy.update(STRATEGIES[name])

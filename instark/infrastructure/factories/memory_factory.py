@@ -1,8 +1,9 @@
 from ..config import Config
 from .factory import Factory
-from ...application.utilities import (Tenant,
+from ...application.utilities import (
+    Tenant,
     QueryParser, TenantProvider, StandardTenantProvider,
-    AuthProvider, StandardAuthProvider, 
+    AuthProvider, StandardAuthProvider,
     TransactionManager, MemoryTransactionManager)
 from ...application.repositories import (
     DeviceRepository, MemoryDeviceRepository,
@@ -10,7 +11,7 @@ from ...application.repositories import (
     SubscriptionRepository, MemorySubscriptionRepository,
     MessageRepository, MemoryMessageRepository)
 from ...application.services import (MemoryDeliveryService,
-    DeliveryService)
+                                     DeliveryService)
 from ...application.coordinators import (
     RegistrationCoordinator, SubscriptionCoordinator, NotificationCoordinator,
     SessionCoordinator)
@@ -18,6 +19,7 @@ from ...application.informers import StandardInstarkInformer
 from ...infrastructure.core import (
     TenantSupplier, MemoryTenantSupplier,
     SetupSupplier, MemorySetupSupplier)
+
 
 class MemoryFactory(Factory):
     def __init__(self, config: Config) -> None:
@@ -27,7 +29,7 @@ class MemoryFactory(Factory):
 
     def query_parser(self) -> QueryParser:
         return QueryParser()
-    
+
     def standard_tenant_provider(self) -> StandardTenantProvider:
         return StandardTenantProvider()
 
@@ -40,7 +42,7 @@ class MemoryFactory(Factory):
     # Repositories
 
     def memory_device_repository(
-        self, query_parser: QueryParser, 
+        self, query_parser: QueryParser,
         tenant_provider: TenantProvider,
         auth_provider: AuthProvider
     ) -> MemoryDeviceRepository:
@@ -48,15 +50,15 @@ class MemoryFactory(Factory):
             query_parser, tenant_provider, auth_provider)
 
     def memory_channel_repository(
-        self, query_parser: QueryParser, 
+        self, query_parser: QueryParser,
         tenant_provider: TenantProvider,
         auth_provider: AuthProvider
     ) -> MemoryChannelRepository:
         return MemoryChannelRepository(
-            query_parser, tenant_provider, auth_provider )
+            query_parser, tenant_provider, auth_provider)
 
     def memory_subscription_repository(
-        self, query_parser: QueryParser, 
+        self, query_parser: QueryParser,
         tenant_provider: TenantProvider,
         auth_provider: AuthProvider
     ) -> MemorySubscriptionRepository:
@@ -109,7 +111,7 @@ class MemoryFactory(Factory):
             device_repository, message_repository, delivery_service)
 
     def session_coordinator(
-        self, tenant_provider: TenantProvider, 
+        self, tenant_provider: TenantProvider,
         auth_provider: AuthProvider
     ) -> SessionCoordinator:
         return SessionCoordinator(tenant_provider, auth_provider)
@@ -126,14 +128,10 @@ class MemoryFactory(Factory):
         return transaction_manager(StandardInstarkInformer)(
             device_repository, channel_repository,
             message_repository, subscription_repository)
-
-
-    #Suppliers
+    # Suppliers
 
     def memory_tenant_supplier(self) -> MemoryTenantSupplier:
         return MemoryTenantSupplier()
 
     def memory_setup_supplier(self) -> MemorySetupSupplier:
         return MemorySetupSupplier()
-
-     

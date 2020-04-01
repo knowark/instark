@@ -27,7 +27,6 @@ class MessageResource:
 
         return web.Response(headers=headers)
 
-
     async def get(self, request: web.Request):
         """
         ---
@@ -48,11 +47,10 @@ class MessageResource:
 
         messages = MessageSchema().dump(
             await self.instark_informer.search(
-              'message', domain,limit=limit,
+                'message', domain, limit=limit,
                 offset=offset), many=True)
 
         return web.json_response(messages, dumps=dumps)
-
 
     async def put(self, request: web.Request):
         """
@@ -100,4 +98,3 @@ class MessageResource:
         result = await self.notification_coordinator.delete_message(ids)
 
         return web.Response(status=204)
-    
