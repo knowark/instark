@@ -14,9 +14,9 @@ class MessageResource:
     async def head(self, request) -> int:
         """
         ---
-        summary: Return answers HEAD headers.
+        summary: Return messages HEAD headers.
         tags:
-          - Answers
+          - Messages
         """
         domain, _, _ = get_request_filter(request)
 
@@ -28,7 +28,6 @@ class MessageResource:
         return web.Response(headers=headers)
 
 
-    #def get(self) -> Tuple[str, int]:
     async def get(self, request: web.Request):
         """
         ---
@@ -52,12 +51,9 @@ class MessageResource:
               'message', domain,limit=limit,
                 offset=offset), many=True)
 
-        #return jsonify(messages)
         return web.json_response(messages, dumps=dumps)
 
 
-
-    #def post(self) -> Tuple[str, int]:
     async def put(self, request: web.Request):
         """
         ---
@@ -75,14 +71,33 @@ class MessageResource:
             description: "Send message"
         """
 
-        #data = MessageSchema().loads(request.data)
         data = MessageSchema(
             many=True).loads(await request.text())
 
         message = await self.notification_coordinator.send_message(data)
 
-       # return json_message, 201
         return web.Response(status=201)
 
-    
+    async def delete(self, request: web.Request):
+        """
+        ---
+        summary: Delete message.
+        tags:
+          - Messages
+        responses:
+          204:
+            description: "Message deleted."
+        """
+        ids = []
+        uri_id = request.match_info.get('id')
+        if uri_id:
+            ids.append(uri_id)
+
+        body = await request.text()
+        if body:
+            ids.extend(loads(await request.text()))
+
+        result = await self.notification_coordinator.delete_message(ids)
+
+        return web.Response(status=204)
     

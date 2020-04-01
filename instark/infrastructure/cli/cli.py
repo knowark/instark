@@ -7,7 +7,7 @@ from injectark import Injectark
 from migrark import sql_migrate
 from typing import List
 from ..config import Config
-from ..web import create_app, run_app #ServerApplication
+from ..web import create_app, run_app
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
@@ -16,7 +16,6 @@ class Cli:
     def __init__(self, config: Config, injector: Injectark) -> None:
         self.config = config
         self.injector = injector
-        #self.registry = injector
         self.parser = ArgumentParser('Instark')
 
     async def run(self, argv: List[str]):

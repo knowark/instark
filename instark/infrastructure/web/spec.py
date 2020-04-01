@@ -38,7 +38,6 @@ def create_spec() -> APISpec:
             description="Instant messaging and notifications server.",
             contact=dict(
                 name="Instark",
-                #url="https://www.nubark.com"
                 url="https://www.knowark.com"
             )))
     

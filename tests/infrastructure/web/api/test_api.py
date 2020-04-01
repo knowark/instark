@@ -1,6 +1,8 @@
 from pytest import raises
 from rapidjson import loads, dumps
 from aiohttp import web
+from instark.infrastructure.web.middleware import authenticate_middleware_factory
+
 
 async def test_root(app) -> None:
     response = await app.get('/')
@@ -21,6 +23,7 @@ async def test_root_api(app) -> None:
 
 # Channels
 
+
 async def test_channels_head(app, headers) -> None:
     response = await app.head('/channels', headers=headers)
     count = response.headers.get('Total-Count')
@@ -40,19 +43,31 @@ async def test_channels_get(app, headers) -> None:
     assert data_dict[0]['id'] == '001'
 
 
-async def test_channels_post(app, headers) -> None:
+async def test_channels_put(app, headers) -> None:
     channel_data = dumps([{
-        "id": "1", 
-        "channel_name": "General Notifications", 
-        "channel_code": "CH001"
+        "id": "1",
+        "name": "General Notifications",
+        "code": "CH001"
     }])
-    response = await app.post('/channels',
+    response = await app.put('/channels',
                              data=channel_data, headers=headers)
     content = await response.text()
-    assert response.status == 200
+    assert response.status == 201
 
+
+async def test_channels_delete(app, headers) -> None:
+    response = await app.delete('/channels/001', headers=headers)
+    content = await response.text()
+    assert response.status == 204
+
+    response = await app.get('/channels', headers=headers)
+    data_dict = loads(await response.text())
+
+    assert len(data_dict) == 2
 
 # Devices
+
+
 async def test_devices_head(app, headers) -> None:
     response = await app.head('/devices', headers=headers)
     count = response.headers.get('Total-Count')
@@ -74,9 +89,9 @@ async def test_devices_get(app, headers) -> None:
 
 async def test_devices_put(app, headers) -> None:
     device_data = dumps([{
-        'id': '1', 
-        'device_name': 'DEV1', 
-        'device_locator': 'a1b2c3d4'
+        'id': '1',
+        'name': 'DEV1',
+        'locator': 'a1b2c3d4'
     }])
     response = await app.put('/devices',
                              data=device_data, headers=headers)
@@ -84,7 +99,19 @@ async def test_devices_put(app, headers) -> None:
     assert response.status == 201
 
 
+async def test_devices_delete(app, headers) -> None:
+    response = await app.delete('/devices/001', headers=headers)
+    content = await response.text()
+    assert response.status == 204
+
+    response = await app.get('/devices', headers=headers)
+    data_dict = loads(await response.text())
+
+    assert len(data_dict) == 1
+
 # Messages
+
+
 async def test_messages_head(app, headers) -> None:
     response = await app.head('/messages', headers=headers)
     count = response.headers.get('Total-Count')
@@ -106,28 +133,41 @@ async def test_messages_get(app, headers) -> None:
 
 async def test_messages_put(app, headers) -> None:
 
-    device_data = dumps([ {
-        'id': '1', 
-        'device_name': 'DEV1', 
-        'device_locator': 'a1b2c3d4'
-    } ])
+    device_data = dumps([{
+        'id': '1',
+        'name': 'DEV1',
+        'locator': 'a1b2c3d4'
+    }])
     response = await app.put('/devices',
                              data=device_data, headers=headers)
 
-    message_data = dumps([ {
-        'id': '1', 
-        'recipientId': '1', 
+    message_data = dumps([{
+        'id': '1',
+        'recipientId': '1',
         'kind': 'Direct',
-        'content': 'Hello World', 
+        'content': 'Hello World',
         'title': 'Message Direct of admin'
-    } ])
+    }])
     response = await app.put('/messages',
                              data=message_data, headers=headers)
 
     content = await response.text()
     assert response.status == 201
 
+
+async def test_messages_delete(app, headers) -> None:
+    response = await app.delete('/messages/001', headers=headers)
+    content = await response.text()
+    assert response.status == 204
+
+    response = await app.get('/messages', headers=headers)
+    data_dict = loads(await response.text())
+
+    assert len(data_dict) == 0
+
 # Subscriptions
+
+
 async def test_subscriptions_head(app, headers) -> None:
     response = await app.head('/subscriptions', headers=headers)
     count = response.headers.get('Total-Count')
@@ -147,73 +187,58 @@ async def test_subscriptions_get(app, headers) -> None:
     assert data_dict[0]['id'] == '001'
 
 
-async def test_subscriptions_post(app, headers) -> None:
-    channel_data = dumps([ {
-        "id": "1", 
-        "channel_name": "Channel 1", 
-        "channel_code": "CH1"
+async def test_subscriptions_put(app, headers) -> None:
+    channel_data = dumps([{
+        "id": "1",
+        "name": "Channel 1",
+        "code": "CH1"
     }])
-    response = await app.post('/channels',
+    response = await app.put('/channels',
                              data=channel_data, headers=headers)
 
-    device_data = dumps([ {
-        'id': '1', 
-        'device_name': 'DEV1', 
-        'device_locator': 'a1b2c3d4'} 
+    device_data = dumps([{
+        'id': '1',
+        'name': 'DEV1',
+        'locator': 'a1b2c3d4'}
     ])
     response = await app.put('/devices',
                              data=device_data, headers=headers)
-                                                      
-    subscription_data = dumps([ {
-        'id': '1', 
-        'channelId': '1', 
+
+    subscription_data = dumps([{
+        'id': '1',
+        'channelId': '1',
         'deviceId': '1'
-    } ])
-    response = await app.post('/subscriptions',
+    }])
+    response = await app.put('/subscriptions',
                              data=subscription_data, headers=headers)
     content = await response.text()
-    assert response.status == 200
-
-"""
-# Channels
+    assert response.status == 201
 
 
-# Devices
+async def test_subscriptions_delete(app, headers) -> None:
+    response = await app.delete('/subscriptions/001', headers=headers)
+    content = await response.text()
+    assert response.status == 204
+
+    response = await app.get('/subscriptions', headers=headers)
+    data_dict = loads(await response.text())
+
+    assert len(data_dict) == 1
+
+# filter
 
 
-def test_device_post_action(app: Flask, headers: dict) -> None:
-    device = {'id': '1', 'name': 'DEV1', 'locator': 'a1b2c3d4'}
-    response = app.put('/devices', headers=headers, data=dumps(device),
-                       content_type='application/json')
-    assert response
-    assert response.status == '201 CREATED'
+async def test_get_request_filter(app, headers) -> None:
+    response = await app.get(
+        '/channels?filter=[["name", "=", "Channel 3"]]',
+        headers=headers)
+    content = await response.text()
+    data_dict = loads(content)
+    assert len(data_dict) == 1
 
-# Messages
+# middleware
 
 
-def test_message_post_action(app: Flask, headers: dict) -> None:
-    device = {'id': '1', 'name': 'DEV1', 'locator': 'a1b2c3d4'}
-    app.put('/devices', headers=headers, data=dumps(device),
-            content_type='application/json')
-    message = {'id': '1', 'recipientId': '1', 'kind': 'Direct',
-               'content': 'Hello World', 'title': 'Message Direct of admin'}
-    response = app.post('/messages', headers=headers, data=dumps(message),
-                        content_type='application/json')
-    assert response
-    assert response.status == '201 CREATED'
-
-# Subscriptions
-
-def test_subscription_post_action(app: Flask, headers: dict) -> None:
-    channel = {"id": "1", "name": "Channel 1", "code": "CH1"}
-    response = app.post('/channels', headers=headers, data=dumps(channel),
-                        content_type='application/json')
-    device = {'id': '1', 'name': 'DEV1', 'locator': 'a1b2c3d4'}
-    app.put('/devices', headers=headers, data=dumps(device),
-            content_type='application/json')
-    subscription = {'id': '1', 'channelId': '1', 'deviceId': '1'}
-    response = app.post(
-        '/subscriptions', headers=headers, data=dumps(subscription),
-        content_type='application/json')
-    assert response
-    assert response.status == '201 CREATED' """
+async def test_middleware(app, headers) -> None:
+    with raises(Exception) as e:
+        raise web.HTTPUnauthorized

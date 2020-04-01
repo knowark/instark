@@ -102,7 +102,7 @@ class SqlRepository(Repository, Generic[T]):
 
         return bool(int(result.replace('DELETE', '')))
 
-    async def count(self, domain: QueryDomain=None) -> int:
+    async def count(self, domain: QueryDomain = None) -> int:
         tenant = self.tenant_provider.tenant
         user = self.auth_provider.user
 

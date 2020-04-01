@@ -43,45 +43,10 @@ class StandardInstarkInformer(InstarkInformer):
         return [vars(entity) for entity in
             await repository.search(
                 domain or [], limit=limit, offset=offset)]
+                
 
     async def count(self,
                 model: str,
                 domain: QueryDomain = None) -> int:
         repository = getattr(self, f'{model}_repository')
         return await repository.count(domain or [])
-
-  
-    #@abstractmethod
-    #def search_devices(self, domain: SearchDomain) -> DeviceDictList:
-    #    """Search Instark's devices"""
-    #
-    #@abstractmethod
-    #def search_channels(self, domain: SearchDomain) -> ChannelDictList:
-    #    """Search Instark's devices"""
-    #
-    #@abstractmethod
-    #def search_device_channels(self, domain: SearchDomain) -> SubscriptionDictList:
-    #    """Search Instark's devices"""
-    #
-    #@abstractmethod
-    #def search_messages(self, domain: SearchDomain) -> MessageDictList:
-    #    """Search Instark's devices"""
-
-
-
-      #async def search_devices(self, domain: SearchDomain) -> DeviceDictList:
-    #    return [vars(device) for device in
-    #            await self.device_repository.search(domain)]
-    #
-    #async def search_channels(self, domain: SearchDomain) -> ChannelDictList:
-    #    return [vars(channel) for channel in
-    #            await self.channel_repository.search(domain)]
-    #
-    #async def search_device_channels(self, domain: SearchDomain
-    #                           ) -> SubscriptionDictList:
-    #    return [vars(device_channel) for device_channel in
-    #            await self.device_channel_repository.search(domain)]
-    #
-    #async def search_messages(self, domain: SearchDomain) -> MessageDictList:
-    #    return [vars(message) for message in
-    #            await self.message_repository.search(domain)]

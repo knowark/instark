@@ -15,9 +15,9 @@ class DeviceResource:
     async def head(self, request) -> int:
         """
         ---
-        summary: Return answers HEAD headers.
+        summary: Return devices HEAD headers.
         tags:
-          - Answers
+          - Devices
         """
         domain, _, _ = get_request_filter(request)
 
@@ -28,7 +28,6 @@ class DeviceResource:
 
         return web.Response(headers=headers)
 
-    #def get(self) -> Tuple[str, int]:
     async def get(self, request: web.Request):
         """
         ---
@@ -45,7 +44,7 @@ class DeviceResource:
                   items:
                     $ref: '#/components/schemas/Device'
         """
-        
+
         domain, limit, offset = get_request_filter(request)
 
         devices = DeviceSchema().dump(
@@ -53,10 +52,8 @@ class DeviceResource:
                 'device', domain, limit=limit,
                 offset=offset), many=True)
 
-        #return jsonify(devices)
         return web.json_response(devices, dumps=dumps)
-    
-    #async def put(self) -> Tuple[str, int]:
+
     async def put(self, request: web.Request):
 
         """
@@ -74,14 +71,33 @@ class DeviceResource:
           201:
             description: "Device created"
         """
-        
-        #data = DeviceSchema().loads(request.data or '{}')
+
         data = DeviceSchema(
             many=True).loads(await request.text())
-       
+
         result = await self.registration_coordinator.register_device(data)
 
-        #return json_device, 201
         return web.Response(status=201)
-    
-  
+
+    async def delete(self, request: web.Request):
+        """
+        ---
+        summary: Delete device.
+        tags:
+          - Devices
+        responses:
+          204:
+            description: "Device deleted."
+        """
+        ids = []
+        uri_id = request.match_info.get('id')
+        if uri_id:
+            ids.append(uri_id)
+
+        body = await request.text()
+        if body:
+            ids.extend(loads(await request.text()))
+
+        result = await self.registration_coordinator.delete_device(ids)
+
+        return web.Response(status=204)

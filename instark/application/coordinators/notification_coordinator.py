@@ -41,5 +41,8 @@ class NotificationCoordinator:
 
             message.backend_id = response
             await self.message_repository.add(message)
-            return message 
 
+    async def delete_message(self, message_ids: List[str]) -> bool:
+        messages = await self.message_repository.search(
+            [('id', 'in', message_ids)])
+        return await self.message_repository.remove(messages)

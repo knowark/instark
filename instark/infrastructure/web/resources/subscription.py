@@ -15,9 +15,9 @@ class SubscriptionResource:
     async def head(self, request) -> int:
         """
         ---
-        summary: Return answers HEAD headers.
+        summary: Return subscriptions HEAD headers.
         tags:
-          - Answers
+          - Subscriptions
         """
         domain, _, _ = get_request_filter(request)
 
@@ -28,7 +28,6 @@ class SubscriptionResource:
 
         return web.Response(headers=headers)
 
-    #def get(self) -> Tuple[str, int]:
     async def get(self, request: web.Request):
         """
         ---
@@ -45,20 +44,17 @@ class SubscriptionResource:
                   items:
                     $ref: '#/components/schemas/Subscription'
         """
-        
+
         domain, limit, offset = get_request_filter(request)
 
         subscriptions = SubscriptionSchema().dump(
             await self.instark_informer.search(
-              'subscription', domain, limit=limit,
+                'subscription', domain, limit=limit,
                 offset=offset), many=True)
 
-        #return jsonify(subscriptions)
         return web.json_response(subscriptions, dumps=dumps)
 
-    
-    #def post(self) -> Tuple[str, int]:
-    async def post(self, request: web.Request):
+    async def put(self, request: web.Request):
         """
         ---
         summary: Register subscription.
@@ -79,11 +75,27 @@ class SubscriptionResource:
 
         subscription = await self.subscription_coordinator.subscribe(data)
 
-        #return json_subscription, 201
-        return web.Response(status=200)
-  
-    
-      
-    
+        return web.Response(status=201)
 
-    
+    async def delete(self, request: web.Request):
+        """
+        ---
+        summary: Delete Subscription.
+        tags:
+          - Subscriptions
+        responses:
+          204:
+            description: "Subscription deleted."
+        """
+        ids = []
+        uri_id = request.match_info.get('id')
+        if uri_id:
+            ids.append(uri_id)
+
+        body = await request.text()
+        if body:
+            ids.extend(loads(await request.text()))
+
+        result = await self.subscription_coordinator.delete_subscribe(ids)
+
+        return web.Response(status=204)

@@ -1,6 +1,6 @@
 from typing import Tuple, List, Dict, Any
 from aiohttp import web
-from .format import parse_domain, parse_dict
+from .format import parse_domain
 
 
 def get_request_filter(request: web.Request) -> Tuple:
@@ -11,7 +11,3 @@ def get_request_filter(request: web.Request) -> Tuple:
     domain = parse_domain(filter)
 
     return domain, limit, offset
-
-
-def get_parameters(request: web.Request) -> Dict[str, Any]:
-    return parse_dict(request.query)

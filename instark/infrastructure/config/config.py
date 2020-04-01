@@ -8,7 +8,7 @@ class Config(defaultdict, ABC):
     @abstractmethod
     def __init__(self):
         self["mode"] = "BASE"
-        self["port"] = 6291 #check port
+        self["port"] = 6291
         self['strategies'] = ['base']
         self['strategy'] = {}
         self["tenancy"] = {

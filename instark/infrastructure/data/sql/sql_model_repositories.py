@@ -2,7 +2,7 @@ from filtrark.sql_parser import SqlParser
 from ....application.utilities import (
     TenantProvider, AuthProvider)
 from ....application.models import (
-    channel, device, message, subscription)
+    Channel, Device, Message, Subscription)
 from ....application.repositories import (
     ChannelRepository, DeviceRepository, MessageRepository,
     SubscriptionRepository)
@@ -17,7 +17,7 @@ class SqlChannelRepository(SqlRepository, ChannelRepository):
                  auth_provider: AuthProvider,
                  connection_manager: ConnectionManager,
                  parser: SqlParser) -> None:
-        super().__init__('channels', channel, tenant_provider,
+        super().__init__('channels', Channel, tenant_provider,
                          auth_provider, connection_manager, parser)
 
 
@@ -28,7 +28,7 @@ class SqlDeviceRepository(SqlRepository, DeviceRepository):
                  auth_provider: AuthProvider,
                  connection_manager: ConnectionManager,
                  parser: SqlParser) -> None:
-        super().__init__('devices', device, tenant_provider,
+        super().__init__('devices', Device, tenant_provider,
                          auth_provider, connection_manager, parser)
 
 
@@ -39,7 +39,7 @@ class SqlMessageRepository(SqlRepository, MessageRepository):
                  auth_provider: AuthProvider,
                  connection_manager: ConnectionManager,
                  parser: SqlParser) -> None:
-        super().__init__('messages', message, tenant_provider,
+        super().__init__('messages', Message, tenant_provider,
                          auth_provider, connection_manager, parser)
 
 
@@ -50,7 +50,5 @@ class SqlSubscriptionRepository(SqlRepository, SubscriptionRepository):
                  auth_provider: AuthProvider,
                  connection_manager: ConnectionManager,
                  parser: SqlParser) -> None:
-        super().__init__('subscriptions', subscription, tenant_provider,
+        super().__init__('subscriptions', Subscription, tenant_provider,
                          auth_provider, connection_manager, parser)
-
-

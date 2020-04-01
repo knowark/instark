@@ -6,9 +6,7 @@ import sys
 import asyncio
 import uvloop
 from injectark import Injectark
-#from .infrastructure.core import build_factory, build_config, Config
 from .infrastructure.cli import Cli
-#from .infrastructure.web import create_app, ServerApplication
 from .infrastructure.config import build_config
 from .infrastructure.factories import build_strategy, build_factory
 
@@ -20,11 +18,11 @@ async def main(args=None):  # pragma: no cover
 
     factory = build_factory(config)
     strategy = build_strategy(config['strategies'], config['strategy'])
-    resolver = Injectark(strategy=strategy, factory=factory)
+    injector = Injectark(strategy=strategy, factory=factory)
     injector['SetupSupplier'].setup()
 
     #.run(sys.argv[1:])
-    await Cli(config, resolver).run(args or [])
+    await Cli(config, injector).run(args or [])
 
 
 if __name__ == '__main__':  # pragma: no cover
