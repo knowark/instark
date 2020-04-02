@@ -9,7 +9,6 @@ test:
 	pytest
 
 COVFILE ?= .coverage
-PWD = $(shell pwd)
 PROJECT = instark
 
 coverage-application:
@@ -42,3 +41,6 @@ update:
 
 serve:
 	python -m $(PROJECT) serve
+
+version:
+	bump2version $(PART) $(PROJECT)/__init__.py --tag --commit
