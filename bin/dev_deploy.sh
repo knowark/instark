@@ -2,7 +2,7 @@
 
 CONTAINER="instark"
 USER="instark"
-PROJECT_PATH=/mnt/Workspace/dev/github.com/nubark/instark
+PROJECT_PATH=/mnt/Workspace/dev/github.com/knowark/instark
 POSTGRES_CONF_DIR="/etc/postgresql/10/main"
 POSTGRES_CONF=$POSTGRES_CONF_DIR/postgresql.conf
 POSTGRES_PG_HBA=$POSTGRES_CONF_DIR/pg_hba.conf

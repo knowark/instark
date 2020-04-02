@@ -1,4 +1,6 @@
 from .exceptions import *
-from .query_parser import *
 from .types import *
-from .tenancy import *
+from .query_parser import *
+from .tenancy import Tenant, TenantProvider, StandardTenantProvider
+from .auth import User, AuthProvider, StandardAuthProvider
+from .transaction import TransactionManager, MemoryTransactionManager

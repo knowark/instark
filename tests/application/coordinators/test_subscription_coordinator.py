@@ -9,12 +9,12 @@ from instark.application.utilities import (
 
 
 @fixture
-def subscription_coordinator(id_service, channel_repository,
-                             device_repository, device_channel_repository,
+def subscription_coordinator(channel_repository,
+                             device_repository, subscription_repository,
                              delivery_service):
     subscription_coordinator = SubscriptionCoordinator(
-        id_service, channel_repository, device_repository,
-        device_channel_repository, delivery_service)
+        channel_repository, device_repository,
+        subscription_repository, delivery_service)
     subscription_coordinator.channel_repository.load({
         'default': {
             '001': Channel(id='001', name='Surveillance', code='surveillance')
@@ -28,32 +28,58 @@ def subscription_coordinator(id_service, channel_repository,
     return subscription_coordinator
 
 
-def test_subscription_coordinator_instantiation(subscription_coordinator):
+def test_subscription_coordinator_instantiation(
+        subscription_coordinator: SubscriptionCoordinator) -> None:
     assert subscription_coordinator is not None
 
 
-async def test_channel_coordinator_create_channel(subscription_coordinator):
-    channel_dict = {'name': 'Channel 2', 'code': 'CH002'}
-    await subscription_coordinator.create_channel(channel_dict)
-
-# def test_get_channels(subscription_coordinator):
-#     channel_dict = {'id': '001', 'name': 'Channel 1', 'code': 'CH001'}
-#     subscription_coordinator.get_channels(channel_dict['id'])
-#     assert len(subscription_coordinator.channel_repository.items) > 0
-
-
-async def test_subscription_coordinator_subscribe(subscription_coordinator):
-    subscription_dict = {'device_id': '001', 'channel_id': '001'}
-    await subscription_coordinator.subscribe(subscription_dict)
-    assert len(subscription_coordinator.device_channel_repository.data) == 1
+async def test_channel_coordinator_create_channel(
+        subscription_coordinator: SubscriptionCoordinator) -> None:
+    channel_dicts: RecordList = [{
+        'name': 'Channel 2',
+        'code': 'CH002'
+    }]
+    await subscription_coordinator.create_channel(channel_dicts)
 
 
-# def test_subscription_coordinator_subscribe_delivery_service(
-#         subscription_coordinator):
-#     code = 'surveillance'
-#     locator = 'ABC123'
-#     subscription_dict = {'device_id': '001', 'channel_id': '001'}
-#     subscription_coordinator.subscribe(subscription_dict)
+async def test_subscription_coordinator_delete_channel(
+        subscription_coordinator: SubscriptionCoordinator) -> None:
+    channel_id = '07506ce5-edd7-4eab-af9c-4e555bc8e098'
+    channel_records: RecordList = [{
+        'id': channel_id,
+        'name': 'Channel 3',
+        'code': 'CH003'
+    }]
+    await subscription_coordinator.create_channel(channel_records)
+    channels_data = getattr(
+        subscription_coordinator.channel_repository, 'data')
+    assert len(channels_data['default']) == 2
+    await subscription_coordinator.delete_channel([channel_id])
+    assert len(channels_data['default']) == 1  # line 19
 
-#     assert subscription_coordinator.delivery_service.code == code
-#     assert subscription_coordinator.delivery_service.locator == locator
+
+async def test_subscription_coordinator_subscribe(
+        subscription_coordinator: SubscriptionCoordinator) -> None:
+    subscription_dicts: RecordList = [{
+        'device_id': '001',
+        'channel_id': '001'
+    }]
+    await subscription_coordinator.subscribe(subscription_dicts)
+    assert len(subscription_coordinator.subscription_repository.data) == 1
+
+
+async def test_subscription_coordinator_delete_subscription(
+        subscription_coordinator: SubscriptionCoordinator) -> None:
+    subscription_id = '07506ce5-edd7-4eab-af9c-4e555bc8e098'
+    subscription_records: RecordList = [{
+        'id': subscription_id,
+        'device_id': '001',
+        'channel_id': '001'
+    }]
+    await subscription_coordinator.subscribe(subscription_records)
+    subscriptions_data = getattr(
+        subscription_coordinator.subscription_repository, 'data')
+    assert len(subscriptions_data['default']) == 1
+    print("subscription data:   ", subscriptions_data)
+    await subscription_coordinator.delete_subscribe([subscription_id])
+    assert len(subscriptions_data['default']) == 0

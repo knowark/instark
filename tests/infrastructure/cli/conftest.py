@@ -1,22 +1,17 @@
 from pytest import fixture
 from injectark import Injectark
-from instark.infrastructure.core import (
-    Config, DevelopmentConfig, build_factory)
+from instark.infrastructure.config import build_config
+from instark.infrastructure.factories import build_strategy, build_factory
 from instark.infrastructure.cli import Cli
-from argparse import Namespace
 
 
 @fixture
 def cli() -> Cli:
-    config = DevelopmentConfig()
-    strategy = config["strategy"]
+    """Create app testing client"""
+    config = build_config('DEV')
+    strategy = build_strategy(config['strategies'], config['strategy'])
     factory = build_factory(config)
 
-    resolver = Injectark(strategy, factory)
+    injector = Injectark(strategy, factory)
 
-    return Cli(config, resolver)
-
-
-@fixture
-def namespace() -> Namespace:
-    return Namespace()
+    return Cli(config, injector)

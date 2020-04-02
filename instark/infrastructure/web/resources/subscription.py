@@ -1,19 +1,60 @@
-import json
-from typing import Tuple
-from flask import request, jsonify
-from flask.views import MethodView
-from marshmallow import ValidationError
-from ..helpers import get_request_filter
+from injectark import Injectark
+from aiohttp import web
+from rapidjson import dumps, loads
 from ..schemas import SubscriptionSchema
+from ..helpers import get_request_filter
 
 
-class SubscriptionResource(MethodView):
+class SubscriptionResource:
 
-    def __init__(self, resolver) -> None:
-        self.subscription_coordinator = resolver['SubscriptionCoordinator']
-        self.instark_informer = resolver['InstarkInformer']
+    def __init__(self, resolver: Injectark) -> None:
+        self.resolver = resolver
+        self.subscription_coordinator = self.resolver['SubscriptionCoordinator']
+        self.instark_informer = self.resolver['InstarkInformer']
 
-    def post(self) -> Tuple[str, int]:
+    async def head(self, request) -> int:
+        """
+        ---
+        summary: Return subscriptions HEAD headers.
+        tags:
+          - Subscriptions
+        """
+        domain, _, _ = get_request_filter(request)
+
+        headers = {
+            'Total-Count': str(await self.instark_informer.count(
+                'subscription', domain))
+        }
+
+        return web.Response(headers=headers)
+
+    async def get(self, request: web.Request):
+        """
+        ---
+        summary: Return all subscriptions.
+        tags:
+          - Subscriptions
+        responses:
+          200:
+            description: "Successful response"
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Subscription'
+        """
+
+        domain, limit, offset = get_request_filter(request)
+
+        subscriptions = SubscriptionSchema().dump(
+            await self.instark_informer.search(
+                'subscription', domain, limit=limit,
+                offset=offset), many=True)
+
+        return web.json_response(subscriptions, dumps=dumps)
+
+    async def put(self, request: web.Request):
         """
         ---
         summary: Register subscription.
@@ -30,32 +71,31 @@ class SubscriptionResource(MethodView):
             description: "Subscription created"
         """
 
-        data = SubscriptionSchema().loads(request.data or '{}')
-        subscription = self.subscription_coordinator.subscribe(data)
-        json_subscription = json.dumps(data, sort_keys=True, indent=4)
+        data = SubscriptionSchema(many=True).loads(await request.text())
 
-        return json_subscription, 201
-  
-    def get(self) -> Tuple[str, int]:
+        subscription = await self.subscription_coordinator.subscribe(data)
+
+        return web.Response(status=201)
+
+    async def delete(self, request: web.Request):
         """
         ---
-        summary: Return all subscriptions.
+        summary: Delete Subscription.
         tags:
           - Subscriptions
         responses:
-          200:
-            description: "Successful response"
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Subscription'
+          204:
+            description: "Subscription deleted."
         """
-        
-        domain, limit, offset = get_request_filter(request)
+        ids = []
+        uri_id = request.match_info.get('id')
+        if uri_id:
+            ids.append(uri_id)
 
-        subscriptions = SubscriptionSchema().dump(
-            self.instark_informer.search_device_channels(domain), many=True)
+        body = await request.text()
+        if body:
+            ids.extend(loads(await request.text()))
 
-        return jsonify(subscriptions)
+        result = await self.subscription_coordinator.delete_subscribe(ids)
+
+        return web.Response(status=204)

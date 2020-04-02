@@ -1,2 +1,2 @@
-from .instark_informer import InstarkInformer
-from .standard_instark_informer import StandardInstarkInformer
+from .instark_informer import (InstarkInformer,
+                               StandardInstarkInformer)

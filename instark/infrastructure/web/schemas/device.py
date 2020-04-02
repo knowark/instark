@@ -1,9 +1,13 @@
-from marshmallow import Schema, fields
+from marshmallow import fields
+from .entity import EntitySchema
 
-class DeviceSchema(Schema):
-    id = fields.Str(
-        required=False, example="9ec44c7c-73d6-4912-8f83-ccff9834132b")
+
+class DeviceSchema(EntitySchema):
+    # device_id = fields.Str(
+    #    data_key='deviceId', dump_only=True,
+    #    example="9ec44c7c-73d6-4912-8f83-ccff9834132b")
     locator = fields.Str(
-        required=True, example="e8j0YSGiE0k:APA91bEz5KQKaS3LfZVZjojSs6SLHmbghrAn")
+        required=True,
+        example="e8j0YSGiE0k:APA91bEz5KQKaS3LfZVZjojSs6SLHmbghrAn")
     name = fields.Str(
         required=True, example="Android Phone XYZ001")

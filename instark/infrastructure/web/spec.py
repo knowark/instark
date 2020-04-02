@@ -18,7 +18,7 @@ class ResourcePlugin(BasePlugin):
         if not resource:
             return
 
-        for method in self.methods:
+        for method in operations or self.methods:
             function = getattr(resource, method, None)
             if not function:
                 continue
@@ -28,7 +28,7 @@ class ResourcePlugin(BasePlugin):
 
 
 def create_spec() -> APISpec:
-    
+
     spec = APISpec(
         title="Instark",
         version="1.3.0",
@@ -37,10 +37,10 @@ def create_spec() -> APISpec:
         info=dict(
             description="Instant messaging and notifications server.",
             contact=dict(
-                name="Nubark",
-                url="https://www.nubark.com"
+                name="Instark",
+                url="https://www.knowark.com"
             )))
-    
+
     _register_schemas(spec)
 
     return spec

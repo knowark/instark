@@ -1,9 +1,11 @@
-from marshmallow import Schema, fields
+from marshmallow import fields
+from .entity import EntitySchema
 
 
-class SubscriptionSchema(Schema):
-    id = fields.Str(
-        required=False, example="01f32c10-6d09-4145-98c5-56d4bf7c1329")
+class SubscriptionSchema(EntitySchema):
+    # subscription_id = fields.Str(
+    #    data_key='messageId', dump_only=True,
+    #    example="01f32c10-6d09-4145-98c5-56d4bf7c1329")
     device_id = fields.Str(
         data_key="deviceId", required=True,
         example="9ec44c7c-73d6-4912-8f83-ccff9834132b")
