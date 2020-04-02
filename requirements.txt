@@ -19,6 +19,7 @@ autopep8==1.4.4
 Babel==2.7.0
 bcrypt==3.1.7
 blockdiag==1.5.4
+bump2version==1.0.0
 CacheControl==0.12.5
 cachetools==3.1.1
 certifi==2019.6.16
