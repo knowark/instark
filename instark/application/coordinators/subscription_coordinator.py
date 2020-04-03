@@ -1,7 +1,8 @@
 from typing import Dict, Union, List, Any, cast
 from ..models import Channel, Subscription
 from ..repositories import (
-    ChannelRepository, DeviceRepository, SubscriptionRepository)
+    ChannelRepository, DeviceRepository,
+    MessageRepository, SubscriptionRepository)
 from ..services import DeliveryService
 from ..utilities import DataValidationError, RecordList
 
@@ -9,10 +10,12 @@ from ..utilities import DataValidationError, RecordList
 class SubscriptionCoordinator:
     def __init__(self, channel_repository: ChannelRepository,
                  device_repository: DeviceRepository,
+                 message_repository: MessageRepository,
                  subscription_repository: SubscriptionRepository,
                  delivery_service: DeliveryService) -> None:
         self.channel_repository = channel_repository
         self.device_repository = device_repository
+        self.message_repository = message_repository
         self.subscription_repository = subscription_repository
         self.delivery_service = delivery_service
 
@@ -22,8 +25,22 @@ class SubscriptionCoordinator:
             for channel_dict in channel_dicts])
 
     async def delete_channel(self, channel_ids: List[str]) -> bool:
+        print(" channels ids en coordinator      ", channel_ids)
         channels = await self.channel_repository.search(
             [('id', 'in', channel_ids)])
+        print(" channels      ", channels)
+        if not channels:
+            return False
+        messages = await self.message_repository.search(
+            [('recipient_id', 'in', [
+                channel.id for channel in channels]),
+                ('kind', '=', 'channel')])
+        if messages:
+            return False
+        subscriptions = await self.subscription_repository.search(
+            [('channel_id', 'in', [
+                channel.id for channel in channels])])
+        await self.subscription_repository.remove(subscriptions)
         return await self.channel_repository.remove(channels)
 
     async def subscribe(self, subscription_dicts: RecordList) -> None:

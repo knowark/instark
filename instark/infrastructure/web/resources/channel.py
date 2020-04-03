@@ -93,7 +93,7 @@ class ChannelResource:
         body = await request.text()
         if body:
             ids.extend(loads(await request.text()))
-
+        print("ids en delete channel   ", ids)
         result = await self.subscription_coordinator.delete_channel(ids)
 
         return web.Response(status=204)

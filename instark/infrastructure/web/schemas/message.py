@@ -1,4 +1,4 @@
-from marshmallow import fields
+from marshmallow import fields, validate
 from .entity import EntitySchema
 
 
@@ -14,6 +14,7 @@ class MessageSchema(EntitySchema):
         example="9ec44c7c-73d6-4912-8f83-ccff9834132b")
     title = fields.Str(required=False, example="Message Direct")
     content = fields.Str(required=True, example="Hello World")
-    kind = fields.Str(required=True, example="Direct")
+    kind = fields.Str(required=True, example="Direct",
+                      validate=validate.OneOf(["direct", "channel"]))
     data = fields.Mapping()
     timestamp = fields.Int()

@@ -1,19 +1,19 @@
 from pytest import fixture
-from instark.application.models import Device, Channel
+from instark.application.models import Device, Channel, Message
 from instark.application.coordinators import SubscriptionCoordinator
 from instark.application.repositories import (
     MemoryChannelRepository, MemoryDeviceRepository,
-    MemorySubscriptionRepository)
+    MemoryMessageRepository, MemorySubscriptionRepository)
 from instark.application.utilities import (
     QueryParser, StandardTenantProvider, Tenant)
 
 
 @fixture
-def subscription_coordinator(channel_repository,
-                             device_repository, subscription_repository,
+def subscription_coordinator(channel_repository, device_repository,
+                             message_repository, subscription_repository,
                              delivery_service):
     subscription_coordinator = SubscriptionCoordinator(
-        channel_repository, device_repository,
+        channel_repository, device_repository, message_repository,
         subscription_repository, delivery_service)
     subscription_coordinator.channel_repository.load({
         'default': {
@@ -42,7 +42,37 @@ async def test_channel_coordinator_create_channel(
     await subscription_coordinator.create_channel(channel_dicts)
 
 
-async def test_subscription_coordinator_delete_channel(
+async def test_subscription_coordinator_delete_channel_with_message(
+        subscription_coordinator: SubscriptionCoordinator) -> None:
+    channel_id = '07506ce5-edd7-4eab-af9c-4e555bc8e098'
+    channel_records: RecordList = [{
+        'id': channel_id,
+        'name': 'Channel 3',
+        'code': 'CH003'
+    }]
+
+    await subscription_coordinator.create_channel(channel_records)
+
+    subscription_coordinator.message_repository.load({
+        'default': {
+            '001': Message(id='001',
+                           recipient_id=channel_id,
+                           content='Hello world',
+                           kind='channel')
+        }
+    })
+
+    channels_data = getattr(
+        subscription_coordinator.channel_repository, 'data')
+
+    print("channels data test subs coord    ", channels_data)
+
+    assert len(channels_data['default']) == 2
+    result = await subscription_coordinator.delete_channel([channel_id])
+    assert result is False
+
+
+async def test_subscription_coordinator_delete_channel_without_message(
         subscription_coordinator: SubscriptionCoordinator) -> None:
     channel_id = '07506ce5-edd7-4eab-af9c-4e555bc8e098'
     channel_records: RecordList = [{
@@ -56,6 +86,13 @@ async def test_subscription_coordinator_delete_channel(
     assert len(channels_data['default']) == 2
     await subscription_coordinator.delete_channel([channel_id])
     assert len(channels_data['default']) == 1  # line 19
+
+
+async def test_subscription_coordinator_delete_channel_without_ids(
+        subscription_coordinator: SubscriptionCoordinator) -> None:
+    channel_id = ''
+    await subscription_coordinator.delete_channel([channel_id])
+
 
 
 async def test_subscription_coordinator_subscribe(
@@ -80,6 +117,6 @@ async def test_subscription_coordinator_delete_subscription(
     subscriptions_data = getattr(
         subscription_coordinator.subscription_repository, 'data')
     assert len(subscriptions_data['default']) == 1
-    print("subscription data:   ", subscriptions_data)
+    #print("subscription data:   ", subscriptions_data)
     await subscription_coordinator.delete_subscribe([subscription_id])
     assert len(subscriptions_data['default']) == 0

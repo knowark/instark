@@ -82,21 +82,26 @@ class MemoryFactory(Factory):
 
     def registration_coordinator(
         self, device_repository: DeviceRepository,
-        transaction_manager: TransactionManager
+        message_repository: MessageRepository,
+        subscription_coordinator: SubscriptionRepository,
+        transaction_manager: TransactionManager,
+        delivery_service:DeliveryService
     ) -> RegistrationCoordinator:
         return transaction_manager(RegistrationCoordinator)(
-            device_repository)
+            device_repository,message_repository, subscription_coordinator,
+            delivery_service)
 
     def subscription_coordinator(
         self, channel_repository: ChannelRepository,
         device_repository: DeviceRepository,
+        message_repository: MessageRepository,
         subscription_repository: SubscriptionRepository,
         delivery_service: DeliveryService,
         transaction_manager: TransactionManager
     ) -> SubscriptionCoordinator:
         return transaction_manager(SubscriptionCoordinator)(
-            channel_repository,
-            device_repository, subscription_repository,
+            channel_repository, device_repository, message_repository,
+            subscription_repository,
             delivery_service)
 
     def notification_coordinator(

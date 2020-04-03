@@ -121,7 +121,7 @@ async def test_devices_delete(app, headers) -> None:
     response = await app.get('/devices', headers=headers)
     data_dict = loads(await response.text())
 
-    assert len(data_dict) == 1
+    assert len(data_dict) == 2
 
 
 async def test_devices_delete_body(app, headers) -> None:
@@ -134,7 +134,7 @@ async def test_devices_delete_body(app, headers) -> None:
     response = await app.get('/devices', headers=headers)
     data_dict = loads(await response.text())
 
-    assert len(data_dict) == 1
+    assert len(data_dict) == 2
 
 # Messages
 
@@ -171,7 +171,7 @@ async def test_messages_put(app, headers) -> None:
     message_data = dumps([{
         'id': '1',
         'recipientId': '1',
-        'kind': 'Direct',
+        'kind': 'direct',
         'content': 'Hello World',
         'title': 'Message Direct of admin'
     }])

@@ -102,7 +102,6 @@ async def test_notification_coordinator_delete_message(
     await notification_coordinator.send_message(message_records)
     messages_data = getattr(
         notification_coordinator.message_repository, 'data')
-    print("data en test msj coord:  ", messages_data)
     assert len(messages_data['default']) == 1
     await notification_coordinator.delete_message([message_id])
     assert len(messages_data['default']) == 0
