@@ -28,4 +28,8 @@ sql = {
     "SetupSupplier": {
         "method": "schema_setup_supplier"
     },
+    # --- SERVICE ---
+    "DeliveryService": {
+        "method": "firebase_delivery_service"
+    },
 }

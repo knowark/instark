@@ -1,10 +1,5 @@
 from ....application.services import DeliveryService
 from firebase_admin import credentials, messaging, initialize_app
-# import for create Android notification
-# from firebase_admin.messaging import AndroidConfig, AndroidNotification
-# import for create Web notification
-# from firebase_admin.messaging import WebpushConfig, WebpushNotification
-# from firebase_admin.messaging import WebpushFcmOptions
 
 
 class FirebaseDeliveryService(DeliveryService):

@@ -11,6 +11,8 @@ from ..config import Config
 from ..core import SchemaTenantSupplier, SchemaSetupSupplier
 from .memory_factory import MemoryFactory
 
+from ..delivery.firebase import FirebaseDeliveryService
+
 
 class SqlFactory(MemoryFactory):
     def __init__(self, config: Config) -> None:
@@ -75,3 +77,15 @@ class SqlFactory(MemoryFactory):
         zones = {key: value['dsn'] for key, value in
                  self.config['zones'].items()}
         return SchemaSetupSupplier(zones)
+
+    def firebase_delivery_service(self) -> FirebaseDeliveryService:
+
+        # default_firebase_credentials_path = str(Path.home().joinpath(
+        #     'firebase_credentials.json'))
+        default_firebase_credentials_path = str(Path.home().joinpath(
+            'proser-2020-firebase-adminsdk-554ie-41811eb8ea.json'))
+
+        firebase_credentials_path = self.config.get(
+            'firebase_credentials_path', default_firebase_credentials_path)
+
+        return FirebaseDeliveryService(firebase_credentials_path)
