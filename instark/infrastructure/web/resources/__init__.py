@@ -13,9 +13,7 @@ class RootResource:
     def __init__(self, spec) -> None:
         self.spec = spec
 
-    # async def get(self) -> str:
     async def get(self, request):
-        # if 'api' in request.args:
         if 'api' in request.query:
             return web.json_response(self.spec.to_dict())
 

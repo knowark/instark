@@ -18,7 +18,6 @@ def mock_strategy(mock_config):
 def test_check_factory(mock_config, mock_strategy):
     factory = build_factory(mock_config)
     resolver = Injectark(strategy=mock_strategy, factory=factory)
-
     for resource in mock_strategy.keys():
         result = resolver.resolve(resource)
         classes = inspect.getmro(type(result))
