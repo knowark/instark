@@ -3,6 +3,7 @@ from aiohttp import web
 from rapidjson import dumps, loads
 from ..schemas import DeviceSchema
 from ..helpers import get_request_filter
+from operator import itemgetter
 
 
 class DeviceResource:
@@ -52,7 +53,12 @@ class DeviceResource:
                 'device', domain, limit=limit,
                 offset=offset), many=True)
 
-        return web.json_response(devices, dumps=dumps)
+        #newlist = sorted(channels, key=lambda k: k['name'])
+
+        devices_order_by_name_asc = sorted(devices, key=itemgetter('name'))
+
+        return web.json_response(devices_order_by_name_asc, dumps=dumps)
+        # return web.json_response(devices, dumps=dumps)
 
     async def put(self, request: web.Request):
 

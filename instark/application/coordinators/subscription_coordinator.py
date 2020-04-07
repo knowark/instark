@@ -25,10 +25,10 @@ class SubscriptionCoordinator:
             for channel_dict in channel_dicts])
 
     async def delete_channel(self, channel_ids: List[str]) -> bool:
-        print(" channels ids en coordinator      ", channel_ids)
+        #print(" channels ids en coordinator      ", channel_ids)
         channels = await self.channel_repository.search(
             [('id', 'in', channel_ids)])
-        print(" channels      ", channels)
+        #print(" channels      ", channels)
         if not channels:
             return False
         messages = await self.message_repository.search(

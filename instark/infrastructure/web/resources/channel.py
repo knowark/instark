@@ -3,6 +3,7 @@ from aiohttp import web
 from rapidjson import dumps, loads
 from ..schemas import ChannelSchema
 from ..helpers import get_request_filter
+from operator import itemgetter
 
 
 class ChannelResource:
@@ -50,7 +51,12 @@ class ChannelResource:
             await self.instark_informer.search(
                 'channel', domain, limit=limit, offset=offset), many=True)
 
-        return web.json_response(channels, dumps=dumps)
+        #newlist = sorted(channels, key=lambda k: k['name'])
+
+        channels_order_by_name_asc = sorted(channels, key=itemgetter('name'))
+
+        return web.json_response(channels_order_by_name_asc, dumps=dumps)
+        # return web.json_response(channels, dumps=dumps)
 
     async def put(self, request: web.Request):
         """
@@ -68,6 +74,7 @@ class ChannelResource:
             201:
               description: "Channel created"
         """
+
         channel_records = ChannelSchema(many=True).loads(await request.text())
 
         result = await self.subscription_coordinator.create_channel(
