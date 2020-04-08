@@ -121,7 +121,7 @@ async def test_devices_delete(app, headers) -> None:
     response = await app.get('/devices', headers=headers)
     data_dict = loads(await response.text())
 
-    assert len(data_dict) == 2
+    assert len(data_dict) == 1
 
 
 async def test_devices_delete_body(app, headers) -> None:
@@ -134,7 +134,7 @@ async def test_devices_delete_body(app, headers) -> None:
     response = await app.get('/devices', headers=headers)
     data_dict = loads(await response.text())
 
-    assert len(data_dict) == 2
+    assert len(data_dict) == 1
 
 # Messages
 

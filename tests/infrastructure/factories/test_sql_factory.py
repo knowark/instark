@@ -26,3 +26,13 @@ def test_sql_factory(mock_config, mock_strategy, monkeypatch):
         result = resolver.resolve(resource)
         classes = inspect.getmro(type(result))
         assert resource in [item.__name__ for item in classes]
+
+
+def test_order_by_channel(monkeypatch):
+    assert sql_factory.SqlChannelRepository._order_by(monkeypatch)
+
+def test_order_by_device(monkeypatch):
+    assert sql_factory.SqlDeviceRepository._order_by(monkeypatch)
+
+
+

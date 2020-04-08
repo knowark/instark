@@ -29,7 +29,11 @@ sql = {
         "method": "schema_setup_supplier"
     },
     # --- SERVICE ---
+    # "DeliveryService": {
+    #      "method": "memory_delivery_service"
+    # },
+    # --- SERVICE ---
     "DeliveryService": {
-        "method": "firebase_delivery_service"
+         "method": "firebase_delivery_service"
     },
 }

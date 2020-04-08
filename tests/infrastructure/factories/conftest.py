@@ -9,7 +9,7 @@ from instark.infrastructure.config import (
 def production_config(tmp_path):
     production_config = ProductionConfig()
     production_config["firebase_credentials_path"] = str(
-        tmp_path / "firebase_credentials.json")
+        tmp_path / "proser-2020-firebase-adminsdk-554ie-41811eb8ea.json")
     data = {
         "type": "service_account",
         "project_id": "massive-graph-230014",

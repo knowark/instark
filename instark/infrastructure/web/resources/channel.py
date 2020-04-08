@@ -51,12 +51,7 @@ class ChannelResource:
             await self.instark_informer.search(
                 'channel', domain, limit=limit, offset=offset), many=True)
 
-        #newlist = sorted(channels, key=lambda k: k['name'])
-
-        channels_order_by_name_asc = sorted(channels, key=itemgetter('name'))
-
-        return web.json_response(channels_order_by_name_asc, dumps=dumps)
-        # return web.json_response(channels, dumps=dumps)
+        return web.json_response(channels, dumps=dumps)
 
     async def put(self, request: web.Request):
         """

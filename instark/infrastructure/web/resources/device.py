@@ -53,12 +53,7 @@ class DeviceResource:
                 'device', domain, limit=limit,
                 offset=offset), many=True)
 
-        #newlist = sorted(channels, key=lambda k: k['name'])
-
-        devices_order_by_name_asc = sorted(devices, key=itemgetter('name'))
-
-        return web.json_response(devices_order_by_name_asc, dumps=dumps)
-        # return web.json_response(devices, dumps=dumps)
+        return web.json_response(devices, dumps=dumps)
 
     async def put(self, request: web.Request):
 
