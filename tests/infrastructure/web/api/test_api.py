@@ -298,4 +298,4 @@ async def test_channels_get_unauthorized(app) -> None:
 
     assert response.status == 401
     data_dict = loads(content)
-    assert 'errors' in data_dict
+    assert 'error' in data_dict
