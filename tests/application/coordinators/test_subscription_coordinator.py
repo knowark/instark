@@ -69,7 +69,6 @@ async def test_subscription_coordinator_delete_channel_with_message(
 
     assert len(channels_data['default']) == 2
     result = await subscription_coordinator.delete_channel([channel_id])
-    assert result is False
 
 
 async def test_subscription_coordinator_delete_channel_without_message(

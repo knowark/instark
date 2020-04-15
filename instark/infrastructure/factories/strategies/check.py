@@ -7,5 +7,9 @@ check = {
     },
     "TenantSupplier": {
         "method": "check_tenant_supplier"
+    },
+    # --- SERVICE ---
+    "DeliveryService": {
+        "method": "memory_delivery_service"
     }
 }

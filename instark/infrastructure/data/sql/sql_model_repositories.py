@@ -20,6 +20,9 @@ class SqlChannelRepository(SqlRepository, ChannelRepository):
         super().__init__('channels', Channel, tenant_provider,
                          auth_provider, connection_manager, parser)
 
+    def _order_by(self) -> str:
+        return "ORDER BY data->>'name' ASC NULLS LAST"
+
 
 class SqlDeviceRepository(SqlRepository, DeviceRepository):
     """Sql Device Repository"""
@@ -30,6 +33,9 @@ class SqlDeviceRepository(SqlRepository, DeviceRepository):
                  parser: SqlParser) -> None:
         super().__init__('devices', Device, tenant_provider,
                          auth_provider, connection_manager, parser)
+
+    def _order_by(self) -> str:
+        return "ORDER BY data->>'name' ASC NULLS LAST"
 
 
 class SqlMessageRepository(SqlRepository, MessageRepository):

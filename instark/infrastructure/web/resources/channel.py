@@ -3,6 +3,7 @@ from aiohttp import web
 from rapidjson import dumps, loads
 from ..schemas import ChannelSchema
 from ..helpers import get_request_filter
+from operator import itemgetter
 
 
 class ChannelResource:
@@ -68,6 +69,7 @@ class ChannelResource:
             201:
               description: "Channel created"
         """
+
         channel_records = ChannelSchema(many=True).loads(await request.text())
 
         result = await self.subscription_coordinator.create_channel(

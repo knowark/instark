@@ -3,6 +3,7 @@ from aiohttp import web
 from rapidjson import dumps, loads
 from ..schemas import DeviceSchema
 from ..helpers import get_request_filter
+from operator import itemgetter
 
 
 class DeviceResource:

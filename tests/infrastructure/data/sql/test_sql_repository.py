@@ -94,6 +94,8 @@ async def test_sql_repository_search(sql_repository):
     assert items[0].id == uid
     assert items[0].field_1 == 'value_2'
 
+# async def test_order_by(sql_repository):
+#     assert sql_repository._order_by()
 
 async def test_sql_repository_search_in_ids(sql_repository):
     id_2 = 'f80fa6dd-29ff-4cb9-be5d-5952bc82decf'

@@ -58,7 +58,6 @@ async def test_subscription_coordinator_delete_device_with_message(
 
     assert len(devices_data['default']) == 1
     result = await registration_coordinator.delete_device([device_id])
-    assert result is False
 
 
 async def test_registration_coordinator_delete_device_without_messsage(

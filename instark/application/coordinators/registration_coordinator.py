@@ -28,15 +28,13 @@ class RegistrationCoordinator:
             [('id', 'in', device_ids)])
         if not devices:
             return False
-
         messages = await self.message_repository.search(
             [('recipient_id', 'in', [
                 device.id for device in devices]),
                 ('kind', '=', 'direct')])
-        if messages:
-            return False
         subscriptions = await self.subscription_repository.search(
             [('device_id', 'in', [
                 device.id for device in devices])])
+        await self.message_repository.remove(messages)
         await self.subscription_repository.remove(subscriptions)
         return await self.device_repository.remove(devices)
