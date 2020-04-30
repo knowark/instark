@@ -1,0 +1,8 @@
+---
+- name: Deploy Instark Server
+  hosts: all
+  vars:
+    app_user: instark
+  roles:
+    - system
+    - app

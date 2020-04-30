@@ -29,6 +29,9 @@ serve:
 serve-dev:
 	export QUESTIONARK_MODE=DEV; python -m $(PROJECT) serve
 
+deploy:
+	./setup/deploy.sh
+	
 PART ?= patch
 
 version:
