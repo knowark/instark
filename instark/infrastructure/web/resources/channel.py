@@ -20,7 +20,7 @@ class ChannelResource:
         tags:
           - Channels
         """
-        domain, _, _ = get_request_filter(request)
+        domain, _, _ = await get_request_filter(request)
 
         headers = {
             'Total-Count': str(await self.instark_informer.count(
@@ -45,7 +45,7 @@ class ChannelResource:
                     items:
                       $ref: '#/components/schemas/Channel'
         """
-        domain, limit, offset = get_request_filter(request)
+        domain, limit, offset = await get_request_filter(request)
 
         channels = ChannelSchema().dump(
             await self.instark_informer.search(

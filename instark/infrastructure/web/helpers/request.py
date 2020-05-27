@@ -1,13 +1,20 @@
+from json import JSONDecodeError, loads
 from typing import Tuple, List, Dict, Any
 from aiohttp import web
 from .format import parse_domain
 
 
-def get_request_filter(request: web.Request) -> Tuple:
+async def get_request_filter(request: web.Request) -> Tuple:
     filter = request.query.get('filter')
-    limit = int(request.query.get('limit') or 1000)
+    limit = int(request.query.get('limit') or 10_000)
     offset = int(request.query.get('offset') or 0)
 
-    domain = parse_domain(filter)
+    query = {}
+    try:
+        query = loads(await request.text())
+    except JSONDecodeError:
+        pass
 
-    return domain, limit, offset
+    domain = parse_domain(query.get('filter', filter))
+
+    return domain, query.get('limit', limit), query.get('offset', offset)

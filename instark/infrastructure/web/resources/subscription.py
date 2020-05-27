@@ -19,7 +19,7 @@ class SubscriptionResource:
         tags:
           - Subscriptions
         """
-        domain, _, _ = get_request_filter(request)
+        domain, _, _ = await get_request_filter(request)
 
         headers = {
             'Total-Count': str(await self.instark_informer.count(
@@ -45,7 +45,7 @@ class SubscriptionResource:
                     $ref: '#/components/schemas/Subscription'
         """
 
-        domain, limit, offset = get_request_filter(request)
+        domain, limit, offset = await get_request_filter(request)
 
         subscriptions = SubscriptionSchema().dump(
             await self.instark_informer.search(

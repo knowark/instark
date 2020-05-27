@@ -18,7 +18,7 @@ class MessageResource:
         tags:
           - Messages
         """
-        domain, _, _ = get_request_filter(request)
+        domain, _, _ = await get_request_filter(request)
 
         headers = {
             'Total-Count': str(await self.instark_informer.count(
@@ -43,7 +43,7 @@ class MessageResource:
                   items:
                     $ref: '#/components/schemas/Message'
         """
-        domain, limit, offset = get_request_filter(request)
+        domain, limit, offset = await get_request_filter(request)
 
         messages = MessageSchema().dump(
             await self.instark_informer.search(
