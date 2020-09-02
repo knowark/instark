@@ -14,7 +14,7 @@ echo "Install Git and Ansible..."
 sleep 5  # Wait for container network connectivity.
 lxc exec $CONTAINER -- apt update -y
 lxc exec $CONTAINER -- apt install git software-properties-common -y
-lxc exec $CONTAINER -- apt-add-repository --yes --update ppa:ansible/ansible
+#lxc exec $CONTAINER -- apt-add-repository --yes --update ppa:ansible/ansible
 lxc exec $CONTAINER -- apt install ansible -y
 lxc exec $CONTAINER -- apt autoremove -y
 
