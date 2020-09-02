@@ -16,12 +16,11 @@ class TenantProvider(ABC):
         """Get the current tenant"""
 
     @property
-    # def location(self) -> str: preguntar al jefe
-    def location(self) -> Tenant:
+    def location(self) -> str:
         return self.tenant.slug
 
     @property
-    def zone(self) -> Tenant:
+    def zone(self) -> str:
         return self.tenant.zone
 
 
