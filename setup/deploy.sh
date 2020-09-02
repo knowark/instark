@@ -6,7 +6,7 @@ PLAYBOOK="setup/local.yml"
 
 echo "Deploying LXD container..."
 
-lxc launch ubuntu:bionic $CONTAINER
+lxc launch ubuntu:focal $CONTAINER
 lxc config device add $CONTAINER home disk source=$HOME path=/mnt/home
 
 echo "Install Git and Ansible..."
