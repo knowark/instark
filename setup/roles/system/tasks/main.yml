@@ -14,10 +14,6 @@
   apt:
     name: python3-psycopg2
 
-- name: Install Python Psycopg2 with Python 2
-  apt:
-    name: python-psycopg2    
-
 - name: Install Python Virtualenvwrapper
   apt:
     name: virtualenvwrapper
