@@ -31,6 +31,6 @@
 
 - name: "Install PostgreSQL Server Dev {{ postgresql_version }}"
   apt:
-    name: "postgresql-server-dev-10"
+    name: "postgresql-server-dev-12"
     state: present
     update_cache: yes

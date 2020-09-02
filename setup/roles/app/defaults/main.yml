@@ -32,7 +32,7 @@ app_database_path: "{{ app_data_directory }}/data.json"
 
 # Database
 
-postgresql_version: 10
+postgresql_version: 12
 
 # Nginx Configuration
 
