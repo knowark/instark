@@ -66,8 +66,6 @@ async def test_subscription_manager_delete_channel_with_message(
     channels_data = getattr(
         subscription_manager.channel_repository, 'data')
 
-    print("channels data test subs coord    ", channels_data)
-
     assert len(channels_data['default']) == 2
     result = await subscription_manager.delete_channel([channel_id])
 
@@ -116,6 +114,5 @@ async def test_subscription_manager_delete_subscription(
     subscriptions_data = getattr(
         subscription_manager.subscription_repository, 'data')
     assert len(subscriptions_data['default']) == 1
-    #print("subscription data:   ", subscriptions_data)
     await subscription_manager.delete_subscribe([subscription_id])
     assert len(subscriptions_data['default']) == 0

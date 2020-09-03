@@ -1,20 +1,22 @@
+from injectark import Factory
 import os
 from pathlib import Path
 from filtrark import SqlParser, SafeEval
-from ...application.utilities import (QueryParser, TenantProvider,
-                                      AuthProvider)
-from ..data import (
+from ..application.domain.common import (QueryParser, TenantProvider,
+                                         AuthProvider)
+from ..core.data import (
     ConnectionManager, DefaultConnectionManager, SqlTransactionManager,
     SqlChannelRepository, SqlDeviceRepository, SqlMessageRepository,
     SqlSubscriptionRepository)
-from ..config import Config
-from ..core import SchemaTenantSupplier, SchemaSetupSupplier
-from .memory_factory import MemoryFactory
+from ..core import Config
+from ..core import (TenantSupplier, SchemaTenantSupplier,
+                    SchemaMigrationSupplier, SchemaConnection)
+from .base_factory import BaseFactory
 
-from ..delivery.firebase import FirebaseDeliveryService
+from ..presenters.delivery import FirebaseDeliveryService
 
 
-class SqlFactory(MemoryFactory):
+class SqlFactory(BaseFactory):
     def __init__(self, config: Config) -> None:
         super().__init__(config)
 
@@ -24,8 +26,8 @@ class SqlFactory(MemoryFactory):
     def sql_connection_manager(self) -> DefaultConnectionManager:
         settings = []
         for zone, config in self.config['zones'].items():
-            Messages = {'name': zone, 'dsn': config['dsn']}
-            settings.append(Messages)
+            options = {'name': zone, 'dsn': config['dsn']}
+            settings.append(options)
 
         return DefaultConnectionManager(settings)
 
@@ -68,18 +70,19 @@ class SqlFactory(MemoryFactory):
             tenant_provider, auth_provider, connection_manager, sql_parser)
 
     def schema_tenant_supplier(self) -> SchemaTenantSupplier:
-        catalog = self.config['tenancy']['dsn']
         zones = {key: value['dsn'] for key, value in
                  self.config['zones'].items()}
-        return SchemaTenantSupplier(catalog, zones)
+        connection = SchemaConnection(self.config['tenancy']['dsn'])
+        return SchemaTenantSupplier(connection, zones)
 
-    def schema_setup_supplier(self) -> SchemaSetupSupplier:
+    def schema_migration_supplier(
+            self, tenant_supplier: TenantSupplier) -> SchemaMigrationSupplier:
         zones = {key: value['dsn'] for key, value in
                  self.config['zones'].items()}
-        return SchemaSetupSupplier(zones)
+        return SchemaMigrationSupplier(zones, tenant_supplier)
 
     # services
-    
+
     def firebase_delivery_service(self) -> FirebaseDeliveryService:
 
         # default_firebase_credentials_path = str(Path.home().joinpath(

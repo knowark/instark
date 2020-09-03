@@ -1,50 +1,23 @@
-import multiprocessing
-from collections import defaultdict
+import os
 from typing import Dict, Any
-from abc import ABC, abstractmethod
-from pathlib import Path
 
 
-class Config(defaultdict, ABC):
-    @abstractmethod
-    def __init__(self):
-        self["mode"] = "BASE"
-        self["port"] = 6291
-        self['strategies'] = ['base']
-        self['strategy'] = {}
-        self["tenancy"] = {
-            "dsn": ""
+Config = Dict[str, Any]
+
+config: Config = {
+    'port': int(os.environ.get('INSTARK_PORT', 6291)),
+    'auto': bool(os.environ.get('INSTARK_AUTO', True)),
+    'factory': os.environ.get('INSTARK_FACTORY', 'SqlFactory'),
+    'strategies': os.environ.get(
+        'INSTARK_STRATEGIES', 'base,sql').split(','),
+    'tenancy': {
+        "dsn": os.environ.get('INSTARK_TENANCY_DSN', (
+            "postgresql://instark:instark@localhost/instark"))
+    },
+    'zones': {
+        "default": {
+            "dsn": os.environ.get('INSTARK_ZONES_DEFAULT_DSN', (
+                "postgresql://instark:instark@localhost/instark"))
         }
-        self["zones"] = {
-            "default": {
-                "dsn": ""
-            }
-        }
-
-
-class DevelopmentConfig(Config):
-    def __init__(self):
-        super().__init__()
-        self["mode"] = "DEV"
-        self['factory'] = 'CheckFactory'
-        self['strategies'].extend(['check'])
-
-
-class ProductionConfig(Config):
-    def __init__(self):
-        super().__init__()
-        self['mode'] = "PROD"
-        self["factory"] = "SqlFactory"
-        self['strategies'].extend(['sql'])
-        self["tenancy"] = {
-            "dsn": (
-                "postgresql://instark:instark"
-                "@localhost/instark")
-        }
-        self["zones"] = {
-            "default": {
-                "dsn": ("postgresql://instark:instark"
-                        "@localhost/instark")
-            }
-        }
-
+    }
+}

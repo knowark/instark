@@ -1,18 +1,18 @@
-from ..config import Config
-from ...application.utilities import (
+from injectark import Factory
+from ..application.domain.common import (
     User, Tenant, QueryParser,
     TenantProvider, StandardTenantProvider,
     AuthProvider, StandardAuthProvider)
-from ...application.models import Device, Channel, Message, Subscription
-from ...application.repositories import (
+from ..application.domain.models import Device, Channel, Message, Subscription
+from ..application.domain.repositories import (
     MemoryChannelRepository, MemoryDeviceRepository,
     MemorySubscriptionRepository, MemoryMessageRepository)
-from .memory_factory import MemoryFactory
-from ...infrastructure.core import (
-    TenantSupplier, MemoryTenantSupplier)
+from .base_factory import BaseFactory
+from ..core import (
+    Config, MemoryTenantSupplier)
 
 
-class CheckFactory(MemoryFactory):
+class CheckFactory(BaseFactory):
     def __init__(self, config: Config) -> None:
         super().__init__(config)
         self.config = config
@@ -97,7 +97,7 @@ class CheckFactory(MemoryFactory):
 
     def check_tenant_supplier(self) -> MemoryTenantSupplier:
         tenant_supplier = MemoryTenantSupplier()
-        tenant_supplier.create_tenant({
+        tenant_supplier.ensure_tenant({
             'id': '001',
             'name': 'Default',
             'zone': 'default',

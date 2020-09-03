@@ -1,13 +1,13 @@
 from filtrark.sql_parser import SqlParser
-from ....application.utilities import (
+from modelark import SqlRepository
+from ....application.domain.common import (
     TenantProvider, AuthProvider)
-from ....application.models import (
+from ....application.domain.models import (
     Channel, Device, Message, Subscription)
-from ....application.repositories import (
+from ....application.domain.repositories import (
     ChannelRepository, DeviceRepository, MessageRepository,
     SubscriptionRepository)
 from .connection import ConnectionManager
-from .sql_repository import SqlRepository
 
 
 class SqlChannelRepository(SqlRepository, ChannelRepository):

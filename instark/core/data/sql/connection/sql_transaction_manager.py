@@ -1,7 +1,7 @@
 import inspect
 from typing import Callable
 from asyncpg import Connection
-from .....application.utilities import TransactionManager, TenantProvider
+from .....application.domain.common import TransactionManager, TenantProvider
 from .connection_manager import ConnectionManager
 
 

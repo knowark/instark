@@ -1,5 +1,4 @@
 
-from functools import partial
 from abc import ABC, abstractmethod
 from typing import Dict, List, Any
 from aiocontextvars import ContextVar
@@ -24,14 +23,14 @@ class DefaultConnectionManager(ConnectionManager):
     def __init__(self, settings: List[Dict[str, Any]],
                  default: str = "") -> None:
         self.settings = settings
-        self.pools: Dict[str, Pool] = None
+        self.pools: Dict[str, Pool] = {}
         self.default = default or self.settings[0]['name']
 
     async def get(self, pool: str = "") -> Connection:
-        connection: Connection = connections_var.get(default=None)
+        connection: Connection = connections_var.get(None)
 
         if connection is None:
-            if self.pools is None:
+            if not self.pools:
                 await self._setup()
             pool = pool or self.default
             connection = await self.pools[pool].acquire()

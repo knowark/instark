@@ -21,8 +21,7 @@ class Migration:
         for table in self.tables:
             statement += self._create_table(table)
 
-        with self.connection.cursor() as cursor:
-            cursor.execute(statement)
+        self.connection.execute(statement)
 
     def schema_down(self):
         """Not implemented."""

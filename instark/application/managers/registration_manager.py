@@ -18,7 +18,6 @@ class RegistrationManager:
         self.delivery_service = delivery_service
 
     async def register_device(self, registration_dicts: RecordList) -> None:
-        print(" reg dicts en registe device    ", registration_dicts)
         devices = await self.device_repository.add([
             Device(**registration_dict)
             for registration_dict in registration_dicts])

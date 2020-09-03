@@ -3,12 +3,14 @@ sql = {
     "SqlParser": {
         "method": "sql_query_parser"
     },
+    # --- MANAGERS ---
     "ConnectionManager": {
         "method": "sql_connection_manager"
     },
     "TransactionManager": {
         "method": "sql_transaction_manager",
     },
+    # --- REPOSITORIES ---
     "ChannelRepository": {
         "method": "sql_channel_repository"
     },
@@ -34,6 +36,6 @@ sql = {
     # },
     # --- SERVICE ---
     "DeliveryService": {
-         "method": "firebase_delivery_service"
+        "method": "firebase_delivery_service"
     },
 }

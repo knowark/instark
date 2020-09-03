@@ -55,8 +55,6 @@ async def test_subscription_manager_delete_device_with_message(
     devices_data = getattr(
         registration_manager.device_repository, 'data')
 
-    print("devices data test subs regis coord    ", devices_data)
-
     assert len(devices_data['default']) == 1
     result = await registration_manager.delete_device([device_id])
 
@@ -72,7 +70,6 @@ async def test_registration_manager_delete_device_without_messsage(
     await registration_manager.register_device(device_records)
     devices_data = getattr(
         registration_manager.device_repository, 'data')
-    print("data en test subs:  ", devices_data)
     assert len(devices_data['default']) == 1
     await registration_manager.delete_device([device_id])
     assert len(devices_data['default']) == 0

@@ -25,18 +25,18 @@ base = {
     "SubscriptionRepository": {
         "method": "memory_subscription_repository"
     },
-    # --- COORDINATORS ---
-    "NotificationCoordinator": {
-        "method": "notification_coordinator"
+    # --- MANAGERS ---
+    "NotificationManager": {
+        "method": "notification_manager"
     },
-    "RegistrationCoordinator": {
-        "method": "registration_coordinator"
+    "RegistrationManager": {
+        "method": "registration_manager"
     },
-    "SessionCoordinator": {
-        "method": "session_coordinator"
+    "SessionManager": {
+        "method": "session_manager"
     },
-    "SubscriptionCoordinator": {
-        "method": "subscription_coordinator"
+    "SubscriptionManager": {
+        "method": "subscription_manager"
     },
     # --- INFORMERS ---
     "InstarkInformer": {
@@ -45,9 +45,6 @@ base = {
     # --- SUPPLIERS ---
     "TenantSupplier": {
         "method": "memory_tenant_supplier"
-    },
-    "SetupSupplier": {
-        "method": "memory_setup_supplier"
     },
     # --- SERVICES ---
     "DeliveryService": {
