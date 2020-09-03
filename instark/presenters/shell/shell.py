@@ -4,6 +4,7 @@ import logging
 from typing import Dict
 from argparse import ArgumentParser, Namespace
 from injectark import Injectark
+from migrark import sql_migrate
 from typing import List
 from ...core import Config
 from ..rest import RestApplication

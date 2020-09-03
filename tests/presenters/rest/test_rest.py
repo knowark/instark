@@ -302,6 +302,14 @@ async def test_get_request_filter(app, headers) -> None:
     data_dict = loads(content)
     assert len(data_dict) == 1
 
+
+async def test_bad_filter_get_route_filter(app, headers) -> None:
+    response = await app.get('/channels?filter=[[**BAD FILTER**]]',
+                             headers=headers)
+    content = await response.text()
+    data_dict = loads(content)
+    assert len(data_dict) == 3
+
 # middleware
 
 

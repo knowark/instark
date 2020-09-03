@@ -58,7 +58,7 @@ def test_schema_migration_supplier_migrate(
     }
 
 
-def test_schema_migration_supplier_migrate_missing(
-        schema_migration_supplier) -> None:
+# def test_schema_migration_supplier_migrate_missing(
+#         schema_migration_supplier) -> None:
 
-    schema_migration_supplier.migrate('missing')
+#     schema_migration_supplier.migrate('missing')

@@ -1,4 +1,3 @@
-from injectark import Factory
 import os
 from pathlib import Path
 from filtrark import SqlParser, SafeEval

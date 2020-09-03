@@ -1,6 +1,6 @@
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
-from .helpers.schemas import (
+from .helpers import (
     ChannelSchema, DeviceSchema, MessageSchema, SubscriptionSchema,
     UserSchema)
 
@@ -34,15 +34,10 @@ def _register_schemas(spec):
 
 def _register_paths(spec):
     resources = [
-        ('activities', 'Channel'),
+        ('Channels', 'Channel'),
         ('Devices', 'Device'),
         ('Messages', 'Message'),
-        ('Subscription', 'Subscription'),
-        ('occurrences', 'Occurrence'),
-        ('reviews', 'Review'),
-        ('sites', 'Site'),
-        ('traces', 'Trace'),
-        ('users', 'User'),
+        ('Subscriptions', 'Subscription'),
     ]
     for resource in resources:
         _append_path(spec, *resource)

@@ -2,7 +2,7 @@
 from functools import partial
 from abc import ABC, abstractmethod
 from typing import Dict, List, Any
-from aiocontextvars import ContextVar
+from contextvars import ContextVar
 from asyncpg import Connection, create_pool
 from asyncpg.pool import Pool
 

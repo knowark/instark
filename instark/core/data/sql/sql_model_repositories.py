@@ -17,8 +17,8 @@ class SqlChannelRepository(SqlRepository, ChannelRepository):
                  auth_provider: AuthProvider,
                  connection_manager: ConnectionManager,
                  parser: SqlParser) -> None:
-        super().__init__('channels', Channel, tenant_provider,
-                         auth_provider, connection_manager, parser)
+        super().__init__('channels', Channel, connection_manager,
+                         parser, tenant_provider, auth_provider)
 
     def _order_by(self) -> str:
         return "ORDER BY data->>'name' ASC NULLS LAST"
@@ -31,8 +31,8 @@ class SqlDeviceRepository(SqlRepository, DeviceRepository):
                  auth_provider: AuthProvider,
                  connection_manager: ConnectionManager,
                  parser: SqlParser) -> None:
-        super().__init__('devices', Device, tenant_provider,
-                         auth_provider, connection_manager, parser)
+        super().__init__('devices', Device, connection_manager,
+                         parser, tenant_provider, auth_provider)
 
     def _order_by(self) -> str:
         return "ORDER BY data->>'name' ASC NULLS LAST"
@@ -45,8 +45,8 @@ class SqlMessageRepository(SqlRepository, MessageRepository):
                  auth_provider: AuthProvider,
                  connection_manager: ConnectionManager,
                  parser: SqlParser) -> None:
-        super().__init__('messages', Message, tenant_provider,
-                         auth_provider, connection_manager, parser)
+        super().__init__('messages', Message, connection_manager,
+                         parser, tenant_provider, auth_provider)
 
 
 class SqlSubscriptionRepository(SqlRepository, SubscriptionRepository):
@@ -56,5 +56,5 @@ class SqlSubscriptionRepository(SqlRepository, SubscriptionRepository):
                  auth_provider: AuthProvider,
                  connection_manager: ConnectionManager,
                  parser: SqlParser) -> None:
-        super().__init__('subscriptions', Subscription, tenant_provider,
-                         auth_provider, connection_manager, parser)
+        super().__init__('subscriptions', Subscription, connection_manager,
+                         parser, tenant_provider, auth_provider)
