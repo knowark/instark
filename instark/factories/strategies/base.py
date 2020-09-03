@@ -9,9 +9,6 @@ base = {
     "AuthProvider": {
         "method": "standard_auth_provider"
     },
-    "TransactionManager": {
-        "method": "memory_transaction_manager"
-    },
     # --- REPOSITORIES ---
     "ChannelRepository": {
         "method": "memory_channel_repository"
@@ -26,6 +23,9 @@ base = {
         "method": "memory_subscription_repository"
     },
     # --- MANAGERS ---
+    "TransactionManager": {
+        "method": "memory_transaction_manager"
+    },
     "NotificationManager": {
         "method": "notification_manager"
     },
@@ -45,6 +45,9 @@ base = {
     # --- SUPPLIERS ---
     "TenantSupplier": {
         "method": "memory_tenant_supplier"
+    },
+    "MigrationSupplier": {
+        "method": "memory_migration_supplier"
     },
     # --- SERVICES ---
     "DeliveryService": {

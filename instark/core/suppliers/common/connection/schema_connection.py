@@ -1,4 +1,3 @@
-# from pgdb import connect preguntar jefe
 from pgdb import connect
 from typing import Sequence, List, Dict, Any
 
@@ -9,10 +8,21 @@ class SchemaConnection:
         credentials, location = dsn.split('@')
         user, password = credentials.split(':')
         host, database = location.split('/')
+        print("@"*120)
+        print("credential  ", credentials)
+        print("location  ", location)
+        print("user  ", user)
+        print("password  ", password)
+        print("location  ", location)
+        print("host  ", database)
+        print("@"*120)
         self.dsn = f'{host}:{database}:{user}:{password}'
         self.connection = None
 
     def open(self) -> None:
+        print("@"*120)
+        print("DSN ", self.dsn)
+        print("@"*120)
         self.connection = connect(dsn=self.dsn)
 
     def close(self) -> None:

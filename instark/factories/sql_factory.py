@@ -87,6 +87,7 @@ class SqlFactory(BaseFactory):
 
         # default_firebase_credentials_path = str(Path.home().joinpath(
         #     'firebase_credentials.json'))
+
         default_firebase_credentials_path = str(Path.home().joinpath(
             'proser-2020-firebase-adminsdk-554ie-41811eb8ea.json'))
 

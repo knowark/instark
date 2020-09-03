@@ -27,8 +27,8 @@ sql = {
     "TenantSupplier": {
         "method": "schema_tenant_supplier"
     },
-    "SetupSupplier": {
-        "method": "schema_setup_supplier"
+    "MigrationSupplier": {
+        "method": "schema_migration_supplier"
     },
     # --- SERVICE ---
     # "DeliveryService": {

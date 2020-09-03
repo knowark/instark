@@ -15,6 +15,10 @@ class SchemaMigrationSupplier(MigrationSupplier):
             (Path(__file__).parent.parent.parent / 'data' /
              'sql' / 'migrations').absolute())
 
+        # print("&"*120)
+        # print("migrations_path    ", self.migrations_path)
+        # print("&"*120)
+
     def migrate(self, tenant: str = '', version: str = '') -> None:
         domain = []
         if tenant:

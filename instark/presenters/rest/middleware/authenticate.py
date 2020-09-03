@@ -7,7 +7,7 @@ from ....core import TenantSupplier
 
 
 def authenticate_middleware_factory(injector: Injectark) -> Callable:
-    session_Manager: SessionManager = injector['SessionManager']
+    session_manager: SessionManager = injector['SessionManager']
     tenant_supplier: TenantSupplier = injector['TenantSupplier']
 
     @web.middleware
@@ -17,11 +17,14 @@ def authenticate_middleware_factory(injector: Injectark) -> Callable:
 
         try:
             user_dict = extract_user(request.headers)
-            session_Manager.set_user(user_dict)
+            session_manager.set_user(user_dict)
 
+            tenant = request.headers['Tenant']
             tenant_id = request.headers['TenantId']
-            tenant_dict = tenant_supplier.get_tenant(tenant_id)
-            session_Manager.set_tenant(tenant_dict)
+
+            tenant_dict = tenant_supplier.ensure_tenant(
+                {'id': tenant_id, 'name': tenant})
+            session_manager.set_tenant(tenant_dict)
         except Exception as error:
             reason = f"{error.__class__.__name__}: {str(error)}"
             raise web.HTTPUnauthorized(reason=reason)

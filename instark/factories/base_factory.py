@@ -77,18 +77,18 @@ class BaseFactory(Factory):
 
     # Managers
 
-    def registration_coordinator(
+    def registration_manager(
         self, device_repository: DeviceRepository,
         message_repository: MessageRepository,
-        subscription_coordinator: SubscriptionRepository,
+        subscription_manager: SubscriptionRepository,
         transaction_manager: TransactionManager,
         delivery_service: DeliveryService
     ) -> RegistrationManager:
         return transaction_manager(RegistrationManager)(
-            device_repository, message_repository, subscription_coordinator,
+            device_repository, message_repository, subscription_manager,
             delivery_service)
 
-    def subscription_coordinator(
+    def subscription_manager(
         self, channel_repository: ChannelRepository,
         device_repository: DeviceRepository,
         message_repository: MessageRepository,
@@ -101,7 +101,7 @@ class BaseFactory(Factory):
             subscription_repository,
             delivery_service)
 
-    def notification_coordinator(
+    def notification_manager(
         self, channel_repository: ChannelRepository,
         device_repository: DeviceRepository,
         message_repository: MessageRepository,
@@ -112,7 +112,7 @@ class BaseFactory(Factory):
             channel_repository,
             device_repository, message_repository, delivery_service)
 
-    def session_coordinator(
+    def session_manager(
         self, tenant_provider: TenantProvider,
         auth_provider: AuthProvider
     ) -> SessionManager:
@@ -130,6 +130,7 @@ class BaseFactory(Factory):
         return transaction_manager(StandardInstarkInformer)(
             device_repository, channel_repository,
             message_repository, subscription_repository)
+
     # Suppliers
 
     def memory_tenant_supplier(self) -> MemoryTenantSupplier:

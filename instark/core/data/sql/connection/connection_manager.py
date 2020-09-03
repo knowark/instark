@@ -1,4 +1,5 @@
 
+from functools import partial
 from abc import ABC, abstractmethod
 from typing import Dict, List, Any
 from aiocontextvars import ContextVar

@@ -1,4 +1,3 @@
-from injectark import Factory
 from ..application.domain.common import (
     User, Tenant, QueryParser,
     TenantProvider, StandardTenantProvider,
@@ -8,8 +7,7 @@ from ..application.domain.repositories import (
     MemoryChannelRepository, MemoryDeviceRepository,
     MemorySubscriptionRepository, MemoryMessageRepository)
 from .base_factory import BaseFactory
-from ..core import (
-    Config, MemoryTenantSupplier)
+from ..core import Config, MemoryTenantSupplier
 
 
 class CheckFactory(BaseFactory):
@@ -17,7 +15,7 @@ class CheckFactory(BaseFactory):
         super().__init__(config)
         self.config = config
 
-    # Tenancy
+    # Provider
 
     def check_tenant_provider(self) -> StandardTenantProvider:
         tenant_provider = StandardTenantProvider()
@@ -99,11 +97,6 @@ class CheckFactory(BaseFactory):
         tenant_supplier = MemoryTenantSupplier()
         tenant_supplier.ensure_tenant({
             'id': '001',
-            'name': 'Default',
-            'zone': 'default',
-            'data': {
-                'memory': {
-                    'default': 'default'
-                }
-            }})
+            'name': 'Default'
+        })
         return tenant_supplier
