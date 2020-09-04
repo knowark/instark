@@ -10,7 +10,7 @@ from .factories import factory_builder, strategy_builder
 from .core import config
 
 
-async def main(args=None):
+async def main(args=None):  # pragma: no cover
     strategy = strategy_builder.build(config['strategies'])
     factory = factory_builder.build(config)
     injector = Injectark(strategy=strategy, factory=factory)
