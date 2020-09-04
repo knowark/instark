@@ -29,7 +29,10 @@ serve-dev:
 	export instark_MODE=DEV; python -m $(PROJECT) serve
 
 deploy:
-	./setup/deploy.sh
+	ansible-playbook -c local -i localhost, setup/deploy.yml
+
+local:
+	./setup/local.sh
 	
 PART ?= patch
 
