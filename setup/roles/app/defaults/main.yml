@@ -26,7 +26,7 @@ app_requirements_path: "{{ app_repository }}/requirements.txt"
 
 # Configuration
 
-app_configuration_path: "{{ app_configuration_directory }}/config.json"
+app_configuration_path: "{{ app_configuration_directory }}"
 
 app_database_path: "{{ app_data_directory }}/data.json"
 

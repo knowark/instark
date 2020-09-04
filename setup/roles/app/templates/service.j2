@@ -2,6 +2,7 @@
 Description={{ app_user }} Service
 
 [Service]
+EnvironmentFile=/etc/profile.d/{{ app_user }}.sh
 User={{ app_user }}
 Group={{ app_user }}
 WorkingDirectory=/opt/{{ app_user }}/{{ app_user }}
