@@ -7,15 +7,13 @@ PLAYBOOK="setup/local.sh"
 
 echo "Deploying LXD container..."
 
-lxc launch ubuntu:focal $CONTAINER
+lxc launch ubuntu:20.04 $CONTAINER
 lxc config device add $CONTAINER home disk source=$HOME path=/mnt/home
 
 echo "Install Git and Ansible..."
 
 sleep 5  # Wait for container network connectivity.
 lxc exec $CONTAINER -- apt update -y
-#lxc exec $CONTAINER -- apt install git software-properties-common -y
-#lxc exec $CONTAINER -- apt-add-repository --yes --update ppa:ansible/ansible
 lxc exec $CONTAINER -- apt install ansible -y
 lxc exec $CONTAINER -- apt autoremove -y
 

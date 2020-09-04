@@ -27,5 +27,5 @@
 
 - name: Install NGINX
   apt:
-    pkg: nginx
+    name: nginx
     state: latest
