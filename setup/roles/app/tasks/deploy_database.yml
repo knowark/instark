@@ -1,16 +1,30 @@
+- name: "Install PostgreSQL {{ postgresql_version }}"
+  apt:
+    name: "postgresql-{{ postgresql_version }}"
+    state: present
+
+- name: "Install PostgreSQL Server Dev {{ postgresql_version }}"
+  apt:
+    name: "postgresql-server-dev-{{ postgresql_version }}"
+    state: present
+
+- name: Install Python Psycopg2
+  apt:
+    name: python3-psycopg2
+
 - name: "Create {{ app_user }} Database User"
   become: yes
   become_user: postgres
   postgresql_user:
-      name: "{{ app_user }}"
-      password: "{{ app_user }}"
-      role_attr_flags: SUPERUSER
-      encrypted: yes
+    name: "{{ app_user }}"
+    password: "{{ app_user }}"
+    role_attr_flags: SUPERUSER
+    encrypted: yes
 
 - name: "Create {{ app_user }} Database"
   become: yes
   become_user: postgres
   postgresql_db:
-      name: "{{ app_user }}"
-      encoding: UTF-8
-      owner: "{{ app_user }}"
+    name: "{{ app_user }}"
+    encoding: UTF-8
+    owner: "{{ app_user }}"

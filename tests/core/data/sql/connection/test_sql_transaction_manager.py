@@ -7,6 +7,8 @@ from instark.application.domain.common import (
 from instark.core.data import (
     ConnectionManager, DefaultConnectionManager,
     SqlTransactionManager)
+from instark.core.data.sql.sql_model_repositories import (
+    SqlChannelRepository, SqlDeviceRepository)
 
 
 class SampleEntity(Entity):
@@ -124,3 +126,11 @@ async def test_transaction_manager_decorator_private_methods(
     connection_manager = transaction_manager.connection_manager
     assert result == 'PRIVATE_VALUE'
     assert getattr(connection_manager, 'pools') == {}
+
+
+def test_order_by_channel(monkeypatch):
+    assert SqlChannelRepository._order_by(monkeypatch)
+
+
+def test_order_by_device(monkeypatch):
+    assert SqlDeviceRepository._order_by(monkeypatch)

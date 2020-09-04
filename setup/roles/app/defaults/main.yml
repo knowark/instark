@@ -36,12 +36,21 @@ postgresql_version: 12
 
 # Nginx Configuration
 
-port: 6291
+app_port: 6291
 
 sites_available: "/etc/nginx/sites-available"
 
 sites_enabled: "/etc/nginx/sites-enabled"
 
-# Service 
+# Service
 
 service_path: "/etc/systemd/system"
+# ETL configuration
+
+# etl_url: https://instark:k5_pTJMM5UknJRxuAeV3@git.nubark.com/applications/servagro/instark/etlinstark.git
+
+# etl_instark_home: "{{ app_home }}/etlinstark"
+
+# etl_executable_path: /usr/local/bin
+
+# etl_version: master

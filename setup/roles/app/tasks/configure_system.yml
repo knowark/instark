@@ -43,16 +43,37 @@
     dest: "{{ app_repository }}"
     state: link
 
-- name: "Create {{ app_user }} Virtualenv and Install Packages"
+- name: "Change Owner and Group to {{ app_user }} Repository"
+  file:
+    path: "{{ app_repository }}"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    recurse: yes
+    state: directory
+    mode: 0775
+  ignore_errors: true
+
+- name: "Create {{ app_user }} Virtualenv"
+  become: yes
+  become_user: "{{ app_user }}"
+  command: "/usr/bin/python3 -m venv {{ app_env }}"
+
+- name: "Install Wheels in Virtualenv"
+  become: yes
+  become_user: "{{ app_user }}"
+  pip:
+    name: "wheel"
+    virtualenv: "{{ app_env }}"
+
+- name: "Install Requirements Inside Virtualenv"
   become: yes
   become_user: "{{ app_user }}"
   pip:
     requirements: "{{ app_requirements_path }}"
     virtualenv: "{{ app_env }}"
-    virtualenv_python: "python3"
 
-- name:  "Create Cron Job {{ app_user }}"
-  cron: 
+- name: "Create Cron Job {{ app_user }}"
+  cron:
     name: "{{ app_user }} deploy updates with Cron Job"
     user: "root"
     hour: "*"
