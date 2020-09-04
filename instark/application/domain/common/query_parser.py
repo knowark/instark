@@ -79,7 +79,7 @@ class QueryParser:
 
     def _parse_term(self, term_tuple: TermTuple) -> Callable:
         field, operator, value = term_tuple
-        function = self.comparison_dict.get(operator)
+        function = self.comparison_dict[operator]
         result = function(field, value)
         return result
 

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import List
-from aiocontextvars import ContextVar
+from typing import List, Optional
+from contextvars import ContextVar
 from ..exceptions import AuthenticationError, AuthorizationError
 from .user import User
 
@@ -34,7 +34,7 @@ class AuthProvider(ABC):
         return self.user.id
 
 
-user_var = ContextVar('user', default=None)
+user_var: ContextVar[Optional[User]] = ContextVar('user', default=None)
 
 
 class StandardAuthProvider(AuthProvider):
@@ -44,16 +44,18 @@ class StandardAuthProvider(AuthProvider):
 
     @property
     def user(self) -> User:
-        if not user_var.get():
+        user = user_var.get()
+        if not user:
             raise AuthenticationError("Not authenticated.")
-        return user_var.get()
+        return user
 
     @property
     def roles(self) -> List[str]:
-        if not user_var.get():
+        user = user_var.get()
+        if not user:
             raise AuthenticationError(
                 "Authentication is required to get the user's roles.")
-        return user_var.get().roles
+        return user.roles
 
     def validate_roles(self, required_roles: List[str] = None) -> None:
         required_roles = required_roles or []

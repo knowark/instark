@@ -4,7 +4,7 @@ from ..domain.models import Device, Channel, Message, Subscription
 from ..domain.repositories import (
     DeviceRepository, ChannelRepository, MessageRepository,
     SubscriptionRepository)
-from ..domain.common import RecordList, QueryDomain
+from ..domain.common.types import RecordList, QueryDomain
 
 
 class InstarkInformer(ABC):
