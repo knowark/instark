@@ -2,14 +2,6 @@
   apt:
     update_cache: yes
 
-- name: Install Git
-  apt:
-    name: git
-
-- name: Install Curl
-  apt:
-    name: curl
-
 - name: Install Python PIP
   apt:
     name: python3-pip
@@ -18,12 +10,12 @@
   apt:
     name: python3-venv
 
+- name: Install Python is Python3
+  apt:
+    name: python-is-python3
+
 - name: Update PIP to Latest Version
   command: pip3 install -U pip
-
-- name: Install Python Virtualenvwrapper
-  apt:
-    name: virtualenvwrapper
 
 - name: Install NGINX
   apt:
