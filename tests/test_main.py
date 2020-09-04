@@ -2,7 +2,7 @@ import instark
 from instark.__main__ import main
 
 
-def test_main(monkeypatch):
+async def test_main(monkeypatch):
     """
     Only assert if the function is defined.
     The function is not tested as it serves

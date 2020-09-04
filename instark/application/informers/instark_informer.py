@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 from typing import List, Union, Dict, Any
-from ..models import Device, Channel, Message, Subscription
-from ..repositories import (
+from ..domain.models import Device, Channel, Message, Subscription
+from ..domain.repositories import (
     DeviceRepository, ChannelRepository, MessageRepository,
     SubscriptionRepository)
-from ..utilities import RecordList, QueryDomain
+from ..domain.common.types import RecordList, QueryDomain
 
 
 class InstarkInformer(ABC):

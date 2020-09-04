@@ -1,9 +1,9 @@
 from pytest import fixture, raises
-from instark.application.models import Device, Channel, Message, Subscription
-from instark.application.utilities import (
+from instark.application.domain.models import Device, Channel, Message, Subscription
+from instark.application.domain.common import (
     QueryParser, Tenant, StandardTenantProvider, Tenant,
     AuthProvider, StandardAuthProvider, User, QueryDomain)
-from instark.application.repositories import (
+from instark.application.domain.repositories import (
     DeviceRepository, MemoryDeviceRepository,
     ChannelRepository, MemoryChannelRepository,
     MessageRepository, MemoryMessageRepository,
@@ -136,4 +136,3 @@ async def test_instark_informer_count_messages(
         instark_informer: InstarkInformer) -> None:
     messages_count = await instark_informer.count('message')
     assert messages_count == 1
-
