@@ -3,7 +3,7 @@
 
 CONTAINER="instark"
 REPOSITORY="https://github.com/knowark/instark.git"
-PLAYBOOK="setup/local.yml"
+PLAYBOOK="setup/local.sh"
 
 echo "Deploying LXD container..."
 
