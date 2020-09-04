@@ -14,25 +14,18 @@
   apt:
     name: python3-pip
 
-- name: Install Python Virtualenvwrapper
+- name: Install Virtualenv
   apt:
-    name: virtualenvwrapper
+    name: python3-venv
 
 - name: Update PIP to Latest Version
   command: pip3 install -U pip
+
+- name: Install Python Virtualenvwrapper
+  apt:
+    name: virtualenvwrapper
 
 - name: Install NGINX
   apt:
     pkg: nginx
     state: latest
-# - name: "Install PostgreSQL {{ postgresql_version }}"
-#   apt:
-#     name: "postgresql-{{ postgresql_version }}"
-#     state: present
-#     update_cache: yes
-
-# - name: "Install PostgreSQL Server Dev {{ postgresql_version }}"
-#   apt:
-#     name: "postgresql-server-dev-12"
-#     state: present
-#     update_cache: yes

@@ -45,12 +45,3 @@ sites_enabled: "/etc/nginx/sites-enabled"
 # Service
 
 service_path: "/etc/systemd/system"
-# ETL configuration
-
-# etl_url: https://instark:k5_pTJMM5UknJRxuAeV3@git.nubark.com/applications/servagro/instark/etlinstark.git
-
-# etl_instark_home: "{{ app_home }}/etlinstark"
-
-# etl_executable_path: /usr/local/bin
-
-# etl_version: master
