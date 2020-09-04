@@ -3,7 +3,7 @@ from ..domain.models import Channel, Message
 from ..domain.repositories import (
     ChannelRepository, DeviceRepository, MessageRepository)
 from ..domain.services import DeliveryService
-from ..domain.common import DataValidationError, RecordList
+from ..domain.common import RecordList
 
 
 class NotificationManager:
