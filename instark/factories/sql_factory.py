@@ -84,11 +84,8 @@ class SqlFactory(BaseFactory):
 
     def firebase_delivery_service(self) -> FirebaseDeliveryService:
 
-        # default_firebase_credentials_path = str(Path.home().joinpath(
-        #     'firebase_credentials.json'))
-
         default_firebase_credentials_path = str(Path.home().joinpath(
-            'proser-2020-firebase-adminsdk-554ie-41811eb8ea.json'))
+            self.config['firebase_config_file']))
 
         firebase_credentials_path = self.config.get(
             'firebase_credentials_path', default_firebase_credentials_path)

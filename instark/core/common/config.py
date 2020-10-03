@@ -19,5 +19,8 @@ config: Config = {
             "dsn": os.environ.get('INSTARK_ZONES_DEFAULT_DSN', (
                 "postgresql://instark:instark@localhost/instark"))
         }
-    }
+    },
+    'firebase_config_file': os.environ.get(
+        'INSTARK_FIREBASE_CONFIG_FILE',
+        'proser-2020-firebase-adminsdk-554ie-41811eb8ea.json'),
 }
