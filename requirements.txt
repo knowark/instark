@@ -1,6 +1,5 @@
 aiocontextvars==0.2.2
 aiohttp==3.6.2
-aiohttp-cors==0.7.0
 aiohttp-jinja2==1.2.0
 aiomcache==0.6.0
 apispec==3.3.2
@@ -37,7 +36,8 @@ Jinja2==2.11.2
 MarkupSafe==1.1.1
 marshmallow==3.7.1
 migrark==0.6.0
-modelark==0.2.3
+modelark==0.2.7
+
 more-itertools==8.5.0
 msgpack==1.0.0
 multidict==4.7.6
