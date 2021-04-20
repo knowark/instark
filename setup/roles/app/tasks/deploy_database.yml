@@ -13,6 +13,13 @@
     name: "postgresql-server-dev-{{ postgresql_version }}"
     state: present
 
+- name: "Enable and Restart PostgreSQL Service"
+  systemd:
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+    name: postgresql
+
 - name: Install Python Psycopg2
   apt:
     name: python3-psycopg2

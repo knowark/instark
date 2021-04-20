@@ -30,9 +30,6 @@ serve-dev:
 
 deploy:
 	ansible-playbook -c local -i localhost, setup/deploy.yml
-
-local:
-	./setup/local.sh
 	
 PART ?= patch
 
