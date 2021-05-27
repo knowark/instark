@@ -21,3 +21,7 @@
   apt:
     name: nginx
     state: latest
+
+- name: Install Autoenv Pip package
+  pip:
+    name: autoenv
